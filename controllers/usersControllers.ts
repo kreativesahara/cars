@@ -23,43 +23,32 @@ const getAllUsers:(req:any, res:any)=>Promise<any> = async ( req: any, res: any)
     res.json(result);
 }
 
-// const createUser: (req: any, res: any) => Promise<any> = async (req:any, res: any): Promise<any> => {
-//     const {
-//         name,
-//         brand,
-//         slug,
-//         description,
-//         price,
-//         category,
-//         quantity,
-//         year,
-//         photo,
-//         location
-//     } = req.body.values;
-//     if (
-//         !name || !brand || !description || !price || !category || !quantity || !year || !location
-//     ) {    
-//          return res.status(400).json({ 'message': 'some inputs are required' });    
-//     }
+const createUser: (req: any, res: any) => Promise<any> = async (req:any, res: any): Promise<any> => {
+    const {
+        firstname,
+        lastname,
+        email,
+        password,
+    } = req.body;
+    if (
+        !firstname || !lastname || !email || !password
+    ) {    
+         return res.status(400).json({ 'message': 'some inputs are required' });    
+    }
 
-//     try {
-//         const result:any = await user.create({
-//             name: name,
-//             brand: brand,
-//             description: description,
-//             price: price,
-//             category: category,
-//             quantity: quantity,
-//             year: year,
-//             location: location
-//             // photo: photo,
-           
-//         });
-//         res.status(201).json(result);
-//     } catch (err) {
-//         console.error(err);
-//     }
-// }
+    try {
+        const result = await db.insert(users).values({
+            firstname,
+            lastname,
+            email,
+            password,
+            // photo: photo,
+        });
+        res.status(201).json(result);
+    } catch (err) {
+        console.error(err);
+    }
+}
 
 // const updateUser = async (req, res) => {
 //     if (!req?.body?.id) {
@@ -105,8 +94,8 @@ const getAllUsers:(req:any, res:any)=>Promise<any> = async ( req: any, res: any)
 // }
 
 export  {
-    getAllUsers
-    // createUser,
+    getAllUsers,
+    createUser,
     // updateUser,
     // deleteUser,
     // getUser

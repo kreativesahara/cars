@@ -7,7 +7,7 @@ const uploadUserDetails = () => {
         firstname: "",
         lastname: "",
         email: "",
-        hashed_password: ""
+        password: ""
     })
 
     const handleChange = (e) => {
@@ -17,7 +17,7 @@ const uploadUserDetails = () => {
     const handleSubmit = async (e) => {
         e.preventDefault();
         try {
-            await axios.post('http://localhost:3100/create', formData,
+            await axios.post('http://localhost:3100/users', formData,
                 {
                     headers: { 'Content-Type': 'application/json' },
                     withCredentials: false
@@ -36,7 +36,7 @@ const uploadUserDetails = () => {
               <input type="text" name='firstname' placeholder='Firstname' onChange={handleChange}/>
               <input type="text" name='lastname' placeholder='Lastname' onChange={handleChange} />
               <input type="text" name='email' placeholder='Email' onChange={handleChange} />
-              <input type="text" name='hashed_password' placeholder='Password' onChange={handleChange} />
+              <input type="text" name='password' placeholder='Password' onChange={handleChange} />
             <button type='submit'className=' bg-green-400 hover:bg-green-500'>Upload</button>
           </form>
     </>
