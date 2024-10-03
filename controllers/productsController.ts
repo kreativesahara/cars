@@ -1,5 +1,4 @@
-//import { products } from '../db/schema/product';
-const products: any = "products";
+import { cars } from '../db/schema/product';
 import db from '../db/dbConfig'
 
 // const getAllUsers = async (req: any, res:any) => {
@@ -19,7 +18,7 @@ import db from '../db/dbConfig'
 
 const getAllProducts: (req: any, res: any) => Promise<any> = async (req: any, res: any): Promise<any> => {
     console.log('hello from products controller');
-    const result: any = await db.select().from(products)
+    const result: any = await db.select().from(cars)
     if (!result) return res.status(204).json({ 'message': 'No product found.' });
     res.json(result);
 }
