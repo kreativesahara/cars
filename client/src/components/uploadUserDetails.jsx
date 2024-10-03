@@ -23,6 +23,7 @@ const uploadUserDetails = () => {
                     withCredentials: false
                 },
             );
+            console.log(formData)
             alert("User details uploaded successfully")
         } catch (error) {
             console.log(error)
@@ -33,11 +34,15 @@ const uploadUserDetails = () => {
     <>
       <div className='mt-10 font-bold bg-red-500 lg:w-1/3'>Upload User Details</div>
           <form onSubmit={handleSubmit} className='flex flex-col p-3 lg:w-1/3'>
+              <label>First Name</label>
               <input type="text" name='firstname' placeholder='Firstname' onChange={handleChange}/>
+              <label>Last Name</label>
               <input type="text" name='lastname' placeholder='Lastname' onChange={handleChange} />
+              <label>Email</label>
               <input type="text" name='email' placeholder='Email' onChange={handleChange} />
+              <label>Password</label>
               <input type="text" name='password' placeholder='Password' onChange={handleChange} />
-            <button type='submit'className=' bg-green-400 hover:bg-green-500'>Upload</button>
+            <button type='submit'>Upload</button>
           </form>
     </>
   )

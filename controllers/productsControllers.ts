@@ -23,43 +23,51 @@ const getAllProducts: (req: any, res: any) => Promise<any> = async (req: any, re
     res.json(result);
 }
 
-// const createUser: (req: any, res: any) => Promise<any> = async (req:any, res: any): Promise<any> => {
-//     const {
-//         name,
-//         brand,
-//         slug,
-//         description,
-//         price,
-//         category,
-//         quantity,
-//         year,
-//         photo,
-//         location
-//     } = req.body.values;
-//     if (
-//         !name || !brand || !description || !price || !category || !quantity || !year || !location
-//     ) {    
-//          return res.status(400).json({ 'message': 'some inputs are required' });    
-//     }
+const createProduct: (req: any, res: any) => Promise<any> = async (req:any, res: any): Promise<any> => {
+    const {
+        make,
+        model,
+        year,
+        engine_capacity,
+        fuel_type,
+        transmission,
+        driveSystem,
+        mileage,
+        features,
+        condition,
+        location,
+        price,
+        seller_id=1
+    } = req.body;
+    if (
+        !make || !features || !seller_id || !mileage || !model || !year || !engine_capacity || !fuel_type || !transmission || !driveSystem || !price || !condition || !location 
+    ) {    
+         return res.status(400).json({ 'message': 'some inputs are required' });    
+    }
 
-//     try {
-//         const result:any = await user.create({
-//             name: name,
-//             brand: brand,
-//             description: description,
-//             price: price,
-//             category: category,
-//             quantity: quantity,
-//             year: year,
-//             location: location
-//             // photo: photo,
+    try {
+        const result = await db.insert(cars).values({
+            make,
+            model,
+            year,
+            engine_capacity,
+            fuel_type,
+            transmission,
+            driveSystem,
+            mileage,
+            features,
+            condition,
+            location,
+            price,
+            seller_id,
+            // photo: photo,
 
-//         });
-//         res.status(201).json(result);
-//     } catch (err) {
-//         console.error(err);
-//     }
-// }
+        });
+        res.status(201).json(result);
+    } catch (err) {
+        console.error(err);
+    }
+}
 
 // const updateUser = async (req, res) => {
 //     if (!req?.body?.id) {
@@ -105,8 +113,8 @@ const getAllProducts: (req: any, res: any) => Promise<any> = async (req: any, re
 // }
 
 export {
-    getAllProducts
-    // createUser,
+    getAllProducts,
+    createProduct,
     // updateUser,
     // deleteUser,
     // getUser

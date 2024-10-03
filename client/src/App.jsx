@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
-import { Outlet } from 'react-router-dom';
+//import { Outlet } from 'react-router-dom';
 import UploadUserDetails from './components/uploadUserDetails';
 import './App.css'; // Import for styling
 
@@ -65,7 +65,7 @@ function App() {
         <div>Not a User found.</div>
       )}
       <UploadUserDetails /> {/* Upload user details form */}
-      <Outlet /> {/* Allow nested routes */}
+      {/* <Outlet /> /*Allow nested routes */}
     </>
   );
 }

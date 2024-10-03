@@ -1,6 +1,5 @@
 import express, { Application } from 'express';
 import usersRoute from './routes/Api/user';
-import billsRoute from './routes/Api/bills';
 import productsRoute from './routes/Api/product';
 import cors from 'cors';
 import corsOptions from './config/corsOptions';
@@ -19,17 +18,6 @@ app.use(express.urlencoded({ extended: true }));
 
 app.use('/users',usersRoute )
 app.use("/products", productsRoute)
-//app.use("/bills",billsRoute)
-// app.get('/bills', (req: express.Request, res: express.Response)=> {
-//     res.send('This are THE BILLS!');
-// })
-// db.execute(`SELECT * FROM bills`, (err:any, result:any) => {
-//     console.error(err);
-//     console.log(result);
-//})
-app.get('/readings', (req: express.Request, res: express.Response)=> {
-    res.send('This are THE READINGS!');
-})
 
 app.listen(PORT, () => {
     console.log(`http://localhost:${PORT}`)
