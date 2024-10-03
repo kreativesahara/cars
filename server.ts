@@ -18,7 +18,7 @@ app.use(express.json())
 app.use(express.urlencoded({ extended: true }));
 
 app.use('/users',usersRoute )
-//app.use("/products", productsRoute)
+app.use("/products", productsRoute)
 //app.use("/bills",billsRoute)
 // app.get('/bills', (req: express.Request, res: express.Response)=> {
 //     res.send('This are THE BILLS!');
