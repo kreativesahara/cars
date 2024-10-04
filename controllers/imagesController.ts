@@ -1,7 +1,7 @@
 // controllers/imagesController.ts
 import db from '../db/dbConfig';
 import { eq } from 'drizzle-orm';
-import { productImages } from '../db/schema/ProductImage';
+import { productImages } from '../db/schema/productImage';
 import { product } from '../db/schema/product';
 import multer from 'multer';
 import path from 'path';
@@ -17,16 +17,37 @@ const storage = multer.diskStorage({
         }
         cb(null, uploadPath);
     },
-    filename: (req:any, file:any, cb:any) => {
-        // Generate a unique filename using timestamp and original name
+    filename: (req: any, file: any, cb: any) => {
+        // Extract the extension
+        let fileExtension = path.extname(file.originalname);
+
+        // Fallback to MIME type if no extension is found
+        if (!fileExtension) {
+            switch (file.mimetype) {
+                case 'image/jpeg':
+                    fileExtension = '.jpg';
+                    break;
+                case 'image/png':
+                    fileExtension = '.png';
+                    break;
+                case 'image/gif':
+                    fileExtension = '.gif';
+                    break;
+                default:
+                    return cb(new Error('File does not have a valid extension or recognized MIME type'));
+            }
+        }
+
+        // Generate a unique filename using timestamp and original name with extension
         const uniqueSuffix = `${Date.now()}-${Math.round(Math.random() * 1E9)}`;
-        cb(null, uniqueSuffix + path.extname(file.originalname));
+        cb(null, uniqueSuffix + fileExtension);
     }
+
 });
 
 // File filter to accept only images
 const fileFilter = (req:any, file:any, cb:any) => {
-    const allowedTypes = ['image/jpeg', 'image/png', 'image/gif'];
+    const allowedTypes = ['image/jpeg', 'image/png', 'image/gif', 'image/jpg'];
     if (allowedTypes.includes(file.mimetype)) {
         cb(null, true); // Accept the file
     } else {
@@ -52,7 +73,7 @@ export const uploadImage = [
                 return res.status(400).json({ message: 'No file uploaded' });
             }
 
-            const { filename, path: filePath } = req.file;
+            const { filename, path: filePath } = req.file.filename;
             const { car_id } = req.body;
 
             if (!car_id) {
