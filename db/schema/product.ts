@@ -1,6 +1,6 @@
 import { int, varchar, decimal, json, mysqlTable } from 'drizzle-orm/mysql-core';
 
-export const cars = mysqlTable('cars', {
+export const product = mysqlTable('cars', {
     id: int('id').primaryKey().autoincrement(),
     make: varchar('make', { length: 255 }).notNull(),
     model: varchar('model', { length: 255 }).notNull(),
