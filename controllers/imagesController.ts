@@ -1,7 +1,7 @@
 // controllers/imagesController.ts
 import db from '../db/dbConfig';
 import { eq } from 'drizzle-orm';
-import { productImages } from '../db/schema/productImage';
+import { productImages } from '../db/schema/ProductImage';
 import { product } from '../db/schema/product';
 import multer from 'multer';
 import path from 'path';
