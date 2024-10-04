@@ -73,7 +73,7 @@ export const uploadImage = [
                 return res.status(400).json({ message: 'No file uploaded' });
             }
 
-            const { filename, path: filePath } = req.file.filename;
+            const { filename, path: filePath } = req.file;
             const { car_id } = req.body;
 
             if (!car_id) {
@@ -91,8 +91,9 @@ export const uploadImage = [
             }
 
             // Construct the image URL (adjust based on how you serve static files)
-            const imageUrl = `${req.protocol}://${req.get('host')}/${filePath}`;
-
+            let imageUrl = `${req.protocol}://${req.get('host')}/${filePath}`;
+            // Replace backward slashes with forward slashes in the URL for compatibility
+            imageUrl = imageUrl.replace(/\\/g, '/');
             // Insert image data into the database
             await db
                 .insert(productImages)
