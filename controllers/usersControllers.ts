@@ -83,20 +83,21 @@ const createUser: (req: any, res: any) => Promise<any> = async (req:any, res: an
 //     res.json(result);
 // }
 
-// const getuser = async (req, res) => {
-//     if (!req?.params?.id) return res.status(400).json({ 'message': 'user ID required.' });
+const getUser = async (req:any, res:any) => {
+    if (!req?.params?.id) return res.status(400).json({ 'message': 'user ID required.' });
 
-//     //const user = await user.findOne({ _id: req.params.id }).exec();
-//     if (!user) {
-//         return res.status(204).json({ "message": `No employee matches ID ${req.params.id}.` });
-//     }
-//     res.json(user);
-// }
+    //const user = await user.findOne({ _id: req.params.id }).exec();
+    //const user = await db.select().from(users)
+    //if (!user) {
+       // return res.status(204).json({ "message": `No employee matches ID ${req.params.id}.` });
+    //}
+    //res.json(user);
+}
 
 export  {
     getAllUsers,
     createUser,
     // updateUser,
     // deleteUser,
-    // getUser
+    getUser
 }

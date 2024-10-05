@@ -3,6 +3,7 @@ import * as path from 'path';
 import usersRoute from './routes/Api/user';
 import productsRoute from './routes/Api/product';
 import imagesRoute from './routes/Api/image';
+import authRoute from './routes/Api/auth';
 import cors from 'cors';
 import corsOptions from './config/corsOptions';
 
@@ -25,6 +26,7 @@ app.use(express.urlencoded({ extended: true }));
 app.use('/users',usersRoute )
 app.use("/products", productsRoute)
 app.use("/image", imagesRoute)
+app.use("/auth", authRoute)
 
 app.listen(PORT, () => {
     console.log(`http://localhost:${PORT}`)

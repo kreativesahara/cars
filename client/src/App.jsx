@@ -52,8 +52,8 @@ function App() {
           </thead>
           <tbody>
             {users.map((user) => (
-              <tr key={user.user_id}>
-                <td>{user.user_id}</td>
+              <tr key={user._id}>
+                <td>{user._id}</td>
                 <td>{user.firstname}</td>
                 <td>{user.lastname}</td>
                 <td>{user.email}</td>
