@@ -62,7 +62,10 @@ const upload = multer({
     fileFilter,
 });
 export const gellAllImage = async (req:any, res:any) => {
-    
+    console.log('hello from images controller');
+    const result: any = await db.select().from(productImages)
+    if (!result) return res.status(204).json({ 'message': 'No product found.' });
+    res.json(result);
 }
 // Controller function to handle image upload
 export const uploadImage = [

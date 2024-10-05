@@ -15,7 +15,7 @@ app.use(express.urlencoded({ extended: true }));
 // Serve static files from the uploads directory
 app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
 app.get('/', (req: express.Request, res: express.Response ) => {
-    res.status(200).send('THIS IS SERVER!');
+    res.status(404).send('THIS IS SERVER!');
 })
 
 // Middleware to parse JSON body
@@ -24,7 +24,7 @@ app.use(express.urlencoded({ extended: true }));
 
 app.use('/users',usersRoute )
 app.use("/products", productsRoute)
-app.use("/image", imagesRoute)
+app.use("/images", imagesRoute)
 
 app.listen(PORT, () => {
     console.log(`http://localhost:${PORT}`)
