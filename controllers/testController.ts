@@ -3,9 +3,9 @@ import { users } from '../db/schema/user';
 import db from '../db/dbConfig';
 
 // Fetch all users
-const getAllUsers = async (req: Request, res: Response): Promise<Response> => {
+const getAllTests = async (req: Request, res: Response): Promise<Response> => {
     try {
-        console.log('Fetching all users');
+        console.log('Fetching all Test');
         const result = await db.select().from(users);
 
         if (!result || result.length === 0) {
@@ -20,7 +20,7 @@ const getAllUsers = async (req: Request, res: Response): Promise<Response> => {
 };
 
 // Fetch a single user by ID
-const getUser = async (req: Request, res: Response): Promise<Response> => {
+const getTest = async (req: Request, res: Response): Promise<Response> => {
     const userId = req.params.id;
 
     if (!userId) {
@@ -44,7 +44,7 @@ const getUser = async (req: Request, res: Response): Promise<Response> => {
 };
 
 // Create a new user
-const createUser = async (req: Request, res: Response): Promise<any> => {
+const createTest = async (req: Request, res: Response): Promise<any> => {
     const { firstname, lastname, email, password } = req.body;
 
     if (!firstname || !lastname || !email || !password) {
@@ -111,7 +111,7 @@ const createUser = async (req: Request, res: Response): Promise<any> => {
 // };
 
 // Delete a user
-const deleteUser = async (req: Request, res: Response): Promise<Response> => {
+const deleteTest = async (req: Request, res: Response): Promise<Response> => {
     const userId = req.params.id;
 
     if (!userId) {
@@ -137,9 +137,9 @@ const deleteUser = async (req: Request, res: Response): Promise<Response> => {
 };
 
 export {
-    getAllUsers,
-    getUser,
-    createUser,
+    getAllTests,
+    getTest,
+    createTest,
     //updateUser,
-    deleteUser
+    deleteTest
 };

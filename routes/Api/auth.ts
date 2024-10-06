@@ -1,11 +1,10 @@
 import { Router } from "express";
-
+import {  registerUser } from "../../controllers/AuthController";
 const router = Router();
-const { uploadImage, gellAllImage} = require("../../controllers/imagesController");
 
 router.route("/")
-    .get(gellAllImage)
-    .post(uploadImage);
+    .get(registerUser)
+    //.post(createUser);
 router.route("/:id")
     .get()
     .put()
