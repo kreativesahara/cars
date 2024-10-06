@@ -1,12 +1,12 @@
 import { Router } from "express";
-import { handleLogin } from "../../controllers/AuthController";
+import {  registerUser } from "../../controllers/AuthController";
 const router = Router();
 
-//const users : string= 'mwongera';
-
-// GET /api/users
 router.route("/")
-    .get(handleLogin)
+    .get(registerUser)
     //.post(createUser);
-
+router.route("/:id")
+    .get()
+    .put()
+    .delete();
 export default router;
