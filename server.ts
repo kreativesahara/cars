@@ -4,7 +4,7 @@ import usersRoute from './routes/Api/user';
 import productsRoute from './routes/Api/product';
 import imagesRoute from './routes/Api/image';
 import authRoute from './routes/Api/auth';
-import testRoute from './routes/Test'
+import testRoute from './routes/test'
 import cors from 'cors';
 import corsOptions from './config/corsOptions';
 
