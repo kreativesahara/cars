@@ -2,7 +2,6 @@ import db from '../db/dbConfig'
 import bcrypt from 'bcrypt';
 import { Request, Response } from 'express';
 import { users } from '../db/schema/user'; // Adjust the import path as necessary
-import { eq} from 'drizzle-orm';
 //const jwt = require('jsonwebtoken');
 
 const registerUser = async (req: Request, res: Response): Promise<Response> => {
