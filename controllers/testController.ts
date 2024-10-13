@@ -1,8 +1,9 @@
 import { Request, Response } from 'express';
+import { eq } from 'drizzle-orm';
 import { users } from '../db/schema/user';
 import db from '../db/dbConfig';
 
-// Fetch all users
+// Fetch all Test
 const getAllTests = async (req: Request, res: Response): Promise<Response> => {
     try {
         console.log('Fetching all Test');
@@ -19,31 +20,32 @@ const getAllTests = async (req: Request, res: Response): Promise<Response> => {
     }
 };
 
-// Fetch a single user by ID
+// Fetch a single Test by ID
 const getTest = async (req: Request, res: Response): Promise<Response> => {
-    const userId = req.params.id;
+    const testId: any = req.params.id;
 
-    if (!userId) {
+    if (!testId) {
         return res.status(400).json({ message: 'An ID is required to fetch some data.' });
     }
 
     try {
-        console.log(`Fetching Data with Created ID: ${userId}`);
-        const user = await db.select().from(users)
-        //.where({ id: userId }).first();
-
+        console.log(`Fetching Data with Created ID: ${testId}`);
+        const user = await db
+            .select()
+            .from(users)
+            .where(eq(users.id, testId));
         if (!user) {
-            return res.status(404).json({ message: `No Data found with this ID: ${userId}.` });
+            return res.status(404).json({ message: `No Data found with this ID: ${testId}.` });
         }
 
         return res.status(200).json(user);
     } catch (error) {
-        console.error(`Error fetching Data with ID ${userId}:`, error);
+        console.error(`Error fetching Data with ID ${testId}:`, error);
         return res.status(500).json({ message: 'Internal server error.' });
     }
 };
 
-// Create a new user
+// Create a new Test
 const createTest = async (req: Request, res: Response): Promise<any> => {
     const { firstname, lastname, email, password } = req.body;
 
@@ -52,7 +54,7 @@ const createTest = async (req: Request, res: Response): Promise<any> => {
     }
 
     try {
-        console.log('Creating a new user');
+        console.log('Creating a new Test');
         const result = await db.insert(users).values({
             firstname,
             lastname,
@@ -62,76 +64,78 @@ const createTest = async (req: Request, res: Response): Promise<any> => {
         });
         return res.status(201).json(result);
     } catch (error) {
-        console.error('Error creating user:', error);
+        console.error('Error creating Test:', error);
         // Handle unique constraint violations or other DB errors
     }
 };
 
-// Update an existing user
-// const updateUser = async (req: Request, res: Response): Promise<Response> => {
-//     const userId = req.params.id;
-//     const { firstname, lastname, email, password } = req.body;
+// Update an existing Test
+const updateTest = async (req: Request, res: Response): Promise<Response> => {
+    const testId: any = req.body.id;
+    const { firstname, lastname, email, password } = req.body;
 
-//     if (!userId) {
-//         return res.status(400).json({ message: 'User ID is required.' });
-//     }
+    if (!testId) {
+        return res.status(400).json({ message: 'Test ID is required.' });
+    }
 
-//     if (!firstname && !lastname && !email && !password) {
-//         return res.status(400).json({ message: 'At least one field (firstname, lastname, email, password) is required to update.' });
-//     }
+    if (!firstname && !lastname && !email && !password) {
+        return res.status(400).json({ message: 'At least one field (firstname, lastname, email, password) is required to update.' });
+    }
 
-//     try {
-//         console.log(`Updating user with ID: ${userId}`);
-//         const user = await db.select().from(users)
-//         //.where({ id: userId }).first();
+    try {
+        console.log(`Updating Test with ID: ${testId}`);
+        const user = await db
+            .select()
+            .from(users)
+            .where(eq(users.id, testId));
+        if (!user) {
+            return res.status(404).json({ message: `No Test found with ID ${testId}.` });
+        }
 
-//         if (!user) {
-//             return res.status(404).json({ message: `No user found with ID ${userId}.` });
-//         }
+        const updatedFields: any = {};
 
-//         const updatedFields: Partial<typeof user> = {};
+        if (firstname) updatedFields.firstname = firstname;
+        if (lastname) updatedFields.lastname = lastname;
+        if (email) updatedFields.email = email;
+        if (password) updatedFields.password = password;
+        // Add other fields if necessary
 
-//         if (firstname) updatedFields.firstname = firstname;
-//         if (lastname) updatedFields.lastname = lastname;
-//         if (email) updatedFields.email = email;
-//         if (password) updatedFields.password = password;
-//         // Add other fields if necessary
+        const [updatedTest] = await db
+            .update(users)
+            .set(updatedFields)
+            .where(eq(users.id, testId));
 
-//         const [updatedUser] = await db.update(updatedFields).from(users).where({ id: userId }).returning('*');
-
-//         return res.status(200).json(updatedUser);
-//     } catch (error) {
-//         console.error(`Error updating user with ID ${userId}:`, error);
-//         // Handle unique constraint violations or other DB errors
-//         if (error.code === '23505') { // Example for PostgreSQL unique violation
-//             return res.status(409).json({ message: 'Email already exists.' });
-//         }
-//         return res.status(500).json({ message: 'Internal server error.' });
-//     }
-// };
+        return res.status(200).json(updatedTest);
+    } catch (error) {
+        console.error(`Error updating user with ID ${testId}:`, error);
+        return res.status(500).json({ message: 'Internal server error.' });
+    }
+};
 
 // Delete a user
 const deleteTest = async (req: Request, res: Response): Promise<Response> => {
-    const userId = req.params.id;
+    const testId: any = req.body.id;
 
-    if (!userId) {
+    if (!testId) {
         return res.status(400).json({ message: 'User ID is required.' });
     }
 
     try {
-        console.log(`Deleting user with ID: ${userId}`);
-        const user = await db.select().from(users)
-        //.where({ id: userId }).first();
+        console.log(`Deleting Test with ID: ${testId}`);
+        const user = await db
+            .select()
+            .from(users)
+            .where(eq(users.id, testId));
 
         if (!user) {
-            return res.status(404).json({ message: `No user found with ID ${userId}.` });
+            return res.status(404).json({ message: `No Test found with ID ${testId}.` });
         }
 
-        //await db.delete().from(users).where({ id: userId });
+        await db.delete(users).where(eq(users.id, testId));
 
-        return res.status(200).json({ message: `User with ID ${userId} has been deleted.` });
+        return res.status(200).json({ message: `Test with ID ${testId} has been deleted.` });
     } catch (error) {
-        console.error(`Error deleting user with ID ${userId}:`, error);
+        console.error(`Error deleting user with ID ${testId}:`, error);
         return res.status(500).json({ message: 'Internal server error.' });
     }
 };
@@ -140,6 +144,6 @@ export {
     getAllTests,
     getTest,
     createTest,
-    //updateUser,
+    updateTest,
     deleteTest
 };
