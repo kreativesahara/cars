@@ -11,3 +11,7 @@ router.route("/:id")
     .put()
     .delete();
 export default router;
+
+//TODO: Add roles
+    //.put(verifyRoles(ROLES_LIST.Admin, ROLES_LIST.Editor), productsController.updateProduct)
+    // .delete(verifyRoles(ROLES_LIST.Admin), productsController.deleteProduct);

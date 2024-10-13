@@ -3,8 +3,8 @@ import {  registerUser } from "../../controllers/AuthController";
 const router = Router();
 
 router.route("/")
-    .get(registerUser)
-    //.post(createUser);
+    .post(registerUser)
+    //.get(userLogin);
 router.route("/:id")
     .get()
     .put()

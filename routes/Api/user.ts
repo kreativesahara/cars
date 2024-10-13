@@ -5,10 +5,11 @@ const {getAllUsers, createUser, getUser} = require("../../controllers/usersContr
 
 router.route("/")
     .get(getAllUsers)
-    .post(createUser);
+    .post(createUser)
+    .put()
+    .delete();
+    
 router.route("/:id")
     .get(getUser)
-    //.put()
-    //.delete();
 
 export default router;

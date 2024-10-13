@@ -1,4 +1,5 @@
 import { Request, Response } from 'express';
+import { eq } from 'drizzle-orm';
 import { users } from '../db/schema/user';
 import db from '../db/dbConfig';
 
@@ -21,7 +22,7 @@ const getAllUsers = async (req: Request, res: Response): Promise<Response> => {
 
 // Fetch a single user by ID
 const getUser = async (req: Request, res: Response): Promise<Response> => {
-    const userId = req.params.id;
+    const userId: any = req.params.id;
 
     if (!userId) {
         return res.status(400).json({ message: 'An ID is required to fetch some data.' });
@@ -29,9 +30,10 @@ const getUser = async (req: Request, res: Response): Promise<Response> => {
 
     try {
         console.log(`Fetching Data with Created ID: ${userId}`);
-        const user = await db.select().from(users)
-        //.where({ id: userId }).first();
-
+        const user = await db
+            .select()
+            .from(users)
+            .where(eq(users.id, userId));
         if (!user) {
             return res.status(404).json({ message: `No Data found with this ID: ${userId}.` });
         }
