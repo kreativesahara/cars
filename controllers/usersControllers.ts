@@ -70,51 +70,51 @@ const createUser = async (req: Request, res: Response): Promise<any> => {
 };
 
 // Update an existing user
-// const updateUser = async (req: Request, res: Response): Promise<Response> => {
-//     const userId = req.params.id;
-//     const { firstname, lastname, email, password } = req.body;
+const updateUser = async (req: Request, res: Response): Promise<Response> => {
+    const userId:any = req.body.id;
+    const { firstname, lastname, email, password } = req.body;
 
-//     if (!userId) {
-//         return res.status(400).json({ message: 'User ID is required.' });
-//     }
+    if (!userId) {
+        return res.status(400).json({ message: 'User ID is required.' });
+    }
 
-//     if (!firstname && !lastname && !email && !password) {
-//         return res.status(400).json({ message: 'At least one field (firstname, lastname, email, password) is required to update.' });
-//     }
+    if (!firstname && !lastname && !email && !password) {
+        return res.status(400).json({ message: 'At least one field (firstname, lastname, email, password) is required to update.' });
+    }
 
-//     try {
-//         console.log(`Updating user with ID: ${userId}`);
-//         const user = await db.select().from(users)
-//         //.where({ id: userId }).first();
+    try {
+        console.log(`Updating user with ID: ${userId}`);
+       const user = await db
+            .select()
+            .from(users)
+            .where(eq(users.id, userId));
+        if (!user) {
+            return res.status(404).json({ message: `No user found with ID ${userId}.` });
+        }
 
-//         if (!user) {
-//             return res.status(404).json({ message: `No user found with ID ${userId}.` });
-//         }
+        const updatedFields: any = {};
 
-//         const updatedFields: Partial<typeof user> = {};
+        if (firstname) updatedFields.firstname = firstname;
+        if (lastname) updatedFields.lastname = lastname;
+        if (email) updatedFields.email = email;
+        if (password) updatedFields.password = password;
+        // Add other fields if necessary
 
-//         if (firstname) updatedFields.firstname = firstname;
-//         if (lastname) updatedFields.lastname = lastname;
-//         if (email) updatedFields.email = email;
-//         if (password) updatedFields.password = password;
-//         // Add other fields if necessary
+        const [updatedUser] = await db
+            .update(users)
+            .set(updatedFields)
+            .where(eq(users.id, userId));
 
-//         const [updatedUser] = await db.update(updatedFields).from(users).where({ id: userId }).returning('*');
-
-//         return res.status(200).json(updatedUser);
-//     } catch (error) {
-//         console.error(`Error updating user with ID ${userId}:`, error);
-//         // Handle unique constraint violations or other DB errors
-//         if (error.code === '23505') { // Example for PostgreSQL unique violation
-//             return res.status(409).json({ message: 'Email already exists.' });
-//         }
-//         return res.status(500).json({ message: 'Internal server error.' });
-//     }
-// };
+        return res.status(200).json(updatedUser);
+    } catch (error) {
+        console.error(`Error updating user with ID ${userId}:`, error);        
+        return res.status(500).json({ message: 'Internal server error.' });
+    }
+};
 
 // Delete a user
 const deleteUser = async (req: Request, res: Response): Promise<Response> => {
-    const userId = req.params.id;
+    const userId: any = req.body.id;
 
     if (!userId) {
         return res.status(400).json({ message: 'User ID is required.' });
@@ -122,14 +122,16 @@ const deleteUser = async (req: Request, res: Response): Promise<Response> => {
 
     try {
         console.log(`Deleting user with ID: ${userId}`);
-        const user = await db.select().from(users)
-        //.where({ id: userId }).first();
+        const user = await db
+            .select()
+            .from(users)
+            .where(eq(users.id, userId));
 
         if (!user) {
             return res.status(404).json({ message: `No user found with ID ${userId}.` });
         }
 
-        //await db.delete().from(users).where({ id: userId });
+        await db.delete(users).where(eq(users.id, userId));
 
         return res.status(200).json({ message: `User with ID ${userId} has been deleted.` });
     } catch (error) {
@@ -142,6 +144,6 @@ export {
     getAllUsers,
     getUser,
     createUser,
-    //updateUser,
+    updateUser,
     deleteUser
 };
