@@ -107,12 +107,12 @@ const updateTest = async (req: Request, res: Response): Promise<Response> => {
 
         return res.status(200).json(updatedTest);
     } catch (error) {
-        console.error(`Error updating user with ID ${testId}:`, error);
+        console.error(`Error updating Test with ID ${testId}:`, error);
         return res.status(500).json({ message: 'Internal server error.' });
     }
 };
 
-// Delete a user
+// Delete a Test
 const deleteTest = async (req: Request, res: Response): Promise<Response> => {
     const testId: any = req.body.id;
 
