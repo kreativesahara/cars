@@ -1,4 +1,4 @@
-import { int, varchar, decimal, json, mysqlTable } from 'drizzle-orm/mysql-core';
+import { int, varchar, decimal, json, mysqlTable, text } from 'drizzle-orm/mysql-core';
 
 export const product = mysqlTable('cars', {
     id: int('id').primaryKey().autoincrement(),
@@ -10,9 +10,9 @@ export const product = mysqlTable('cars', {
     transmission: varchar('transmission', { length: 50 }).notNull(),
     driveSystem: varchar('drive_system', { length: 50 }).notNull(),
     mileage: int('mileage'),
-    features: json('features').default(null),
+    features: text('features').notNull(),
     condition: varchar('car_condition', { length: 50 }).notNull(),
     location: varchar('view_location', { length: 255 }).notNull(),
     price: decimal('price', { precision: 10, scale: 2 }).notNull(),
-    seller_id: int('seller_id').notNull(),
+    seller_id: int('seller_id').notNull()
 });
