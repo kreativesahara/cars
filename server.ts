@@ -5,6 +5,7 @@ import productsRoute from './routes/Api/product';
 import imagesRoute from './routes/Api/image';
 import authRoute from './routes/Api/auth';
 import testRoute from './routes/test'
+import printRoute from './routes/Api/print'
 import cors from 'cors';
 import corsOptions from './config/corsOptions';
 
@@ -29,6 +30,7 @@ app.use("/auth", authRoute)
 
 //Test Case
 app.use("/test", testRoute)
+app.use("/print",printRoute)
 
 // Start the server
 app.listen(PORT, () => {

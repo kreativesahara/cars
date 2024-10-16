@@ -2,7 +2,7 @@ import { Router } from "express";
 
 
 const router = Router();
-const { getAllProducts, getProduct, createProduct, updateSingleProduct,deleteProduct } = require("../../controllers/productsController");
+const { getAllProducts, getProduct, createProduct, updateSingleProduct,deleteProduct } = require("../../controllers/testProductController");
 
 router.route("/")
     .get(getAllProducts)

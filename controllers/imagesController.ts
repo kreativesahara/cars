@@ -1,7 +1,7 @@
 // controllers/imagesController.ts
 import db from '../db/dbConfig';
 import { eq } from 'drizzle-orm';
-import { productImages } from '../db/schema/productImage';
+import { productImage } from '../db/schema/productImage';
 import { product } from '../db/schema/product';
 import multer from 'multer';
 import path from 'path';
@@ -63,7 +63,7 @@ const upload = multer({
 });
 export const gellAllImage = async (req:any, res:any) => {
     console.log('hello from images controller');
-    const result: any = await db.select().from(productImages)
+    const result: any = await db.select().from(productImage)
     if (!result) return res.status(204).json({ 'message': 'No product found.' });
     res.json(result);
 }
@@ -99,7 +99,7 @@ export const uploadImage = [
             imageUrl = imageUrl.replace(/\\/g, '/');
             // Insert image data into the database
             await db
-                .insert(productImages)
+                .insert(productImage)
                 .values({
                     car_id: parseInt(car_id),
                     image_url: imageUrl,
