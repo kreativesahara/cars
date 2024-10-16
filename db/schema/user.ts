@@ -11,5 +11,6 @@ export const users = mysqlTable('users', {
     firstname: varchar('first_name', { length: 255 }),
     lastname: varchar('last_name', { length: 255 }),
     email: varchar('email', { length: 255 }),
+    phone_no: varchar('phone_no', { length: 255 }),
     password: varchar('password', { length: 255 })
 });
