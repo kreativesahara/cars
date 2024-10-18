@@ -17,7 +17,7 @@ const router = createBrowserRouter([
         element:<Product/>,
       },
       {
-        path: "print",
+        path: "upload",
         element: <FullProduct />,
       },
       { 

@@ -1,16 +1,14 @@
 import { Router } from "express";
-
-
 const router = Router();
-const { getAllProducts, getProduct, createProduct, updateSingleProduct,deleteProduct } = require("../../controllers/testProductController");
+const { getAllUploads, createUpload, getUpload, updateUpload, deleteUpload} = require("../../controllers/uploadsController");
 
 router.route("/")
-    .get(getAllProducts)
-    .post(createProduct)
-    .put(updateSingleProduct)
-    .delete(deleteProduct);
+    .get(getAllUploads)
+    .post(createUpload)
+    .put(updateUpload)
+    .delete(deleteUpload);
 router.route("/:id")
-    .get(getProduct)
+    .get(getUpload)
 export default router;
 
 //TODO: Add roles

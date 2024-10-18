@@ -19,7 +19,7 @@ const uploadUserDetails = () => {
         try {
             await axios.post('http://localhost:3100/auth', formData,
                 {
-                    headers: { 'Content-Type': 'application/json' },
+                   // headers: { 'Content-Type': 'application/json' },
                     withCredentials: false
                 },
             );

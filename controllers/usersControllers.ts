@@ -48,7 +48,7 @@ const getUser = async (req: Request, res: Response): Promise<Response> => {
 // Create a new user
 const createUser = async (req: Request, res: Response): Promise<any> => {
     const { firstname, lastname, email, password } = req.body;
-
+    console.log(req.body);
     if (!firstname || !lastname || !email || !password) {
         return res.status(400).json({ message: 'Firstname, lastname, email, and password are required.' });
     }

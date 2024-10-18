@@ -26,9 +26,12 @@ const getProduct = async (req:Request, res:Response): Promise<any> => {
     res.json(singleProduct);
 }
 const createProduct: (req: any, res: any) => Promise<any> = async (req:any, res: any): Promise<any> => {
-    const {make, model, year, engine_capacity, fuel_type, transmission, driveSystem, mileage, features, condition,     location, price, seller_id=1} = req.body;
+    const {make, model, year, engine_capacity, fuel_type, transmission, driveSystem, mileage, features, condition,location, price,
+     seller_id=53
+    } = req.body;
 
-    if (!make || !features || !seller_id || !mileage || !model || !year || !engine_capacity || !fuel_type || !transmission || !driveSystem || !price || !condition || !location 
+    if (!make 
+        || !features || !seller_id || !mileage || !model || !year || !engine_capacity || !fuel_type || !transmission || !driveSystem || !price || !condition || !location 
     ) {    
          return res.status(400).json({ 'message': 'some inputs are required' });  
     }

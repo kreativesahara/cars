@@ -18,7 +18,7 @@ const storage = multer.diskStorage({
 const upload = multer({ storage });
 
 // Get all products
-const getAllProducts = async (req: Request, res: Response): Promise<Response> => {
+export const getAllUploads = async (req: Request, res: Response): Promise<Response> => {
     console.log('Fetching all products');
     const result = await db.select().from(product);
     if (!result.length) return res.status(204).json({ message: 'No products found.' });
@@ -26,7 +26,7 @@ const getAllProducts = async (req: Request, res: Response): Promise<Response> =>
 };
 
 // Get single product
-const getProduct = async (req: Request, res: Response): Promise<Response> => {
+export const getUpload = async (req: Request, res: Response): Promise<Response> => {
     const productId: any = req.params.id;
 
     if (!productId) {
@@ -44,14 +44,14 @@ const getProduct = async (req: Request, res: Response): Promise<Response> => {
 
 
 // Create product with images
-const createProduct = async (req: Request, res: Response): Promise<Response> => {
-    const { make, model, year, engine_capacity, fuel_type, transmission, driveSystem, mileage, features, condition, location, price, seller_id } = req.body;
+export const createUpload = async (req: any, res: any): Promise<any> => {
+    const { make, model, year, engine_capacity, fuel_type, transmission, driveSystem, mileage, features, condition, location, price, seller_id =53 } = req.body;
 
     if (!make || !model || !year || !engine_capacity || !fuel_type || !transmission || !driveSystem || !mileage || !features || !condition || !location || !price || !seller_id) {
         return res.status(400).json({ message: 'All fields are required.' });
     }
 
-    const images = req.files as Express.Multer.File[];
+   //const images = req.files as Express.Multer.File[];
 
     try {
         const result = await db.insert(product).values({
@@ -71,21 +71,25 @@ const createProduct = async (req: Request, res: Response): Promise<Response> => 
         })
         .$returningId();
 
+        console.log('Inserted product ID:', result);
+        //console.log(images);
         // Check if productId was retrieved successfully
         if (!result) {
             return res.status(500).json({ message: 'Failed to retrieve inserted product ID.' });
         }
 
-        if (images && images.length > 0) {
-            const imagePromises = images.map(async (img: Express.Multer.File) => {
-                await db.insert(productImage).values({
-                    car_id: result[0].id,
-                    image_url: img.path,
-                });
-            });
+        // if (images && images.length > 0) {
+        //     const imagePromises = images.map(async (img: Express.Multer.File) => {
+        //         await db.insert(productImage).values({
+        //             car_id: result[0].id,
+        //             image_url: img.path,
+        //         });
+        //     });
 
-            await Promise.all(imagePromises);
-        }
+        //     await Promise.all(imagePromises);
+        // }else{
+        //     console.log('No images uploaded');
+        // }
 
         return res.status(201).json({ message: 'Product created successfully.',  result });
     } catch (err) {
@@ -95,7 +99,7 @@ const createProduct = async (req: Request, res: Response): Promise<Response> => 
 };
 
 // Update product
-const updateSingleProduct = async (req: Request, res: Response): Promise<Response> => {
+export const updateUpload = async (req: Request, res: Response): Promise<Response> => {
     const productId = req.body.id;
     const { make, model, year, engine_capacity, fuel_type, transmission, driveSystem, mileage, features, condition, location, price, seller_id } = req.body;
 
@@ -135,7 +139,7 @@ const updateSingleProduct = async (req: Request, res: Response): Promise<Respons
 };
 
 // Delete product
-const deleteProduct = async (req: Request, res: Response): Promise<Response> => {
+export const deleteUpload = async (req: Request, res: Response): Promise<Response> => {
     const productId = req.body.id;
 
     if (!productId) {
@@ -156,13 +160,4 @@ const deleteProduct = async (req: Request, res: Response): Promise<Response> => 
         console.error(`Error deleting Product with ID ${productId}:`, error);
         return res.status(500).json({ message: 'Internal server error.' });
     }
-};
-
-export {
-    getAllProducts,
-    createProduct,
-    updateSingleProduct,
-    deleteProduct,
-    getProduct,
-    upload // Export upload middleware if needed
 };

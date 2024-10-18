@@ -5,7 +5,7 @@ import { users } from '../db/schema/user'; // Adjust the import path as necessar
 //const jwt = require('jsonwebtoken');
 const registerUser = async (req: Request, res: Response): Promise<Response> => {
     const { firstname, lastname, email, password } = req.body;
-
+    console.log(req.body);
     // Input Validation
     if (!firstname || !lastname || !email || !password) {
         return res.status(400).json({ message: 'Firstname, lastname, email, and password are required.' });

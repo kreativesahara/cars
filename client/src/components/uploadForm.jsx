@@ -27,6 +27,7 @@ const UploadListing = () => {
         }));
     }
 
+   
     const handleImageChange = (e) => {
         setImages(Array.from(e.target.files));
     };
@@ -35,25 +36,24 @@ const UploadListing = () => {
         e.preventDefault();
         try {
             const form = new FormData();
-
             // Append all form fields
             Object.keys(values).forEach((key) => form.append(key, values[key]));
-
             // Append images to form data
-            for (let i = 0; i < images.length; i++) {
-                form.append("images", images[i]);
-            }
-
+            images.forEach((image, index) => {
+                form.append(`images`, image); // You can customize the key for each image
+            });
+            
             // Post data to backend
-            const response = await axios.post('http://localhost:3100/print',
+            const response = await axios.post('http://localhost:3100/upload',
                 form,
                 {
-                    headers: { 'Content-Type': 'multipart/form-data' },
-                    withCredentials: false
+                    headers: { 'Content-Type': 'application/json' },
+                    withCredentials: true
                 },
             );
 
-            console.log(response);
+            console.log("Response:", response);
+            console.log("Values:", values)
             alert("Car details uploaded successfully");
 
             // Reset form fields
@@ -86,7 +86,7 @@ const UploadListing = () => {
                     <label>Upload Images:</label>
                     <input
                         type="file"
-                        name="images"
+                        name="image"
                         multiple
                         accept="image/*"
                         onChange={handleImageChange}

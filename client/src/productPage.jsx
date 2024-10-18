@@ -62,7 +62,7 @@ const productPage = () => {
                   </tbody>
               </table>
           ) : (
-              <div>Not a User found.</div>
+              <div>No products found.</div>
           )}
         <UploadListing/>
     </div>

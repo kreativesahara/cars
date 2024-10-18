@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import axios from 'axios';
 import imageCompression from 'browser-image-compression';
 import '../output.css';
-const carId = 10;
+const carId = 55;
 function UploadImage() {
   const [values, setValues] = useState({ car_id: carId });
   const [image, setImage] = useState(null);
@@ -42,7 +42,7 @@ function UploadImage() {
     formData.append('car_id', carId);
     try {
       await axios.post('http://localhost:3100/image', formData, {
-        headers: { 'Content-Type': 'multipart/form-data' },
+       // headers: { 'Content-Type': 'multipart/form-data' },
         withCredentials: false,
       });
       alert('Image uploaded successfully!');
