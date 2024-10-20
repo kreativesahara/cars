@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import axios from 'axios';
 import './uploadlist.css';
+import { ConsoleLogWriter } from 'drizzle-orm';
 
 const UploadListing = () => {
     const [values, setValues] = useState({
@@ -37,16 +38,22 @@ const UploadListing = () => {
         try {
             const form = new FormData();
             // Append all form fields
-            Object.keys(values).forEach((key) => form.append(key, values[key]));
+           const data =  Object.keys(values).forEach((key) => form.append(key, values[key]));
             // Append images to form data
-            images.forEach((image, index) => {
-                form.append(`images`, image); // You can customize the key for each image
-            });
-            
+
+            //TODO: 
+            // images.forEach((image, index) => {
+            //     form.append(`images`, image); // You can customize the key for each image
+            // });
+
+            const jsonData = JSON.stringify(form)
+
+            console.log(jsonData)           
             // Post data to backend
             const response = await axios.post('http://localhost:3100/upload',
                 form,
                 {
+                    //Requires multipart/form-data to set data for api post request
                     headers: { 'Content-Type': 'application/json' },
                     withCredentials: true
                 },
@@ -211,9 +218,8 @@ const UploadListing = () => {
                         placeholder="Describe the features of the Vehicle"
                         required
                         value={values.features}
-                    />
-                </div>
-
+                    /> 
+                </div> 
                 <button type='submit'>
                     Add all Listing
                 </button>

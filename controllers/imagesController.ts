@@ -6,6 +6,7 @@ import { product } from '../db/schema/product';
 import multer from 'multer';
 import path from 'path';
 import fs from 'fs';
+import { log } from 'console';
 
 // Configure Multer to store files on disk
 const storage = multer.diskStorage({
@@ -72,6 +73,7 @@ export const gellAllImage = async (req:any, res:any) => {
 export const uploadImage = [
     upload.single('image'), // 'image' is the field name in the form
     async (req:any, res:any) => {
+        console.log('uploaded image file',req.file)
         try {
             if (!req.file) {
                 return res.status(400).json({ message: 'No file uploaded' });

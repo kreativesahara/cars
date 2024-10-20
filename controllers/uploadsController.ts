@@ -45,6 +45,7 @@ export const getUpload = async (req: Request, res: Response): Promise<Response> 
 
 // Create product with images
 export const createUpload = async (req: any, res: any): Promise<any> => {
+    upload.single('image')
     const { make, model, year, engine_capacity, fuel_type, transmission, driveSystem, mileage, features, condition, location, price, seller_id =53 } = req.body;
 
     if (!make || !model || !year || !engine_capacity || !fuel_type || !transmission || !driveSystem || !mileage || !features || !condition || !location || !price || !seller_id) {
