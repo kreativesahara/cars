@@ -1,6 +1,6 @@
 import React from 'react'
 import axios from 'axios'
-import './uploadlist.css'
+//import './uploadlist.css'
 import { useState } from 'react'
 
 const uploadListing = () => {
@@ -71,7 +71,7 @@ const uploadListing = () => {
                       placeholder="Describe the features of the Vehicle" required
                   />
               </div>
-              <button type='submit'>
+              <button className='btn' type='submit'>
                   Add Listing
               </button>
           </form>

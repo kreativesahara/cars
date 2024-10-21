@@ -5,7 +5,8 @@ import productsRoute from './routes/Api/product';
 import imagesRoute from './routes/Api/image';
 //import authRoute from './routes/Api/auth';
 import testRoute from './routes/test'
-import uploadRoute from './routes/Api/upload'
+import UploadRoute from './routes/Api/product'
+import testUploadRoute from './routes/Api/testimage'
 import cors from 'cors';
 import corsOptions from './config/corsOptions';
 
@@ -30,8 +31,10 @@ app.use("/image", imagesRoute)
 //app.use("/auth", authRoute)
 
 //Test Case
+app.use("/upload", UploadRoute)
 app.use("/test", testRoute)
-app.use("/upload",uploadRoute)
+app.use("/testupload", testUploadRoute)
+
 
 // Start the server
 app.listen(PORT, () => {

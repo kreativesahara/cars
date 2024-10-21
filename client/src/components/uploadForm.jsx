@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import axios from 'axios';
-import './uploadlist.css';
-import { ConsoleLogWriter } from 'drizzle-orm';
+
+const carId = 55;
 
 const UploadListing = () => {
     const [values, setValues] = useState({
@@ -46,7 +46,7 @@ const UploadListing = () => {
             //     form.append(`images`, image); // You can customize the key for each image
             // });
 
-            const jsonData = JSON.stringify(form)
+            const jsonData = JSON.stringify(data)
 
             console.log(jsonData)           
             // Post data to backend
@@ -55,7 +55,7 @@ const UploadListing = () => {
                 {
                     //Requires multipart/form-data to set data for api post request
                     headers: { 'Content-Type': 'application/json' },
-                    withCredentials: true
+                    withCredentials: false
                 },
             );
 

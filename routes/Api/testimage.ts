@@ -1,14 +1,20 @@
 import { Router } from "express";
 const router = Router();
-const { getAllUploads, createUpload, getUpload, updateUpload, deleteUpload} = require("../../controllers/uploadsController");
+const { 
+    getAllUploads, 
+    createUpload, 
+    // getUpload, 
+    // updateUpload, 
+    // deleteUpload
+} = require("../../controllers/uploadsController");
 
 router.route("/")
     .get(getAllUploads)
     .post(createUpload)
-    .put(updateUpload)
-    .delete(deleteUpload);
+    // .put(updateUpload)
+    // .delete(deleteUpload);
 router.route("/:id")
-    .get(getUpload)
+    // .get(getUpload)
 export default router;
 
 //TODO: Add roles

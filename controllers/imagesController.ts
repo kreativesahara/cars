@@ -1,12 +1,11 @@
 // controllers/imagesController.ts
 import db from '../db/dbConfig';
 import { eq } from 'drizzle-orm';
-import { productImage } from '../db/schema/productImage';
+import { productImage } from '../db/schema/ProductImage';
 import { product } from '../db/schema/product';
 import multer from 'multer';
 import path from 'path';
 import fs from 'fs';
-import { log } from 'console';
 
 // Configure Multer to store files on disk
 const storage = multer.diskStorage({
@@ -76,7 +75,7 @@ export const uploadImage = [
         console.log('uploaded image file',req.file)
         try {
             if (!req.file) {
-                return res.status(400).json({ message: 'No file uploaded' });
+                return res.status(500).json({ message: 'No file uploaded' });
             }
 
             const { filename, path: filePath } = req.file;

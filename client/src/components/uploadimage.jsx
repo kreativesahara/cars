@@ -1,7 +1,8 @@
 import React, { useState } from 'react';
 import axios from 'axios';
 import imageCompression from 'browser-image-compression';
-import '../output.css';
+import './uploadlist.css'
+
 const carId = 55;
 function UploadImage() {
   const [values, setValues] = useState({ car_id: carId });
