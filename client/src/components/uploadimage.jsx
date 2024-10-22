@@ -1,8 +1,9 @@
 import React, { useState } from 'react';
 import axios from 'axios';
 import imageCompression from 'browser-image-compression';
-import '../output.css';
-const carId = 10;
+import './uploadlist.css'
+
+const carId = 55;
 function UploadImage() {
   const [values, setValues] = useState({ car_id: carId });
   const [image, setImage] = useState(null);
@@ -10,6 +11,7 @@ function UploadImage() {
 
   const handleChange = async (e) => {
     const file = e.target.files[0];
+    console.log("Stagged image File: ",file)
     if (file) {
       // Optional: Compress the image before setting it to state
       const options = {
@@ -40,10 +42,12 @@ function UploadImage() {
     const formData = new FormData();
     formData.append('image', image);
     formData.append('car_id', carId);
+
+    console.log('Form Data: ',formData);
     try {
       await axios.post('http://localhost:3100/image', formData, {
         headers: { 'Content-Type': 'multipart/form-data' },
-        withCredentials: false,
+        withCredentials: true,
       });
       alert('Image uploaded successfully!');
       setImage(null);
@@ -56,7 +60,7 @@ function UploadImage() {
 
   return (
     <div className="upload-container">
-      <form onSubmit={handleSubmit} className="upload-form">
+      <form onSubmit={handleSubmit} className="upload-form" >
         <label htmlFor="image-upload" className="upload-label">
           Upload an Image
         </label>

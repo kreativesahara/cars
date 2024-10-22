@@ -1,9 +1,11 @@
 import React from 'react'
-import Contacts from './contacts.jsx';
 import ReactDOM from 'react-dom/client'
 import {createBrowserRouter,RouterProvider,} from "react-router-dom";
 import App from './App.jsx'
 import Product from './productPage.jsx'
+import FullProduct from './fullProductPage.jsx'
+import Contacts from './contacts.jsx';
+import TestUpload from './testUploadPage.jsx'
 import './index.css';
 
 const router = createBrowserRouter([
@@ -13,8 +15,16 @@ const router = createBrowserRouter([
       },
       { 
         path: "product", 
-        // element:<div>products</div>
         element:<Product/>,
+      },
+      {
+        path: "upload",
+        element: <FullProduct />,
+      },
+      {
+        path: "testupload",
+        //element: <div> hello</div >,
+        element: <TestUpload />,
       },
       { 
         path: "contact", 

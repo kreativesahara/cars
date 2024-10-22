@@ -1,7 +1,7 @@
 import React from 'react'
 import axios from 'axios';
 import { useState, useEffect } from 'react';
-import UploadListing from './components/uploadListing'
+import UploadForm from './components/uploadForm'
 const productPage = () => {
     const [products, setProducts] = useState([]); // State for fetched users
     const [isLoading, setIsLoading] = useState(false); // State for loading indicator
@@ -13,7 +13,7 @@ const productPage = () => {
             setError(null); // Clear any previous errors
 
             try {
-                const response = await axios.get('http://localhost:3100/products'); // Assuming endpoint returns users
+                const response = await axios.get('http://localhost:3100/upload'); // Assuming endpoint returns users
                 setProducts(response.data); // Update users state
                 console.log(response.data);
             } catch (error) {
@@ -62,9 +62,9 @@ const productPage = () => {
                   </tbody>
               </table>
           ) : (
-              <div>No products found.</div>
+              <div>Not a User found.</div>
           )}
-        <UploadListing/>
+        <UploadForm/>
     </div>
   )
 }

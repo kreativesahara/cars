@@ -61,7 +61,7 @@ const upload = multer({
     limits: { fileSize: 5 * 1024 * 1024 }, // Limit file size to 5MB
     fileFilter,
 });
-export const gellAllImage = async (req:any, res:any) => {
+export const getAllImage = async (req:any, res:any) => {
     console.log('hello from images controller');
     const result: any = await db.select().from(productImage)
     if (!result) return res.status(204).json({ 'message': 'No product found.' });
@@ -72,21 +72,21 @@ export const gellAllImage = async (req:any, res:any) => {
 export const uploadImage = [
     upload.single('image'), // 'image' is the field name in the form
     async (req:any, res:any) => {
-        console.log('uploaded image file',req.file)
+        const { make, model, year, engine_capacity, fuel_type, transmission, driveSystem, mileage, features, condition, location, price, seller_id } = req.body;
+        const images = req.files;
+        const { car_id }: any = 55;
+
         try {
             if (!req.file) {
-                return res.status(500).json({ message: 'No file uploaded' });
+                return res.status(400).json({ message: 'No file uploaded' });
+            }
+
+            if (!make || !model || !year || !engine_capacity || !fuel_type || !transmission || !driveSystem || !mileage || !features || !condition || !location || !price || !seller_id ||!images ) {
+                return res.status(400).json({ message: 'All fields are required.' });
             }
 
             const { filename, path: filePath } = req.file;
-            const { car_id } = req.body;
-
-            if (!car_id) {
-                // Delete the uploaded file since car_id is missing
-                fs.unlinkSync(filePath);
-                return res.status(400).json({ message: 'car_id is required' });
-            }
-
+            
             // Optional: Verify that the car_id exists in the products table
             const car = await db.select().from(product).where(eq(product.id, parseInt(car_id))).execute();
             if (car.length === 0) {

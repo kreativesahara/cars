@@ -9,10 +9,13 @@ export const product = mysqlTable('cars', {
     fuel_type: varchar('fuel_type', { length: 50 }).notNull(),
     transmission: varchar('transmission', { length: 50 }).notNull(),
     driveSystem: varchar('drive_system', { length: 50 }).notNull(),
-    mileage: int('mileage'),
+    mileage: int('mileage').notNull(),
     features: text('features').notNull(),
     condition: varchar('car_condition', { length: 50 }).notNull(),
     location: varchar('view_location', { length: 255 }).notNull(),
     price: decimal('price', { precision: 10, scale: 2 }).notNull(),
     seller_id: int('seller_id').notNull()
+    //seller_id: int('seller_id').notNull().references('sellers.id')
+
+
 });

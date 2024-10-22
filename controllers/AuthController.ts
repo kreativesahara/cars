@@ -3,56 +3,9 @@ import bcrypt from 'bcrypt';
 import { Request, Response } from 'express';
 import { users } from '../db/schema/user'; // Adjust the import path as necessary
 //const jwt = require('jsonwebtoken');
-// const handleLogin = async (req: Request, res: Response) => {
-//     const { user, pwd } = req.body;
-//     if (!user || !pwd) return res.status(400).json({ 'message': 'Username and password are required.' });
-
-//     const foundUser = await users.findOne({ username: user }).exec();
-//     if (!foundUser) return res.sendStatus(401); //Unauthorized 
-//     // evaluate password 
-//     const match = await bcrypt.compare(pwd, foundUser.password);
-//     if (match) {
-//         const roles = Object.values(foundUser.roles).filter(Boolean);
-//         // create JWTs
-//         //TODO: change access token expire 
-//         const accessToken = jwt.sign(
-//             {
-//                 "UserInfo": {
-//                     "username": foundUser.username,
-//                     "roles": roles
-//                 }
-//             },
-//             process.env.ACCESS_TOKEN_SECRET,
-//             { expiresIn: '10s' },
-
-//         );
-
-
-//         const refreshToken = jwt.sign(
-//             { "username": foundUser.username },
-//             process.env.REFRESH_TOKEN_SECRET,
-//             { expiresIn: '1h' }
-//         );
-//         // Saving refreshToken with current user
-//         foundUser.refreshToken = refreshToken;
-//         const result = await foundUser.save();
-//         console.log(result);
-//         console.log(roles);
-
-//         // Creates Secure Cookie with refresh token
-//         res.cookie('jwt', refreshToken, { httpOnly: true, secure: true, maxAge: 24 * 60 * 60 * 1000 });
-//         //sameSite: 'None',
-//         //secure:true,
-//         // Send authorization roles and access token to user
-//         res.json({ roles, accessToken });
-
-//     } else {
-//         res.sendStatus(401);
-//     }
-// }
 const registerUser = async (req: Request, res: Response): Promise<Response> => {
     const { firstname, lastname, email, password } = req.body;
-
+    console.log(req.body);
     // Input Validation
     if (!firstname || !lastname || !email || !password) {
         return res.status(400).json({ message: 'Firstname, lastname, email, and password are required.' });
@@ -100,7 +53,53 @@ const registerUser = async (req: Request, res: Response): Promise<Response> => {
         return res.status(500).json({ message: 'Internal server error.' });
     }
 };
+// const handleLogin = async (req: Request, res: Response) => {
+//     const { user, pwd } = req.body;
+//     if (!user || !pwd) return res.status(400).json({ 'message': 'Username and password are required.' });
 
+//     const foundUser = await users.findOne({ username: user }).exec();
+//     if (!foundUser) return res.sendStatus(401); //Unauthorized
+//     // evaluate password
+//     const match = await bcrypt.compare(pwd, foundUser.password);
+//     if (match) {
+//         const roles = Object.values(foundUser.roles).filter(Boolean);
+//         // create JWTs
+//         //TODO: change access token expire
+//         const accessToken = jwt.sign(
+//             {
+//                 "UserInfo": {
+//                     "username": foundUser.username,
+//                     "roles": roles
+//                 }
+//             },
+//             process.env.ACCESS_TOKEN_SECRET,
+//             { expiresIn: '10s' },
+
+//         );
+
+
+//         const refreshToken = jwt.sign(
+//             { "username": foundUser.username },
+//             process.env.REFRESH_TOKEN_SECRET,
+//             { expiresIn: '1h' }
+//         );
+//         // Saving refreshToken with current user
+//         foundUser.refreshToken = refreshToken;
+//         const result = await foundUser.save();
+//         console.log(result);
+//         console.log(roles);
+
+//         // Creates Secure Cookie with refresh token
+//         res.cookie('jwt', refreshToken, { httpOnly: true, secure: true, maxAge: 24 * 60 * 60 * 1000 });
+//         //sameSite: 'None',
+//         //secure:true,
+//         // Send authorization roles and access token to user
+//         res.json({ roles, accessToken });
+
+//     } else {
+//         res.sendStatus(401);
+//     }
+// }
 export { registerUser,
          //handleLogin
       };
