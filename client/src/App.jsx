@@ -15,7 +15,7 @@ function App() {
       setError(null); // Clear any previous errors
 
       try {
-        const response = await axios.get('http://localhost:3100/users'); // Assuming endpoint returns users
+        const response = await axios.get('http://localhost:3100/auth'); // Assuming endpoint returns users
         setUsers(response.data); // Update users state
         console.log(response.data);
       } catch (error) {
