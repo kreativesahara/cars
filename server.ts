@@ -6,7 +6,7 @@ import cors from 'cors';
 import usersRoute from './routes/Api/user';
 import productsRoute from './routes/Api/product';
 import imagesRoute from './routes/Api/image';
-//import authRoute from './routes/Api/auth';
+import authRoute from './routes/Api/auth';
 import testRoute from './routes/test'
 import UploadRoute from './routes/Api/product'
 import testUploadRoute from './routes/Api/testimage'
@@ -34,7 +34,7 @@ app.get('/', (req: express.Request, res: express.Response ) => {
 app.use('/users',usersRoute )
 app.use("/products", productsRoute)
 app.use("/image", imagesRoute)
-//app.use("/auth", authRoute)
+app.use("/auth", authRoute)
 
 //Test Case
 app.use("/upload", UploadRoute)
