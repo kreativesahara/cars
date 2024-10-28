@@ -108,22 +108,27 @@ export const createUpload = async (req: any, res: any): Promise<any> => {
         try {
             // Handle image uploads and prepare data for bulk insertion
             console.log('Images:', images);
+
+            // Construct the image URL (adjust based on how you serve static files)
+            let imageUrl = `${req.protocol}://${req.get('host')}/${images[0].path}`;
+            // Replace backward slashes with forward slashes in the URL for compatibility
+            imageUrl = imageUrl.replace(/\\/g, '/');
             const valuesToInsert = images.map((img: any) => ({
                 make: make,
                 model: model,
-                image_url: img.path, // Save the image URL/path
+                image_url: imageUrl // Save the image URL/path
             }));
 
             // Insert all values at once
-            const result = await db.insert(testImage).values(valuesToInsert);
-
+            const result = await db
+                .insert(testImage)
+                .values(valuesToInsert);
             console.log('Inserted product IDs:', result);
 
             // Check if the products were inserted successfully
             if (!result) {
                 return res.status(500).json({ message: 'Failed to insert products.' });
             }
-
             return res.status(201).json({ message: 'Products created successfully.', result });
         } catch (err) {
             console.error('Internal server error:', err);

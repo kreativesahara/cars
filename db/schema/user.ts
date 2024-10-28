@@ -18,7 +18,7 @@ export const users = mysqlTable('users', {
     lastname: varchar('last_name', { length: 255 }),
     email: varchar('email', { length: 255 }),
     //phone_no: varchar('phone_no', { length: 255 }),
-    role: int('role').default(ROLES_LIST.Member).notNull(),
+    //role: int('role').default(ROLES_LIST.Member).notNull(),
     //subscription: int('subscription_type'),
     password: varchar('password', { length: 255 }),
     //created_at: datetime('created_at'),

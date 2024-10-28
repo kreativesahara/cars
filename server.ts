@@ -1,5 +1,8 @@
 import express from 'express';
 import * as path from 'path';
+import morgan from 'morgan';
+import cors from 'cors';
+
 import usersRoute from './routes/Api/user';
 import productsRoute from './routes/Api/product';
 import imagesRoute from './routes/Api/image';
@@ -7,9 +10,11 @@ import imagesRoute from './routes/Api/image';
 import testRoute from './routes/test'
 import UploadRoute from './routes/Api/product'
 import testUploadRoute from './routes/Api/testimage'
-import cors from 'cors';
+
 import corsOptions from './config/corsOptions';
 
+import dotenv from 'dotenv';
+dotenv.config();
 const app : express.Application = express();
 const PORT: number = Number(process.env.PORT) || 3100;  
 
@@ -17,6 +22,7 @@ const PORT: number = Number(process.env.PORT) || 3100;
 app.use(express.json())
 app.use(express.urlencoded({ extended: true }));
 app.use(cors(corsOptions));
+app.use(morgan('dev'))
 
 
 // Serve static files from the uploads directory
