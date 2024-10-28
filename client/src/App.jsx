@@ -30,7 +30,7 @@ function App() {
 
   // Handle loading and error states conditionally
   if (isLoading) {
-    return <div>Loading bills...</div>; // Display loading indicator
+    return <div>Loading your details...</div>; // Display loading indicator
   }
 
   if (error) {
