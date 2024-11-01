@@ -89,9 +89,11 @@ const registerUser = async (req: Request, res: Response): Promise<Response> => {
         // Creates Secure Cookie with refresh token
         res.cookie('jwt', refreshToken, { 
             httpOnly: true, 
-            secure: true, 
-            maxAge: 24 * 60 * 60 * 1000 
-        });
+            secure: true,
+            sameSite: 'none',
+            maxAge: 24 * 60 * 60 * 1000})
+           .header('Authorization',accessToken)
+        ;
         //sameSite: 'None',
         // Send authorization roles and access token to user
         res.json({  accessToken });

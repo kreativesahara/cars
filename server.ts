@@ -1,7 +1,10 @@
 import express from 'express';
 import * as path from 'path';
+import dotenv from 'dotenv';
+import cookieParser from 'cookie-parser'
 import morgan from 'morgan';
 import cors from 'cors';
+
 
 import usersRoute from './routes/Api/user';
 import productsRoute from './routes/Api/product';
@@ -11,9 +14,12 @@ import testRoute from './routes/test'
 import UploadRoute from './routes/Api/product'
 import testUploadRoute from './routes/Api/testimage'
 
-import corsOptions from './config/corsOptions';
+import refreshRoute from './routes/Api/refresh'
 
-import dotenv from 'dotenv';
+import corsOptions from './config/corsOptions';
+import { requireAuth } from './controllers/requireUser';
+
+
 dotenv.config();
 const app : express.Application = express();
 const PORT: number = Number(process.env.PORT) || 3100;  
@@ -21,6 +27,7 @@ const PORT: number = Number(process.env.PORT) || 3100;
 // Middleware to parse JSON body & parse URL-encoded bodies (for form submissions)
 app.use(express.json())
 app.use(express.urlencoded({ extended: true }));
+app.use(cookieParser())
 app.use(cors(corsOptions));
 app.use(morgan('dev'))
 
@@ -33,12 +40,14 @@ app.get('/', (req: express.Request, res: express.Response ) => {
 
 app.use('/users',usersRoute )
 app.use("/products", productsRoute)
+app.use("/upload", UploadRoute)
 app.use("/image", imagesRoute)
 app.use("/auth", authRoute)
 
+app.use('/refresh',refreshRoute)
+
 //Test Case
-app.use("/upload", UploadRoute)
-app.use("/test", testRoute)
+app.use("/test", requireAuth,testRoute)
 app.use("/testupload", testUploadRoute)
 
 
