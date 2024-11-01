@@ -9,24 +9,24 @@ function App() {
   const [isLoading, setIsLoading] = useState(false); // State for loading indicator
   const [error, setError] = useState(null); // State for error handling
 
-  useEffect(() => {
-    const fetchAllUsers = async () => {
-      setIsLoading(true); // Set loading state to true
-      setError(null); // Clear any previous errors
+  // useEffect(() => {
+  //   const fetchAllUsers = async () => {
+  //     setIsLoading(true); // Set loading state to true
+  //     setError(null); // Clear any previous errors
 
-      try {
-        const response = await axios.get('http://localhost:3100/auth'); // Assuming endpoint returns users
-        setUsers(response.data); // Update users state
-        console.log(response.data);
-      } catch (error) {
-        setError(error); // Set error state for handling
-      } finally {
-        setIsLoading(false); // Set loading state to false after fetch (success or error)
-      }
-    };
+  //     try {
+  //       const response = await axios.get('http://localhost:3100/auth'); // Assuming endpoint returns users
+  //       setUsers(response.data); // Update users state
+  //       console.log(response.data);
+  //     } catch (error) {
+  //       setError(error); // Set error state for handling
+  //     } finally {
+  //       setIsLoading(false); // Set loading state to false after fetch (success or error)
+  //     }
+  //   };
 
-    fetchAllUsers();
-  }, []); // Empty dependency array to fetch data once on component mount
+  //   fetchAllUsers();
+  // }, []); // Empty dependency array to fetch data once on component mount
 
   // Handle loading and error states conditionally
   if (isLoading) {
@@ -40,7 +40,7 @@ function App() {
   // Render content based on fetched bills
   return (
     <>
-      {users.length > 0 ? (
+      {/* {users.length > 0 ? (
         <table >
           <thead>
             <tr className='bg-red-500'>
@@ -63,7 +63,7 @@ function App() {
         </table>
       ) : (
         <div>Not a User found.</div>
-      )}
+      )} */}
       <UploadUserDetails /> {/* Upload user details form */}
       {/* <Outlet /> /*Allow nested routes */}
     </>

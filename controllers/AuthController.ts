@@ -2,8 +2,7 @@ import db from '../db/dbConfig'
 import bcrypt from 'bcrypt';
 import { Request, Response } from 'express';
 import { users } from '../db/schema/user'; // Adjust the import path as necessary
-import { eq } from 'drizzle-orm';
-import jwt from 'jsonwebtoken';
+import { eq } from 'drizzle-orm';import jwt from 'jsonwebtoken';
 
 const registerUser = async (req: Request, res: Response): Promise<Response> => {
     const { firstname, lastname, email, password } = req.body;
@@ -12,7 +11,7 @@ const registerUser = async (req: Request, res: Response): Promise<Response> => {
     if (!firstname || !lastname || !email || !password) {
         return res.status(400).json({ message: 'Firstname, lastname, email, and password are required.' });
     }
-
+    
     try {
         // Hash the password
         const saltRounds: any = await bcrypt.genSalt();
@@ -88,7 +87,11 @@ const registerUser = async (req: Request, res: Response): Promise<Response> => {
             .where(eq(users.email, email));
 
         // Creates Secure Cookie with refresh token
-        res.cookie('jwt', refreshToken, { httpOnly: true, secure: true, maxAge: 24 * 60 * 60 * 1000 });
+        res.cookie('jwt', refreshToken, { 
+            httpOnly: true, 
+            secure: true, 
+            maxAge: 24 * 60 * 60 * 1000 
+        });
         //sameSite: 'None',
         // Send authorization roles and access token to user
         res.json({ roles, accessToken });
