@@ -60,14 +60,14 @@ const registerUser = async (req: Request, res: Response): Promise<Response> => {
     // evaluate password
     const isMatch = await bcrypt.compare(password, foundUser[0].password??'');
     if (isMatch) {
-        const roles = Object.values(foundUser[0].role).filter(Boolean);
+        //const roles = Object.values(foundUser[0].role).filter(Boolean);
         // create JWTs
         //TODO: change access token expire
         const accessToken = jwt.sign(
             {
                 "UserInfo": {
                     "email": foundUser[0].email,
-                    "roles": roles
+                   // "roles": roles
                 }
             },
             process.env.ACCESS_TOKEN_SECRET as string,
@@ -94,7 +94,7 @@ const registerUser = async (req: Request, res: Response): Promise<Response> => {
         });
         //sameSite: 'None',
         // Send authorization roles and access token to user
-        res.json({ roles, accessToken });
+        res.json({  accessToken });
         console.log(foundUser);
     } else {
         res.sendStatus(401);
