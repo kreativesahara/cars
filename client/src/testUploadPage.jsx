@@ -17,7 +17,7 @@ const productPage = () => {
             try {
                 const response = await axios.get('testupload'); // Assuming endpoint returns users
                 setProducts(response.data); // Update users state
-                console.log(response.data);
+                //console.log(response.data);
             } catch (error) {
                 setError(error); // Set error state for handling
             } finally {

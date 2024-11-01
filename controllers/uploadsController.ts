@@ -99,16 +99,13 @@ export const createUpload = async (req: any, res: any): Promise<any> => {
         }
         const { make, model } = req.body;
         const images: any = req.files;
-        console.log('server req body', req.body);
-        console.log('server req file', req.files);
+        
         // Validate required fields
         if (!make || !model) {
             return res.status(400).json({ message: 'All fields are required.' });
         }
         try {
             // Handle image uploads and prepare data for bulk insertion
-            console.log('Images:', images);
-
             // Construct the image URL (adjust based on how you serve static files)
             let imageUrl = `${req.protocol}://${req.get('host')}/${images[0].path}`;
             // Replace backward slashes with forward slashes in the URL for compatibility
@@ -131,7 +128,6 @@ export const createUpload = async (req: any, res: any): Promise<any> => {
             }
             return res.status(201).json({ message: 'Products created successfully.', result });
         } catch (err) {
-            console.error('Internal server error:', err);
             return res.status(500).json({ message: 'Internal server error.' });
         }
     });
