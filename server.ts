@@ -15,9 +15,11 @@ import UploadRoute from './routes/Api/product'
 import testUploadRoute from './routes/Api/testimage'
 
 import refreshRoute from './routes/Api/refresh'
+import logoutRoute from './routes/Api/logout'
 
 import corsOptions from './config/corsOptions';
 import { requireAuth } from './controllers/requireUser';
+
 
 
 dotenv.config();
@@ -45,6 +47,7 @@ app.use("/image", imagesRoute)
 app.use("/auth", authRoute)
 
 app.use('/refresh',refreshRoute)
+app.use('/logout', requireAuth, logoutRoute)
 
 //Test Case
 app.use("/test", requireAuth,testRoute)

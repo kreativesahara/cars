@@ -71,7 +71,7 @@ const registerUser = async (req: Request, res: Response): Promise<Response> => {
                 }
             },
             process.env.ACCESS_TOKEN_SECRET as string,
-            { expiresIn: '60s' },
+            { expiresIn: '1d' },
 
         );
 
@@ -89,14 +89,13 @@ const registerUser = async (req: Request, res: Response): Promise<Response> => {
         // Creates Secure Cookie with refresh token
         res.cookie('jwt', refreshToken, { 
             httpOnly: true, 
-            secure: true,
+            //secure: true,
             sameSite: 'none',
             maxAge: 24 * 60 * 60 * 1000})
            .header('Authorization',accessToken)
         ;
-        //sameSite: 'None',
         // Send authorization roles and access token to user
-        res.json({  accessToken });
+        res.json({ accessToken });
         console.log(foundUser);
     } else {
         res.sendStatus(401);

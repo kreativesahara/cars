@@ -4,16 +4,14 @@ import { eq } from 'drizzle-orm';
 import jwt from 'jsonwebtoken';
 import { Request, Response } from 'express';
 
+
 export const handleRefreshToken = async (req: Request, res: Response) => {
     const cookies = req.cookies;
-
-    console.log(cookies)
 
     // Check for cookies or JWT presence
     if (!cookies?.jwt) {
         return res.status(401).json({ message: 'Authorization token required' });
     }
-
     const refreshToken = cookies.jwt;
     const foundUser = await db.select().from(users).where(eq(users.refreshToken, refreshToken)).limit(1);
 
@@ -31,18 +29,20 @@ export const handleRefreshToken = async (req: Request, res: Response) => {
             }
 
             // Extract roles and create new access token
-            const roles = Object.values(foundUser[0].role).filter(Boolean);
+           // const roles = Object.values(foundUser[0].role).filter(Boolean);
             const accessToken = jwt.sign(
                 {
                     "UserInfo": {
                         "email": decoded.email,
-                        "role": roles
+                        //"role": roles
                     }
                 },
                 process.env.ACCESS_TOKEN_SECRET as string,
-                { expiresIn: '30s' }
+                { expiresIn: '60s' }
             );
-            res.json({ roles, accessToken });
+            res.cookie('Authorization', accessToken)
+
+            return res.status(200).json({ accessToken });
         }
     );
 };

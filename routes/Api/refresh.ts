@@ -4,9 +4,6 @@ import { handleRefreshToken } from "../../controllers/refreshTokenController";
 const router = Router();
 
 router.route("/")
-    .get(handleRefreshToken)
-    // .post(createTest)
-    // .put(updateTest)
-    // .delete(deleteTest);
+    .post(handleRefreshToken)
 
 export default router
