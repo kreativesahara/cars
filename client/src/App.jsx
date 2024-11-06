@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 //import { Outlet } from 'react-router-dom';
-import UploadUserDetails from './components/uploadUserDetails';
+import UploadUserDetails from './components/forms/uploadUserDetails';
 import './App.css'; // Import for styling
 
 function App() {

@@ -1,5 +1,5 @@
 import React from 'react'
-import Uploadimage from './components/uploadimage.jsx'
+import Uploadimage from './components/forms/uploadimage.jsx'
 function contacts() {
   return (
   <>

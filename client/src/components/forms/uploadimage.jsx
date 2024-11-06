@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import axios from 'axios';
 import imageCompression from 'browser-image-compression';
-import './uploadlist.css'
+import '../lists/uploadlist.css';
 
 const carId = 55;
 function UploadImage() {
