@@ -1,5 +1,6 @@
 import React from 'react'
 import axios from 'axios';
+import {Navigate} from 'react-router-dom';
 import { useState } from 'react';
 
 const LoginForm = () => {
@@ -7,6 +8,7 @@ const LoginForm = () => {
         email: "",
         password: ""
     })
+    const [navigate, setNavigate] = useState(false);
 
     const handleChange = (e) => {
         setFormData((prev) => ({
@@ -16,16 +18,20 @@ const LoginForm = () => {
         e.preventDefault();
         console.log(formData)
         try {
-            const response = await axios.all('http://localhost:3100/auth', formData,
+            const response = await axios.post('http://localhost:3100/auth/login', formData,
                 {
                     headers: { 'Content-Type': 'application/json' },
                     withCredentials: false
                 },
             );
-            console.log('Logged in: ',response.data)
+            console.log('Logged in: ',response)
             alert("User login successfully")
+            setNavigate(true)
         } catch (error) {
             console.log(error)
+        }
+        if(navigate) {
+            return <Navigate to='/product' />
         }
     }
 
