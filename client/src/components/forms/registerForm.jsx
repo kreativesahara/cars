@@ -20,7 +20,7 @@ const uploadUserDetails = () => {
             await axios.post('http://localhost:3100/auth/register', formData,
                 {
                     headers: { 'Content-Type': 'application/json' },
-                    withCredentials: false
+                    withCredentials: true
                 },
             );
             console.log(formData)

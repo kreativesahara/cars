@@ -21,12 +21,13 @@ const LoginForm = () => {
             const response = await axios.post('http://localhost:3100/auth/login', formData,
                 {
                     headers: { 'Content-Type': 'application/json' },
-                    withCredentials: false
+                    withCredentials: true
                 },
             );
-            console.log('Logged in: ',response)
-            alert("User login successfully")
             setNavigate(true)
+            console.log('Logged in: ', response.data)
+            alert("User login successfully")
+         
         } catch (error) {
             console.log(error)
         }
