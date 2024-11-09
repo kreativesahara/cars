@@ -1,14 +1,16 @@
 import React from 'react'
 import axios from 'axios';
-import {Navigate} from 'react-router-dom';
+import {useNavigate, useLocation} from 'react-router-dom';
 import { useState } from 'react';
 
 const LoginForm = () => {
+    const navigate = useNavigate();
+    const location = useLocation();
+    const from = location.state?.from?.pathname || "/product";
     const [formData, setFormData] = useState({
         email: "",
         password: ""
     })
-    const [navigate, setNavigate] = useState(false);
 
     const handleChange = (e) => {
         setFormData((prev) => ({
@@ -18,22 +20,22 @@ const LoginForm = () => {
         e.preventDefault();
         console.log(formData)
         try {
-            const response = await axios.post('http://localhost:3100/auth/login', formData,
+            const {data} = await axios.post('http://localhost:3100/auth/login', formData,
                 {
                     headers: { 'Content-Type': 'application/json' },
                     withCredentials: true
                 },
+               
             );
-            setNavigate(true)
-            console.log('Logged in: ', response.data)
+            console.log('Logged in: ', data['accessToken'])
+            axios.defaults.headers.common['Authorization'] = `Bearer ${data['accessToken']}`
             alert("User login successfully")
-         
+            navigate(from, { replace: true })
         } catch (error) {
             console.log(error)
         }
-        if(navigate) {
-            return <Navigate to='/product' />
-        }
+        
+       
     }
 
   return (

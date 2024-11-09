@@ -1,8 +1,13 @@
 import React from 'react'
 import axios from 'axios';
+import { useNavigate, useLocation } from 'react-router-dom';
 import { useState } from 'react';
 
 const uploadUserDetails = () => {
+    const navigate = useNavigate();
+    const location = useLocation();
+    const from = location.state?.from?.pathname || "/login";
+   
     const [formData, setFormData] = useState({
         firstname: "",
         lastname: "",
@@ -17,14 +22,16 @@ const uploadUserDetails = () => {
     const handleSubmit = async (e) => {
         e.preventDefault();
         try {
-            await axios.post('http://localhost:3100/auth/register', formData,
+            await axios.post('http://localhost:3100/auth', formData,
                 {
                     headers: { 'Content-Type': 'application/json' },
                     withCredentials: true
                 },
             );
             console.log(formData)
-            alert("User details uploaded successfully")
+            alert("User registered successfully")
+            navigate(from, { replace: true })
+            
         } catch (error) {
             console.log(error)
         }

@@ -1,19 +1,18 @@
 import React from 'react'
 import axios from 'axios';
 import { useState, useEffect } from 'react';
-import UploadListing from './components/lists/uploadListing'
+import UploadForm from './components/forms/uploadForm'
 const productPage = () => {
     const [products, setProducts] = useState([]); // State for fetched users
     const [isLoading, setIsLoading] = useState(false); // State for loading indicator
     const [error, setError] = useState(null); // State for error handling
-
-    useEffect(() => {
+    const [name, setName] = useState('');
+    useEffect(() => {       
         const fetchAllProducts = async () => {
             setIsLoading(true); // Set loading state to true
-            setError(null); // Clear any previous errors
-
+            setError(null); // Clear any previous errors 
             try {
-                const response = await axios.get('http://localhost:3100/products'); // Assuming endpoint returns users
+                const response = await axios.get('http://localhost:3100/upload'); // Assuming endpoint returns users
                 setProducts(response.data); // Update users state
                 console.log(response.data);
             } catch (error) {
@@ -37,7 +36,9 @@ const productPage = () => {
 
     // Render content based on fetched bills
     return (
+    
     <div>
+         
           {products.length > 0 ? (
               <table >
                   <thead>
@@ -62,9 +63,9 @@ const productPage = () => {
                   </tbody>
               </table>
           ) : (
-              <div>No products found.</div>
+              <div>No vehicle found.</div>
           )}
-        <UploadListing/>
+        <UploadForm/>
     </div>
   )
 }

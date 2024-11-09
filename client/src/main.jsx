@@ -4,7 +4,6 @@ import {createBrowserRouter,RouterProvider,} from "react-router-dom";
 import App from './App.jsx'
 import Login from './login.jsx'
 import Product from './productPage.jsx'
-import FullProduct from './fullProductPage.jsx'
 import Contacts from './contacts.jsx';
 import TestUpload from './testUploadPage.jsx'
 import './index.css';
@@ -18,13 +17,10 @@ const router = createBrowserRouter([
         path: "login",
         element: <Login/>,
       },
-      { 
-        path: "product", 
-        element:<Product/>,
-      },
+   
       {
-        path: "upload",
-        element: <FullProduct />,
+        path: "product",
+        element: <Product />,
       },
       {
         path: "testupload",
