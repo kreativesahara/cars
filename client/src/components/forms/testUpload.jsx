@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import axios from 'axios';
+import axios from '../../api/axios';
 import imageCompression from 'browser-image-compression';
 
 const UploadListing = () => {
@@ -64,7 +64,7 @@ const UploadListing = () => {
         }
         try {
             // Send data without manually setting Content-Type header
-            const response = await axios.post('http://localhost:3100/testupload', form, {
+            const response = await axios.post('testupload', form, {
                 headers: { 'Content-Type': 'multipart/form-data' },
                 withCredentials: true, 
             });

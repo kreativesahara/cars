@@ -40,7 +40,12 @@ export const handleRefreshToken = async (req: Request, res: Response) => {
                 process.env.ACCESS_TOKEN_SECRET as string,
                 { expiresIn: '60s' }
             );
-            res.cookie('Authorization', accessToken)
+            res.cookie('Authorization', accessToken,{
+                httpOnly: true,
+                sameSite: 'none',
+                secure: true,
+                maxAge: 60 * 1000
+            })
 
             return res.status(200).json({ accessToken });
         }

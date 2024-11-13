@@ -1,5 +1,5 @@
 import React from 'react'
-import axios from 'axios';
+import axios from '../../api/axios';
 import { useNavigate, useLocation } from 'react-router-dom';
 import { useState } from 'react';
 
@@ -22,7 +22,7 @@ const uploadUserDetails = () => {
     const handleSubmit = async (e) => {
         e.preventDefault();
         try {
-            await axios.post('http://localhost:3100/auth', formData,
+            await axios.post('auth', formData,
                 {
                     headers: { 'Content-Type': 'application/json' },
                     withCredentials: true

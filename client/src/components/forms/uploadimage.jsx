@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import axios from 'axios';
+import axios from '../../api/axios';
 import imageCompression from 'browser-image-compression';
 import '../lists/uploadlist.css';
 
@@ -45,7 +45,7 @@ function UploadImage() {
 
     console.log('Form Data: ',formData);
     try {
-      await axios.post('http://localhost:3100/image', formData, {
+      await axios.post('image', formData, {
         headers: { 'Content-Type': 'multipart/form-data' },
         withCredentials: true,
       });

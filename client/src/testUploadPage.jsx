@@ -1,5 +1,5 @@
 import React from 'react'
-import axios from 'axios';
+import axios from './api/axios';
 import { useState, useEffect } from 'react';
 import TestUpload from './components/forms/testUpload'
 
@@ -15,7 +15,7 @@ const productPage = () => {
             setError(null); // Clear any previous errors
 
             try {
-                const response = await axios.get('http://localhost:3100/testupload'); // Assuming endpoint returns users
+                const response = await axios.get('testupload'); // Assuming endpoint returns users
                 setProducts(response.data); // Update users state
                 console.log(response.data);
             } catch (error) {
