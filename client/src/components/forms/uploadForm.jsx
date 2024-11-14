@@ -55,7 +55,7 @@ const UploadListing = () => {
                 {
                     //Requires multipart/form-data to set data for api post request
                     headers: { 'Content-Type': 'application/json' },
-                    withCredentials: false
+                    withCredentials: true
                 },
             );
 

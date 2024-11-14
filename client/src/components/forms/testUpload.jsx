@@ -58,7 +58,7 @@ const UploadListing = () => {
             form.append('images', image);
         });
  
-        // Log form data to inspect what's being sent
+        // Logs form data to inspect what's being sent
         for (let pair of form.entries()) {
             console.log(pair[0], pair[1]);
         }
