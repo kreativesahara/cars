@@ -5,7 +5,7 @@ import {Link,useNavigate, useLocation} from 'react-router-dom'
 import { useRef,useState, useEffect } from 'react'
 
 const LoginForm = () => {
-    const {auth, setAuth, persist, setPersist} = useAuth();
+    const {setAuth, persist, setPersist} = useAuth();
     const navigate = useNavigate();
     const location = useLocation();
     const from = location.state?.from?.pathname || "/product";

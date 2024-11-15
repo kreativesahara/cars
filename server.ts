@@ -41,16 +41,16 @@ app.get('/', (req: express.Request, res: express.Response ) => {
 })
 
 app.use('/users',usersRoute )
-app.use("/products", productsRoute)
+app.use("/products", requireAuth,productsRoute)
 app.use("/upload", UploadRoute)
 app.use("/image", imagesRoute)
 app.use("/auth", authRoute)
 
-app.use('/refresh',refreshRoute)
+app.use('/refresh', refreshRoute)
 app.use('/logout', requireAuth, logoutRoute)
 
 //Test Case
-app.use("/test", requireAuth,testRoute)
+app.use("/test", requireAuth, testRoute)
 app.use("/testupload", testUploadRoute)
 
 
