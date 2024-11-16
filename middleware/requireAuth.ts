@@ -28,7 +28,7 @@ export const requireAuth = (req: Request, res: Response, next: NextFunction) => 
 
             // Set decoded values in a custom `auth` property on the request object
             req.auth = {
-                user: decoded.UserInfo.username,
+                user: decoded.UserInfo.email,
                 roles: decoded.UserInfo.roles
             };
 

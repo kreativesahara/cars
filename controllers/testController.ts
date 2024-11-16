@@ -60,7 +60,7 @@ const createTest = async (req: Request, res: Response): Promise<any> => {
             lastname,
             email,
             password,
-            // photo: photo,
+            roles: 0,
         });
         return res.status(201).json(result);
     } catch (error) {

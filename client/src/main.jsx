@@ -25,7 +25,7 @@ const protectedRoutes = [
   {
     path: "product",
     element: <Product />,
-    //roles: [ROLES.User, ROLES.Admin],
+    roles: [ROLES.visitor],
   },
   {
     path: "testupload",

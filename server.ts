@@ -18,7 +18,7 @@ import refreshRoute from './routes/Api/refresh'
 import logoutRoute from './routes/Api/logout'
 
 import corsOptions from './config/corsOptions';
-import { requireAuth } from './controllers/requireUser';
+import { requireAuth } from './middleware/requireAuth';
 
 
 

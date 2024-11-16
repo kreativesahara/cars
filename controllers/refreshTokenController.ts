@@ -7,7 +7,7 @@ import { Request, Response } from 'express';
 
 export const handleRefreshToken = async (req: Request, res: Response) => {
     const cookies = req.cookies;
-
+    console.log(req.cookies);
     // Check for cookies or JWT presence
     if (!cookies?.jwt) {
         return res.status(401).json({ message: 'Authorization token required' });
@@ -34,18 +34,13 @@ export const handleRefreshToken = async (req: Request, res: Response) => {
                 {
                     "UserInfo": {
                         "email": decoded.email,
-                        //"role": roles
+                        "roles": decoded.roles
                     }
                 },
                 process.env.ACCESS_TOKEN_SECRET as string,
                 { expiresIn: '60s' }
             );
-            res.cookie('Authorization', accessToken,{
-                httpOnly: true,
-                sameSite: 'none',
-                secure: true,
-                maxAge: 60 * 1000
-            })
+            res.header('Authorization', accessToken)
 
             return res.status(200).json({ accessToken });
         }

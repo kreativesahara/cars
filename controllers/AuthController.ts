@@ -3,6 +3,7 @@ import bcrypt from 'bcrypt';
 import { Request, Response } from 'express';
 import { users } from '../db/schema/user'; // Adjust the import path as necessary
 import { eq } from 'drizzle-orm';import jwt from 'jsonwebtoken';
+import { ROLES_LIST } from '../config/roles_list';
 
 const registerUser = async (req: Request, res: Response): Promise<Response> => {
     const { firstname, lastname, email, password } = req.body;
@@ -16,7 +17,6 @@ const registerUser = async (req: Request, res: Response): Promise<Response> => {
         // Hash the password
         const saltRounds: any = await bcrypt.genSalt();
         const hashedPassword = await bcrypt.hash(password, saltRounds);
-
         // Insert the new user into the database
         const [newUser] = await db
             .insert(users)
@@ -25,7 +25,7 @@ const registerUser = async (req: Request, res: Response): Promise<Response> => {
             lastname,
             email,
             password: hashedPassword,
-            // Add other fields if necessary, e.g., photo
+            roles: ROLES_LIST.visitor
         })
         console.log('User registered successfully:', newUser); 
         // Exclude the password from the response
@@ -35,6 +35,7 @@ const registerUser = async (req: Request, res: Response): Promise<Response> => {
                 firstname: firstname,
                 lastname: lastname,
                 email: email,
+                roles: ROLES_LIST.visitor
             },
         }); 
           
@@ -60,14 +61,14 @@ const registerUser = async (req: Request, res: Response): Promise<Response> => {
     // evaluate password
     const isMatch = await bcrypt.compare(password, foundUser[0].password??'');
     if (isMatch) {
-        //const roles = Object.values(foundUser[0].role).filter(Boolean);
+        const roles = foundUser[0].roles;
         // create JWTs
         //TODO: change access token expire
         const accessToken = jwt.sign(
             {
                 "UserInfo": {
                     "email": foundUser[0].email,
-                   // "roles": roles
+                    //"roles": roles
                 }
             },
             process.env.ACCESS_TOKEN_SECRET as string,
@@ -76,7 +77,11 @@ const registerUser = async (req: Request, res: Response): Promise<Response> => {
         );
 
         const refreshToken = jwt.sign(
-            { "email": foundUser[0].email },
+            { 
+                "email": foundUser[0].email,
+                //"roles": roles
+
+             },
             process.env.REFRESH_TOKEN_SECRET as string,
             { expiresIn: '1d' }
         );
@@ -89,18 +94,17 @@ const registerUser = async (req: Request, res: Response): Promise<Response> => {
         // Creates Secure Cookie with refresh token
         res.cookie('jwt', refreshToken, { 
             httpOnly: true, 
-            //secure: true,
+           // secure: true,
             sameSite: 'none',
             maxAge: 24 * 60 * 60 * 1000})
            .header('Authorization',accessToken)
         ;
         // Send authorization roles and access token to user
-        res.json({ accessToken });
+        res.json({ roles ,accessToken,refreshToken });
+       //console.log(req.cookies);
         console.log(foundUser);
     } else {
         res.sendStatus(401);
     }
 }
-export { registerUser,
-         handleLogin
-      };
+export { registerUser, handleLogin };

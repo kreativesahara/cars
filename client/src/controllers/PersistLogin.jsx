@@ -13,7 +13,6 @@ const PersistLogin = () => {
 
         const verifyRefreshToken = async () => {
             try {
-                console.log("intializing refresh token", refresh);
                 await refresh();
             }
             catch (err) {
