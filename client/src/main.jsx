@@ -25,7 +25,7 @@ const protectedRoutes = [
   {
     path: "product",
     element: <Product />,
-    roles: [ROLES.visitor],
+    roles: [ROLES.visitor,ROLES.Member, ROLES.Seller],
   },
   {
     path: "testupload",
@@ -49,6 +49,11 @@ const router = createBrowserRouter([
     path: "login",
     element: <Login />,
   },
+  {
+    path: "unauthorized",
+    element: <div>Unauthorized</div>,
+  },
+
   {
     element: <PersistLogin />, // Wrap protected routes with PersistLogin
     children: protectedRoutes.map(({ path, element, roles }) => ({

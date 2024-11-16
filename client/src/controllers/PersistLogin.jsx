@@ -12,8 +12,10 @@ const PersistLogin = () => {
         let isMounted = true;
 
         const verifyRefreshToken = async () => {
+            console.log('loading verifyRefreshToken');
             try {
-                await refresh();
+               const response = await refresh();
+               console.log('verifyRefreshToken',response);
             }
             catch (err) {
                 console.error(err);
@@ -22,8 +24,6 @@ const PersistLogin = () => {
                 isMounted && setIsLoading(false);
             }
         }
-
-        // persist added here AFTER tutorial video
         // Avoids unwanted call to verifyRefreshToken
         !auth?.accessToken && persist ? verifyRefreshToken() : setIsLoading(false);
 

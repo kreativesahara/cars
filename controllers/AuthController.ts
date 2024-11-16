@@ -62,13 +62,14 @@ const registerUser = async (req: Request, res: Response): Promise<Response> => {
     const isMatch = await bcrypt.compare(password, foundUser[0].password??'');
     if (isMatch) {
         const roles = foundUser[0].roles;
+        console.log('userRoles:', roles);
         // create JWTs
         //TODO: change access token expire
         const accessToken = jwt.sign(
             {
                 "UserInfo": {
                     "email": foundUser[0].email,
-                    //"roles": roles
+                    "roles": roles
                 }
             },
             process.env.ACCESS_TOKEN_SECRET as string,
@@ -79,7 +80,7 @@ const registerUser = async (req: Request, res: Response): Promise<Response> => {
         const refreshToken = jwt.sign(
             { 
                 "email": foundUser[0].email,
-                //"roles": roles
+                "roles": roles
 
              },
             process.env.REFRESH_TOKEN_SECRET as string,

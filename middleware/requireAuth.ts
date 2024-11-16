@@ -13,7 +13,7 @@ declare module 'express-serve-static-core' {
 
 export const requireAuth = (req: Request, res: Response, next: NextFunction) => {
     const authHeader = req.headers.authorization || req.headers.Authorization as string;
-
+    console.log(authHeader);
     if (!authHeader?.startsWith('Bearer ')) {
         return res.status(401).json({ error: 'Authorization token required' });
     }
