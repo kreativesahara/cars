@@ -22,7 +22,7 @@ const uploadUserDetails = () => {
     const handleSubmit = async (e) => {
         e.preventDefault();
         try {
-            await axios.post('auth', formData,
+            await axios.post('auth/', formData,
                 {
                     headers: { 'Content-Type': 'application/json' },
                     withCredentials: true

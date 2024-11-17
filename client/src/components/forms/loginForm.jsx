@@ -39,13 +39,12 @@ const LoginForm = () => {
                 },
                
             );
-            //console.log('Logged in: ', response.data)
-            //axios.defaults.headers.common['Authorization'] = `Bearer ${data['accessToken']}`
+        
             const { accessToken, roles } = response?.data;
             setAuth({  
                 email: formData.email,
-                //roles:roles,
-                 accessToken 
+                roles:Array.isArray(roles) ? roles : [roles],
+                accessToken 
              });
            
             setFormData({ email: "", password: "" });

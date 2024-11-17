@@ -65,7 +65,7 @@ function App() {
         <div>Not a User found.</div>
       )} */}
       <UploadUserDetails /> {/* Upload user details form */}
-      <Outlet /> 
+      {/* <Outlet />  */}
     </>
   );
 }
