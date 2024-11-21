@@ -1,6 +1,6 @@
 import React from 'react';
 import ReactDOM from 'react-dom/client';
-import { createBrowserRouter, RouterProvider } from 'react-router-dom';
+import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import App from './App.jsx';
 import Login from './login.jsx';
 import Product from './productPage.jsx';
@@ -13,64 +13,48 @@ import { AuthProvider } from './context/AuthProvider.jsx';
 
 // Roles constant
 const ROLES = {
-  visitor: 0,
-  Member: 1,
-  Seller: 2,
-  modarator: 3,
-  Admin: 4
+  visitor: 1,
+  Member: 2,
+  Seller: 3,
+  modarator: 4,
+  Admin: 5,
 };
 
-// Define protected routes
-const protectedRoutes = [
-  {
-    path: "product",
-    element: <Product />,
-    roles: [ROLES.visitor,ROLES.Member, ROLES.Seller],
-  },
-  {
-    path: "testupload",
-    element: <TestUpload />,
-    //roles: [ROLES.Admin],
-  },
-  {
-    path: "contact",
-    element: <Contacts />,
-    //roles: [ROLES.User, ROLES.Admin],
-  },
-];
+const AppRoutes = () => (
+  <Routes>
+    {/* Public Routes */}
+    <Route path="/" element={<App />} />
+    <Route path="login" element={<Login />} />
+    <Route path="unauthorized" element={<div>Unauthorized</div>} />
 
-// Configure the router
-const router = createBrowserRouter([
-  {
-    path: "/",
-    element: <App />,
-  },
-  {
-    path: "login",
-    element: <Login />,
-  },
-  {
-    path: "unauthorized",
-    element: <div>Unauthorized</div>,
-  },
-
-  {
-    element: <PersistLogin />, // Wrap protected routes with PersistLogin
-    children: protectedRoutes.map(({ path, element, roles }) => ({
-      path,
-      element: (
-        <RequireAuth allowedRoles={roles}>
-          {element}
-        </RequireAuth>
-      ),
-    })),
-  },
-]);
+    {/* Protected Routes */}
+    <Route element={<PersistLogin />}>
+      {/* Nested Routes for Authorization */}
+      <Route
+        element={<RequireAuth allowedRoles={[ROLES.visitor, ROLES.Member, ROLES.Seller]} />}
+      >
+        <Route path="product" element={<Product />} />
+      </Route>
+      <Route
+        element={<RequireAuth allowedRoles={[ROLES.Member, ROLES.Admin]} />}
+      >
+        <Route path="testupload" element={<TestUpload />} />
+      </Route>
+      <Route
+        element={<RequireAuth allowedRoles={[ROLES.Member, ROLES.Admin]} />}
+      >
+        <Route path="contact" element={<Contacts />} />
+      </Route>
+    </Route>
+  </Routes>
+);
 
 ReactDOM.createRoot(document.getElementById('root')).render(
   <React.StrictMode>
     <AuthProvider>
-      <RouterProvider router={router} />
+      <Router>
+        <AppRoutes />
+      </Router>
     </AuthProvider>
   </React.StrictMode>
 );

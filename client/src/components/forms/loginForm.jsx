@@ -22,6 +22,8 @@ const LoginForm = () => {
 
     useEffect(() => {
         userRef.current.focus();
+        const persisted = JSON.parse(localStorage.getItem("persist"));
+        if (persisted) setPersist(persisted);
     }, []);
 
     const handleChange = (e) => {
@@ -30,6 +32,7 @@ const LoginForm = () => {
     }
     const handleSubmit = async (e) => {
         e.preventDefault();
+        console.log(JSON.stringify(from))
         console.log(formData)
         try {
             const response= await axios.post('auth/login', formData,

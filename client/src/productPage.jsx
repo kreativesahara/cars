@@ -40,6 +40,7 @@ const productPage = () => {
 
     // Render content based on fetched bills
     return (    
+    
     <div>
         <div>
             <h2>Welcome, {auth?.email || "User"}!</h2>

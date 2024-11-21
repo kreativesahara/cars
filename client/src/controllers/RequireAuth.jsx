@@ -5,15 +5,16 @@ const RequireAuth = ({ allowedRoles }) => {
     const { auth } = useAuth();
     const location = useLocation();
 
+    const isAuthorised = auth?.roles?.find(roles => allowedRoles?.includes(roles))
+    console.log('isAuthorised', typeof isAuthorised, isAuthorised)
     return (
-        console.log("Required auth role: ", auth?.roles),
-        auth?.roles?.find(role => allowedRoles?.includes(role))
+        isAuthorised
             ? <Outlet />
-            : auth?.accessToken //changed from user to accessToken to persist login after refresh
+            : auth?.accessToken 
                 ? <Navigate to="/unauthorized" state={{ from: location }} replace />
                 : <Navigate to="/login" state={{ from: location }} replace />
     );
     
 }
 
-export default RequireAuth;
+export default RequireAuth; 

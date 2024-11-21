@@ -46,9 +46,6 @@ const UploadListing = () => {
             //     form.append(`images`, image); // You can customize the key for each image
             // });
 
-            const jsonData = JSON.stringify(data)
-
-            console.log(jsonData)           
             // Post data to backend
             const response = await axios.post('http://localhost:3100/upload',
                 form,
