@@ -13,6 +13,7 @@ import authRoute from './routes/Api/auth';
 import testRoute from './routes/test'
 import UploadRoute from './routes/Api/product'
 import testUploadRoute from './routes/Api/testimage'
+import testProductRoute from './routes/Api/testProduct'
 
 import refreshRoute from './routes/Api/refresh'
 import logoutRoute from './routes/Api/logout'
@@ -41,7 +42,7 @@ app.get('/', (req: express.Request, res: express.Response ) => {
 })
 
 app.use('/users',usersRoute )
-app.use("/products", requireAuth,productsRoute)
+//app.use("/products", requireAuth,productsRoute)
 app.use("/upload", UploadRoute)
 app.use("/image", imagesRoute)
 app.use("/auth", authRoute)
@@ -51,7 +52,8 @@ app.use('/logout', requireAuth, logoutRoute)
 
 //Test Case
 app.use("/test", requireAuth, testRoute)
-app.use("/testupload", testUploadRoute)
+//app.use("/testupload", testUploadRoute)
+app.use("/testproduct", testProductRoute)
 
 
 // Start the server

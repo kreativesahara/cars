@@ -64,15 +64,15 @@ const UploadListing = () => {
         }
         try {
             // Send data without manually setting Content-Type header
-            const response = await axios.post('testupload', form, {
+            const response = await axios.post('testproduct', form, {
                 headers: { 'Content-Type': 'multipart/form-data' },
                 withCredentials: true, 
             });
 
-            console.log("Response:", response.data);
+            console.log("Response from testproduct controller:", response.data);
             alert("Car details uploaded successfully");
             // Reset form fields
-            setValues({ 
+            setValues({
                 make: '',
                 model: '',
             });
@@ -87,7 +87,7 @@ const UploadListing = () => {
 
     return (
         <div>
-            <div>test upload</div>
+            <div>TestProductUpload</div>
             <form onSubmit={handleSubmit}>
                 <div>
                     <label>Upload Images:</label>

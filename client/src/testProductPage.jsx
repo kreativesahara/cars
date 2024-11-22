@@ -1,7 +1,7 @@
 import React from 'react'
 import axios from './api/axios';
 import { useState, useEffect } from 'react';
-import TestUpload from './components/forms/testUpload'
+import TestProduct from './components/forms/testProductUpload'
 
 
 const productPage = () => {
@@ -15,7 +15,7 @@ const productPage = () => {
             setError(null); // Clear any previous errors
 
             try {
-                const response = await axios.get('testupload'); // Assuming endpoint returns users
+                const response = await axios.get('testproduct'); // Assuming endpoint returns users
                 setProducts(response.data); // Update users state
                 //console.log(response.data);
             } catch (error) {
@@ -40,7 +40,7 @@ const productPage = () => {
     // Render content based on fetched bills
     return (
     <div>
-        <h1>test upload Page</h1>
+          <h1>Test Product Page</h1>
           {products.length > 0 ? (
               <table >
                   <thead>
@@ -63,9 +63,9 @@ const productPage = () => {
                   </tbody>
               </table>
           ) : (
-              <div>Not a User found.</div>
+              <div>No products found.</div>
           )}
-        <TestUpload/>
+        <TestProduct/>
     </div>
   )
 }
