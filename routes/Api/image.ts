@@ -1,10 +1,10 @@
 import { Router } from "express";
 
 const router = Router();
-const { uploadImage, gellAllImage} = require("../../controllers/imagesController");
+const { uploadImage, getAllImage} = require("../../controllers/imagesController");
 
 router.route("/")
-    .get(gellAllImage)
+    .get(getAllImage)
     .post(uploadImage);
 router.route("/:id")
     .get()

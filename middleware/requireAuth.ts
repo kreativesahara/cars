@@ -11,28 +11,49 @@ declare module 'express-serve-static-core' {
     }
 }
 
+// Middleware for verifying JWT and attaching user data to the request
 export const requireAuth = (req: Request, res: Response, next: NextFunction) => {
-    const authHeader = req.headers.authorization || req.headers.Authorization as string;
-    console.log(authHeader);
-    if (!authHeader?.startsWith('Bearer ')) {
-        return res.status(401).json({ error: 'Authorization token required' });
-    }
+    try {
+        const authHeader = req.headers.authorization || req.headers.Authorization as string;
 
-    const token = authHeader.split(' ')[1];
-
-    jwt.verify(
-        token,
-        process.env.ACCESS_TOKEN_SECRET as string,
-        (err, decoded: any) => {
-            if (err) return res.sendStatus(403); // Invalid token
-
-            // Set decoded values in a custom `auth` property on the request object
-            req.auth = {
-                user: decoded.UserInfo.email,
-                roles: decoded.UserInfo.roles
-            };
-
-            next();
+        if (!authHeader || !authHeader.startsWith('Bearer ')) {
+            console.error('Authorization header missing or invalid');
+            return res.status(401).json({ error: 'Authorization token required' });
         }
-    );
+
+        const token = authHeader.split(' ')[1];
+
+        jwt.verify(
+            token,
+            process.env.ACCESS_TOKEN_SECRET as string,
+            (err, decoded: any) => {
+                if (err) {
+                    console.error('Token verification failed:', err.message);
+                    return res.status(403).json({ error: 'Invalid or expired token' });
+                }
+
+                // Check if the decoded token contains the required fields
+                if (!decoded.UserInfo || !decoded.UserInfo.email || !decoded.UserInfo.roles) {
+                    console.error('Invalid token payload');
+                    return res.status(403).json({ error: 'Invalid token payload' });
+                }
+
+                // Attach user information to the request object
+                req.auth = {
+                    user: decoded.UserInfo.email,
+                    roles: decoded.UserInfo.roles,
+                };
+
+                console.log('User authenticated:', {
+                    user: req.auth.user,
+                    roles: req.auth.roles,
+                });
+
+                next();
+            }
+        );
+    } catch (err) {
+        console.error('Error in requireAuth middleware:', err);
+        res.status(500).json({ error: 'Internal server error' });
+    }
 };

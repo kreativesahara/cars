@@ -3,7 +3,7 @@ import axios from '../../api/axios';
 import imageCompression from 'browser-image-compression';
 import '../lists/uploadlist.css';
 
-const carId = 55;
+const carId = 105;
 function UploadImage() {
   const [values, setValues] = useState({ car_id: carId });
   const [image, setImage] = useState(null);
@@ -45,6 +45,7 @@ function UploadImage() {
 
     console.log('Form Data: ',formData);
     try {
+      console.log('waiting for form data')
       await axios.post('image', formData, {
         headers: { 'Content-Type': 'multipart/form-data' },
         withCredentials: true,

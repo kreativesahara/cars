@@ -5,14 +5,12 @@ import cookieParser from 'cookie-parser'
 import morgan from 'morgan';
 import cors from 'cors';
 
+import testRoute from './routes/test'
 
+import authRoute from './routes/Api/auth';
 import usersRoute from './routes/Api/user';
 import productsRoute from './routes/Api/product';
 import imagesRoute from './routes/Api/image';
-import authRoute from './routes/Api/auth';
-import testRoute from './routes/test'
-import UploadRoute from './routes/Api/product'
-import testUploadRoute from './routes/Api/testimage'
 import testProductRoute from './routes/Api/testProduct'
 
 import refreshRoute from './routes/Api/refresh'
@@ -42,19 +40,20 @@ app.get('/', (req: express.Request, res: express.Response ) => {
 })
 
 app.use('/users',usersRoute )
-//app.use("/products", requireAuth,productsRoute)
-app.use("/upload", UploadRoute)
-app.use("/image", imagesRoute)
 app.use("/auth", authRoute)
-
-app.use('/refresh', refreshRoute)
-app.use('/logout', requireAuth, logoutRoute)
 
 //Test Case
 app.use("/test", requireAuth, testRoute)
-//app.use("/testupload", testUploadRoute)
-app.use("/testproduct", testProductRoute)
 
+//API Routes
+app.use("/products",productsRoute)
+app.use("/testproduct", requireAuth, testProductRoute)
+app.use("/image", imagesRoute)
+
+
+
+app.use('/refresh', refreshRoute)
+app.use('/logout', requireAuth, logoutRoute)
 
 // Start the server
 app.listen(PORT, () => {

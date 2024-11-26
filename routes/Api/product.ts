@@ -7,10 +7,10 @@ const { getAllProducts, getProduct, createProduct, updateSingleProduct,deletePro
 router.route("/")
     .get(getAllProducts)
     .post(createProduct)
-    .put(updateSingleProduct)
-    .delete(deleteProduct);
-router.route("/:id")
-    .get(getProduct)
+    // .put(updateSingleProduct)
+    // .delete(deleteProduct);
+// router.route("/:id")
+//     .get(getProduct)
 export default router;
 
 //TODO: Add roles

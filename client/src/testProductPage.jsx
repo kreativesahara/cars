@@ -1,32 +1,41 @@
 import React from 'react'
-import axios from './api/axios';
+import axiosPrivate from './api/axios';
+import useAuth from './hooks/useAuth';
 import { useState, useEffect } from 'react';
-import TestProduct from './components/forms/testProductUpload'
+import TestProductUpload from './components/forms/testProductUpload'
 
 
 const productPage = () => {
+    const { auth } = useAuth();
     const [products, setProducts] = useState([]); // State for fetched users
     const [isLoading, setIsLoading] = useState(false); // State for loading indicator
     const [error, setError] = useState(null); // State for error handling
 
-    useEffect(() => {
-        const fetchAllProducts = async () => {
-            setIsLoading(true); // Set loading state to true
-            setError(null); // Clear any previous errors
+    // useEffect(() => {
+    //     const fetchAllProducts = async () => {
+    //         setIsLoading(true); // Set loading state to true
+    //         setError(null); // Clear any previous errors
 
-            try {
-                const response = await axios.get('testproduct'); // Assuming endpoint returns users
-                setProducts(response.data); // Update users state
-                //console.log(response.data);
-            } catch (error) {
-                setError(error); // Set error state for handling
-            } finally {
-                setIsLoading(false); // Set loading state to false after fetch (success or error)
-            }
-        };
+    //         try {
+    //             const response = await axiosPrivate.get('testproduct',
+    //                 {
+    //                     headers: {
+    //                         Authorization: `${auth.accessToken}` // Replace auth.accessToken with your token variable
+    //                     }
+    //                 }
+    //             ); // Assuming endpoint returns users
+                
+    //             setProducts(response.data); // Update users state
+    //             //console.log(response.data);
+    //         } catch (error) {
+    //             setError(error); // Set error state for handling
+    //         } finally {
+    //             setIsLoading(false); // Set loading state to false after fetch (success or error)
+    //         }
+    //     };
 
-        fetchAllProducts();
-    }, []); // Empty dependency array to fetch data once on component mount
+    //     fetchAllProducts();
+    // }, []); // Empty dependency array to fetch data once on component mount
 
     // Handle loading and error states conditionally
     if (isLoading) {
@@ -41,6 +50,7 @@ const productPage = () => {
     return (
     <div>
           <h1>Test Product Page</h1>
+          
           {products.length > 0 ? (
               <table >
                   <thead>
@@ -65,7 +75,7 @@ const productPage = () => {
           ) : (
               <div>No products found.</div>
           )}
-        <TestProduct/>
+        <TestProductUpload/>
     </div>
   )
 }

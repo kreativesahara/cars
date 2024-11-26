@@ -1,3 +1,5 @@
+import {verifyRoles} from "../../middleware/verifyRoles";
+import { ROLES_LIST } from "../../config/roles_list";
 import { Router } from "express";
 const router = Router();
 const { 
@@ -9,6 +11,7 @@ const {
 } = require("../../controllers/testProductController");
 
 router.route("/")
+    .get(verifyRoles(ROLES_LIST.Member,ROLES_LIST.Seller,ROLES_LIST.modarator,ROLES_LIST.Admin), getAllUploads)
     .get(getAllUploads)
     .post(createUpload)
     // .put(updateUpload)

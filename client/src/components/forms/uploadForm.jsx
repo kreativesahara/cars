@@ -1,7 +1,6 @@
 import React, { useState } from 'react';
 import axios from '../../api/axios';
-
-const carId = 55;
+import imageCompression from 'browser-image-compression';
 
 const UploadListing = () => {
     const [values, setValues] = useState({
@@ -20,46 +19,68 @@ const UploadListing = () => {
     });
 
     const [images, setImages] = useState([]);
+    const [preview, setPreview] = useState([]);
 
     const handleChange = (e) => {
         setValues((prev) => ({
             ...prev,
             [e.target.name]: e.target.value
-        }));
-    }
+        }),
+            // console.log(values)
+        );
+    };
 
-   
-    const handleImageChange = (e) => {
-        setImages(Array.from(e.target.files));
+    const handleImageChange = async (e) => {
+        const files = Array.from(e.target.files);
+        const previewUrls = [];
+
+        for (const file of files) {
+            const options = {
+                maxSizeMB: 1,          // Maximum size in MB
+                maxWidthOrHeight: 400, // Max width or height
+                useWebWorker: true,
+            };
+            try {
+                const compressedFile = await imageCompression(file, options);
+                setImages((prev) => [...prev, compressedFile]);
+                previewUrls.push(URL.createObjectURL(compressedFile));
+            } catch (error) {
+                console.error('Error while compressing image:', error);
+                setImages((prev) => [...prev, file]); // Use original image if compression fails
+                previewUrls.push(URL.createObjectURL(file));
+            }
+        }
+
+        setPreview(previewUrls);
     };
 
     const handleSubmit = async (e) => {
         e.preventDefault();
+
+        if (!images.length) {
+            alert('Please select images to upload.');
+            return;
+        }
+        // Create FormData object
+        const form = new FormData();
+        Object.keys(values).forEach((key) => form.append(key, values[key]));
+        images.forEach((image) => {
+            form.append('images', image);
+        });
+
+        // Logs form data to inspect what's being sent
+        for (let pair of form.entries()) {
+            console.log(pair[0], pair[1]);
+        }
         try {
-            const form = new FormData();
-            // Append all form fields
-           const data =  Object.keys(values).forEach((key) => form.append(key, values[key]));
-            // Append images to form data
+            // Send data without manually setting Content-Type header
+            const response = await axios.post('testupload', form, {
+                headers: { 'Content-Type': 'multipart/form-data' },
+                withCredentials: true,
+            });
 
-            //TODO: 
-            // images.forEach((image, index) => {
-            //     form.append(`images`, image); // You can customize the key for each image
-            // });
-
-            // Post data to backend
-            const response = await axios.post('http://localhost:3100/upload',
-                form,
-                {
-                    //Requires multipart/form-data to set data for api post request
-                    headers: { 'Content-Type': 'application/json' },
-                    withCredentials: true
-                },
-            );
-
-            console.log("Response:", response);
-            console.log("Values:", values)
+            console.log("Response from testproduct controller:", response.data);
             alert("Car details uploaded successfully");
-
             // Reset form fields
             setValues({
                 make: '',
@@ -76,15 +97,17 @@ const UploadListing = () => {
                 price: '',
             });
             setImages([]);
+            setPreview([]);
 
         } catch (error) {
-            console.error("Error uploading car details:", error);
+            console.error("Error uploading car details:", error.response?.data || error.message);
             alert("Failed to upload car details. Please try again.");
         }
-    }
+    };
 
     return (
         <div>
+            <div>Upload Product</div>
             <form onSubmit={handleSubmit}>
                 <div>
                     <label>Upload Images:</label>
@@ -96,6 +119,13 @@ const UploadListing = () => {
                         onChange={handleImageChange}
                         required
                     />
+                    {preview.length > 0 && (
+                        <div>
+                            {preview.map((src, index) => (
+                                <img key={index} src={src} alt={`Preview ${index + 1}`} />
+                            ))}
+                        </div>
+                    )}
 
                     <label>Vehicle Make</label>
                     <input
@@ -116,7 +146,6 @@ const UploadListing = () => {
                         required
                         value={values.model}
                     />
-
                     <label>Year of Manufacture</label>
                     <input
                         name='year'
@@ -215,14 +244,12 @@ const UploadListing = () => {
                         placeholder="Describe the features of the Vehicle"
                         required
                         value={values.features}
-                    /> 
-                </div> 
-                <button type='submit'>
-                    Add all Listing
-                </button>
+                    />
+                </div>
+                <button type='submit'>Listing</button>
             </form>
         </div>
     );
-}
+};
 
 export default UploadListing;

@@ -16,7 +16,7 @@ const productPage = () => {
             setIsLoading(true); // Set loading state to true
             setError(null); // Clear any previous errors 
             try {
-                const response = await axiosPrivate.get('upload'); // Assuming endpoint returns users
+                const response = await axiosPrivate.get('products'); // Assuming endpoint returns users
                 setProducts(response.data); // Update users state
                 console.log(response.data);
             } catch (error) {
@@ -54,7 +54,7 @@ const productPage = () => {
                         <th>Vehicle ID</th>
                         <th>Vehicle Make</th>
                         <th>vehicle Model</th>
-                        <th>Vehicle Year</th>
+                        <th>Vehicle Image</th>
                         <th>Vehicle Location</th>
                     </tr>
                 </thead>
@@ -64,7 +64,7 @@ const productPage = () => {
                             <td>{product.id}</td>
                             <td>{product.make}</td>
                             <td>{product.model}</td>
-                            <td>{product.year}</td>
+                            <td>{product.image_url}</td>
                             <td>{product.location}</td>
                         </tr>
                     ))}

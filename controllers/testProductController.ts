@@ -97,11 +97,11 @@ export const createUpload = async (req: any, res: any): Promise<any> => {
             console.log('Error from client:', err);
             return res.status(500).json({ message: 'Image upload error.' });
         }
-        const { make, model } = req.body;
+        const { make, model, year, engine_capacity, fuel_type, transmission, driveSystem, mileage, features, condition, location, price, seller_id=93} = req.body;
         const images: any = req.files;
         
         // Validate required fields
-        if (!make || !model) {
+        if (!make || !model || !year || !engine_capacity || !fuel_type || !transmission || !driveSystem || !mileage || !features || !condition || !location || !price) {
             return res.status(400).json({ message: 'All fields are required.' });
         }
         try {
@@ -113,6 +113,17 @@ export const createUpload = async (req: any, res: any): Promise<any> => {
             const valuesToInsert = images.map((img: any) => ({
                 make: make,
                 model: model,
+                year: year,
+                engine_capacity: engine_capacity,
+                fuel_type: fuel_type,
+                transmission: transmission,
+                driveSystem: driveSystem,
+                mileage: mileage,
+                features: features,
+                condition: condition,
+                location: location,
+                price: price,
+                seller_id: seller_id,
                 image_url: imageUrl // Save the image URL/path
             }));
 

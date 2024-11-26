@@ -3,9 +3,10 @@ import ReactDOM from 'react-dom/client';
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import App from './App.jsx';
 import Login from './login.jsx';
-//import Product from './productPage.jsx';
+
+import Product from './productPage.jsx';
 import Contacts from './contacts.jsx';
-import TestUpload from './testUploadPage.jsx';
+
 import TestProduct from './testProductPage.jsx';
 import PersistLogin from './controllers/PersistLogin';
 import RequireAuth from './controllers/RequireAuth';
@@ -31,21 +32,18 @@ const AppRoutes = () => (
     {/* Protected Routes */}
     <Route element={<PersistLogin />}>
       {/* Nested Routes for Authorization */}
-      {/* <Route
-        element={<RequireAuth allowedRoles={[ROLES.visitor, ROLES.Member, ROLES.Seller]} />}
-      >
-        <Route path="product" element={<Product />} />
-      </Route> */}
+      
       <Route
         element={<RequireAuth allowedRoles={[ROLES.visitor, ROLES.Member, ROLES.Seller, ROLES.Member, ROLES.Admin]} />}
       >
         <Route path="testproduct" element={<TestProduct />} />
       </Route> 
       <Route
-        element={<RequireAuth allowedRoles={[ROLES.visitor, ROLES.Member, ROLES.Seller,ROLES.Member, ROLES.Admin]} />}
+        element={<RequireAuth allowedRoles={[ROLES.visitor, ROLES.Member, ROLES.Seller, ROLES.Member, ROLES.Admin]} />}
       >
-        <Route path="testupload" element={<TestUpload />} />
+        <Route path="product" element={<Product />} />
       </Route>
+
       <Route
         element={<RequireAuth allowedRoles={[ROLES.Member, ROLES.Admin]} />}
       >

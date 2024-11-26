@@ -14,8 +14,7 @@ export const product = mysqlTable('cars', {
     condition: varchar('car_condition', { length: 50 }).notNull(),
     location: varchar('view_location', { length: 255 }).notNull(),
     price: decimal('price', { precision: 10, scale: 2 }).notNull(),
-    seller_id: int('seller_id').notNull()
-    //seller_id: int('seller_id').notNull().references('sellers.id')
-
-
+    seller_id: int('seller_id').notNull(),
+    //seller_id: int('seller_id').notNull().references('sellers.id'),
+    image_url: text('image_url').notNull(),
 });

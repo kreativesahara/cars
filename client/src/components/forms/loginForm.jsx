@@ -37,7 +37,11 @@ const LoginForm = () => {
         try {
             const response= await axios.post('auth/login', formData,
                 {
-                    headers: { 'Content-Type': 'application/json' },
+                    headers: { 
+                        'Content-Type': 'application/json',
+                       
+                        
+                    },
                     withCredentials: true
                 },
                
