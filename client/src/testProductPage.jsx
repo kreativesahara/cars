@@ -7,7 +7,7 @@ import TestProductUpload from './components/forms/testProductUpload'
 
 const productPage = () => {
     const { auth } = useAuth();
-    const [products, setProducts] = useState([]); // State for fetched users
+    const [products, setProducts] = useState([]); // State for fetched products
     const [isLoading, setIsLoading] = useState(false); // State for loading indicator
     const [error, setError] = useState(null); // State for error handling
     const [Navigate]= useNavigate();
@@ -15,40 +15,29 @@ const productPage = () => {
     useEffect(() => {
         const fetchAllProducts = async () => {
             setIsLoading(true); // Set loading state to true
-            setError(null); // Clear any previous errors
-
+            // Clear any previous errors
+            //setError(null); 
             try {
                 let mount = true
                 const controller = new AbortController();
                 const response = await axiosPrivate.get('testproduct',
-                    {
-                        signal: controller.signal
-                    }
-                ); // Assuming endpoint returns users
-                
-                mount && setProducts(response.data); // Update users state
-                //console.log(response.data);
+                    {signal: controller.signal}
+                ); 
+                mount &&  setProducts(response.data); 
             } catch (error) {
-                setError(error); // Set error state for handling                
+                setError(error);                
                 Navigate('/login', { state: { from: Location }, replace: true })                
             } finally {
-                setIsLoading(false); // Set loading state to false after fetch (success or error)
+                setIsLoading(Boolean(mount) ? false : false); 
             }
         };
-
         fetchAllProducts();
     }, []); // Empty dependency array to fetch data once on component mount
 
-    // Handle loading and error states conditionally
-    if (isLoading) {
-        return <div>Loading bills...</div>; // Display loading indicator
-    }
-
-    if (error) {
-        return <div>Error: {error.message}</div>; // Display error message
-    }
-
-    // Render content based on fetched bills
+    // Handle loading and error state conditions
+    if (isLoading) {return <div>Loading bills...</div>;}
+    if (error) { return <div>Error: {error.message}</div>; }
+    else
     return (
     <div>
           <h1>Test Product Page</h1>
