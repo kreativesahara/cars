@@ -25,7 +25,7 @@ const registerUser = async (req: Request, res: Response): Promise<Response> => {
             lastname,
             email,
             password: hashedPassword,
-            roles: ROLES_LIST.visitor
+            roles: ROLES_LIST.Visitor
         })
         console.log('User registered successfully:', newUser); 
         // Exclude the password from the response
@@ -35,7 +35,7 @@ const registerUser = async (req: Request, res: Response): Promise<Response> => {
                 firstname: firstname,
                 lastname: lastname,
                 email: email,
-                roles: ROLES_LIST.visitor
+                roles: ROLES_LIST.Visitor
             },
         }); 
           
@@ -73,7 +73,7 @@ const registerUser = async (req: Request, res: Response): Promise<Response> => {
                 }
             },
             process.env.ACCESS_TOKEN_SECRET as string,
-            { expiresIn: '15s' },
+            { expiresIn: '1h' },
 
         );
 
@@ -98,12 +98,12 @@ const registerUser = async (req: Request, res: Response): Promise<Response> => {
            // secure: true,
             sameSite: 'none',
             maxAge: 24 * 60 * 60 * 1000})
-           .header('Authorization',accessToken)
         ;
+        //res.header('authorization', `Bearer ${accessToken}`); 
         // Send authorization roles and access token to user
+        
         res.json({ roles ,accessToken,refreshToken });
-       //console.log(req.cookies);
-        console.log(foundUser);
+        console.log('foundUser',foundUser);
     } else {
         res.sendStatus(401);
     }

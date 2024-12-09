@@ -74,7 +74,7 @@ const UploadListing = () => {
         }
         try {
             // Send data without manually setting Content-Type header
-            const response = await axios.post('testupload', form, {
+            const response = await axios.post('products', form, {
                 headers: { 'Content-Type': 'multipart/form-data' },
                 withCredentials: true,
             });

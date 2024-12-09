@@ -11,15 +11,10 @@ const {
 } = require("../../controllers/testProductController");
 
 router.route("/")
-    .get(verifyRoles(ROLES_LIST.Member,ROLES_LIST.Seller,ROLES_LIST.modarator,ROLES_LIST.Admin), getAllUploads)
-    .get(getAllUploads)
+    .get(verifyRoles(ROLES_LIST.Visitor,ROLES_LIST.Member,ROLES_LIST.Seller,ROLES_LIST.Modarator,ROLES_LIST.Admin), getAllUploads)
     .post(createUpload)
     // .put(updateUpload)
     // .delete(deleteUpload);
 router.route("/:id")
     // .get(getUpload)
 export default router;
-
-//TODO: Add roles
-    //.put(verifyRoles(ROLES_LIST.Admin, ROLES_LIST.Editor), productsController.updateProduct)
-    // .delete(verifyRoles(ROLES_LIST.Admin), productsController.deleteProduct);

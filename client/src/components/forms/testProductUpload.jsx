@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import axios from '../../api/axios';
+import { axiosPrivate } from '../../api/axios';
 import imageCompression from 'browser-image-compression';
 
 const UploadListing = () => {
@@ -74,7 +74,7 @@ const UploadListing = () => {
         }
         try {
             // Send data without manually setting Content-Type header
-            const response = await axios.post('testproduct', form, {
+            const response = await axiosPrivate.post('testproduct', form, {
                 headers: { 'Content-Type': 'multipart/form-data' },
                 withCredentials: true, 
             });

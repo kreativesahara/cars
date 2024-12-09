@@ -14,8 +14,9 @@ declare module 'express-serve-static-core' {
 // Middleware for verifying JWT and attaching user data to the request
 export const requireAuth = (req: Request, res: Response, next: NextFunction) => {
     try {
-        const authHeader = req.headers.authorization || req.headers.Authorization as string;
-
+        // Extract the token from the Authorization header
+        const authHeader = req.headers['authorization'] || req.headers.authorization as string;
+        console.log('AuthHeader:', authHeader);
         if (!authHeader || !authHeader.startsWith('Bearer ')) {
             console.error('Authorization header missing or invalid');
             return res.status(401).json({ error: 'Authorization token required' });

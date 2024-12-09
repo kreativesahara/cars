@@ -1,7 +1,7 @@
 import { Outlet } from "react-router-dom";
 import { useState, useEffect } from "react";
-import useRefreshToken from '../hooks/useRefreshToken';
-import useAuth from '../hooks/useAuth';
+import useRefreshToken from "../hooks/useRefreshToken";
+import useAuth from "../hooks/useAuth";
 
 const PersistLogin = () => {
     const [isLoading, setIsLoading] = useState(true);
@@ -9,42 +9,42 @@ const PersistLogin = () => {
     const { auth, persist } = useAuth();
 
     useEffect(() => {
-        let isMounted = true;
+        let mounted = true; // Improved naming for clarity
 
         const verifyRefreshToken = async () => {
-            console.log('loading verifyRefreshToken');
+            if (!persist) {
+                setIsLoading(false); // Skip token verification if persistence is off
+                return;
+            }
+
+            console.log("Verifying refresh token...");
             try {
-               const response = await refresh();
-               console.log('verifyRefreshToken',response);
+                await refresh(); // Refresh token and update auth state
+            } catch (err) {
+                console.error("Error verifying refresh token:", err.message);
+            } finally {
+                if (mounted) setIsLoading(false);
             }
-            catch (err) {
-                console.error(err);
-            }
-            finally {
-                isMounted && setIsLoading(false);
-            }
+        };
+
+        if (!auth?.accessToken) {
+            verifyRefreshToken();
+        } else {
+            setIsLoading(false);
         }
-        // Avoids unwanted call to verifyRefreshToken
-        !auth?.accessToken && persist ? verifyRefreshToken() : setIsLoading(false);
 
-        return () => isMounted = false;
-    }, [])
+        return () => {
+            mounted = false; // Cleanup
+        };
+    }, [auth?.accessToken, persist, refresh]); // Include dependencies to avoid stale closures
 
-    useEffect(() => {
-        console.log(`isLoading: ${isLoading}`)
-        console.log(`aT: ${JSON.stringify(auth?.accessToken)}`)
-    }, [isLoading])
+    return !persist ? (
+        <Outlet />
+    ) : isLoading ? (
+        <p>Loading...</p>
+    ) : (
+        <Outlet />
+    );
+};
 
-    return (
-        <>
-            { !persist 
-                ? <Outlet />
-                : isLoading
-                    ? <p>Loading...</p>
-                    : <Outlet />
-            }
-        </>
-    )
-}
-
-export default PersistLogin
+export default PersistLogin;

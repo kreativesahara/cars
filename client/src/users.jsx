@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { axiosPrivate } from './api/axios';
+import axios from './api/axios';
 //import { Outlet } from 'react-router-dom';
 import './App.css'; // Import for styling
 
@@ -14,7 +14,7 @@ function Users() {
       setError(null); // Clear any previous errors
 
       try {
-        const response = await axiosPrivate.get('users'); // Assuming endpoint returns users
+        const response = await axios.get('users'); // Assuming endpoint returns users
         setUsers(response.data); // Update users state
         console.log(response.data);
       } catch (error) {

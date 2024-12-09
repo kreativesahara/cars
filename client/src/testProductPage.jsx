@@ -1,7 +1,7 @@
 import React from 'react'
 import axiosPrivate from './api/axios';
 import useAuth from './hooks/useAuth';
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useNavigate, useLocation} from 'react';
 import TestProductUpload from './components/forms/testProductUpload'
 
 
@@ -10,32 +10,34 @@ const productPage = () => {
     const [products, setProducts] = useState([]); // State for fetched users
     const [isLoading, setIsLoading] = useState(false); // State for loading indicator
     const [error, setError] = useState(null); // State for error handling
+    const [Navigate]= useNavigate();
+    const [Location]= useLocation();
+    useEffect(() => {
+        const fetchAllProducts = async () => {
+            setIsLoading(true); // Set loading state to true
+            setError(null); // Clear any previous errors
 
-    // useEffect(() => {
-    //     const fetchAllProducts = async () => {
-    //         setIsLoading(true); // Set loading state to true
-    //         setError(null); // Clear any previous errors
-
-    //         try {
-    //             const response = await axiosPrivate.get('testproduct',
-    //                 {
-    //                     headers: {
-    //                         Authorization: `${auth.accessToken}` // Replace auth.accessToken with your token variable
-    //                     }
-    //                 }
-    //             ); // Assuming endpoint returns users
+            try {
+                let mount = true
+                const controller = new AbortController();
+                const response = await axiosPrivate.get('testproduct',
+                    {
+                        signal: controller.signal
+                    }
+                ); // Assuming endpoint returns users
                 
-    //             setProducts(response.data); // Update users state
-    //             //console.log(response.data);
-    //         } catch (error) {
-    //             setError(error); // Set error state for handling
-    //         } finally {
-    //             setIsLoading(false); // Set loading state to false after fetch (success or error)
-    //         }
-    //     };
+                mount && setProducts(response.data); // Update users state
+                //console.log(response.data);
+            } catch (error) {
+                setError(error); // Set error state for handling                
+                Navigate('/login', { state: { from: Location }, replace: true })                
+            } finally {
+                setIsLoading(false); // Set loading state to false after fetch (success or error)
+            }
+        };
 
-    //     fetchAllProducts();
-    // }, []); // Empty dependency array to fetch data once on component mount
+        fetchAllProducts();
+    }, []); // Empty dependency array to fetch data once on component mount
 
     // Handle loading and error states conditionally
     if (isLoading) {

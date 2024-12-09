@@ -7,7 +7,7 @@ import { Request, Response } from 'express';
 export const handleRefreshToken = async (req: Request, res: Response) => {
     try {
         const cookies = req.cookies;
-        console.log('Cookies:', cookies);
+        console.log('Cookies received:', cookies);
 
         // Check if JWT cookie is present
         if (!cookies?.jwt) {
@@ -24,7 +24,7 @@ export const handleRefreshToken = async (req: Request, res: Response) => {
             .limit(1);
 
         if (foundUser.length === 0) {
-            console.error('Refresh token does not match any user');
+            console.error('Refresh token does not match any user:', refreshToken);
             return res.status(403).json({ message: 'User not found or token invalid.' });
         }
 
@@ -35,13 +35,15 @@ export const handleRefreshToken = async (req: Request, res: Response) => {
             (err: jwt.VerifyErrors | null, decoded: any) => {
                 if (err) {
                     console.error('Token verification failed:', err.message);
+                    console.error('Failed token:', refreshToken);
                     return res.status(403).json({ message: 'Token invalid or expired.' });
                 }
+                console.log('Decoded token:', decoded);
 
                 // Validate the decoded token matches the user
                 const userEmail = foundUser[0].email;
                 if (userEmail !== decoded.email) {
-                    console.error('Token email mismatch');
+                    console.error('Token email mismatch:', { tokenEmail: decoded.email, dbEmail: userEmail });
                     return res.status(403).json({ message: 'Token email mismatch.' });
                 }
 
@@ -54,13 +56,13 @@ export const handleRefreshToken = async (req: Request, res: Response) => {
                         },
                     },
                     process.env.ACCESS_TOKEN_SECRET as string,
-                    { expiresIn: '60s' } // Adjust expiration as needed
+                    { expiresIn: '30s' }
                 );
 
                 console.log('New access token generated for:', userEmail);
 
-                // Optionally set the access token in headers or cookies
-                res.header('Authorization', ` ${accessToken}`);
+                /// Set access token as a cookie in the response
+                res.header('Authorization', `Bearer ${accessToken}`)
                 return res.status(200).json({ accessToken });
             }
         );
