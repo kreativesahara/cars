@@ -1,20 +1,18 @@
 import React from 'react'
 import axios from '../../api/axios'
 import useAuth from '../../hooks/useAuth'
-import {Link,useNavigate, useLocation} from 'react-router-dom'
+import { Link, useNavigate, useLocation } from 'react-router-dom'
 import { useRef,useState, useEffect } from 'react'
 
 const LoginForm = () => {
     const {setAuth, persist, setPersist} = useAuth();
     const navigate = useNavigate();
     const location = useLocation();
-    const from = location.state?.from?.pathname || "/product";
-
     const userRef = useRef();
     const errRef = useRef();
-
     const [errMsg, setErrMsg] = useState('');
-   
+    const from = location.state?.from?.pathname || "/product";
+
     const [formData, setFormData] = useState({
         email: "",
         password: ""
@@ -49,7 +47,7 @@ const LoginForm = () => {
             setAuth({  
                 email: formData.email,
                 roles:Array.isArray(roles) ? roles : [roles],
-                accessToken 
+                accessToken: accessToken 
              });
            
             setFormData({ email: "", password: "" });
@@ -74,12 +72,9 @@ const LoginForm = () => {
     const togglePersist = () => {
         setPersist(prev => !prev);
     };
-
     useEffect(() => {
         localStorage.setItem("persist", JSON.stringify(persist));
     }, [persist]);
-    
-
   return (
     <>
       <div className='mt-10 font-bold bg-red-500 lg:w-1/3'>Upload User Details</div>

@@ -6,16 +6,16 @@ import { Request, Response } from 'express';
 
 export const handleRefreshToken = async (req: Request, res: Response) => {
     try {
-        const cookies = req.cookies;
-        console.log('Cookies received:', cookies);
-
-        // Check if JWT cookie is present
-        if (!cookies?.jwt) {
-            console.error('Missing refresh token cookie');
-            return res.status(401).json({ message: 'Authorization token required' });
+        // Extract the token from the Authorization cookie
+        const authcookies = req.cookies;
+        console.log('AuthCookies:', authcookies);
+        if (!authcookies?.authorization) {
+            console.error('missing authorization cookie');
+            return res.status(401).json({ error: 'Authorization token required' });
         }
+    
 
-        const refreshToken = cookies.jwt;
+        const refreshToken = authcookies.refreshToken;
 
         // Fetch user with matching refresh token
         const foundUser = await db.select()
@@ -61,8 +61,13 @@ export const handleRefreshToken = async (req: Request, res: Response) => {
 
                 console.log('New access token generated for:', userEmail);
 
-                /// Set access token as a cookie in the response
-                res.header('Authorization', `Bearer ${accessToken}`)
+                //Set access token as a cookie in the response
+                res.cookie('authorization', accessToken,
+                    { httpOnly: true, sameSite: 'strict', 
+                        //secure: true, 
+                        maxAge: 24 * 60 * 60 * 1000 
+                    }
+                );
                 return res.status(200).json({ accessToken });
             }
         );

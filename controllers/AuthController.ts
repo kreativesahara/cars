@@ -51,7 +51,6 @@ const registerUser = async (req: Request, res: Response): Promise<Response> => {
     };
 }
  const handleLogin = async (req: Request, res: Response) => {
-    console.log('Logging in user');
     const { email, password} = req.body;
     if (!email || !password) return res.status(400).json({ 'message': 'Email and password are required.' });
 
@@ -73,7 +72,7 @@ const registerUser = async (req: Request, res: Response): Promise<Response> => {
                 }
             },
             process.env.ACCESS_TOKEN_SECRET as string,
-            { expiresIn: '1h' },
+            { expiresIn: '10s' },
 
         );
 
@@ -92,16 +91,21 @@ const registerUser = async (req: Request, res: Response): Promise<Response> => {
             .set({ refreshToken: refreshToken })
             .where(eq(users.email, email));
 
-        // Creates Secure Cookie with refresh token
-        res.cookie('jwt', refreshToken, { 
+        // Creates Secure Cookie with access token
+        res.cookie('authorization', accessToken, { 
             httpOnly: true, 
            // secure: true,
-            sameSite: 'none',
-            maxAge: 24 * 60 * 60 * 1000})
+            sameSite: 'strict',
+            maxAge: 24 * 60 * 60 * 1000})            
         ;
-        //res.header('authorization', `Bearer ${accessToken}`); 
-        // Send authorization roles and access token to user
+        res.cookie('refreshToken', refreshToken, {
+            httpOnly: true,
+            //secure: true,
+            sameSite: 'strict',
+            maxAge: 24 * 60 * 60 * 1000
+        })
         
+        // Send authorization roles and access token to user
         res.json({ roles ,accessToken,refreshToken });
         console.log('foundUser',foundUser);
     } else {

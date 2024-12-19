@@ -46,7 +46,7 @@ app.use("/auth", authRoute)
 app.use("/test", requireAuth, testRoute)
 
 //API Routes
-app.use("/products",productsRoute)
+app.use("/products",requireAuth,productsRoute)
 app.use("/testproduct", requireAuth, testProductRoute)
 app.use("/image", imagesRoute)
 
