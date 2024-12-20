@@ -63,7 +63,9 @@ export const handleRefreshToken = async (req: Request, res: Response) => {
 
                 //Set access token as a cookie in the response
                 res.cookie('authorization', accessToken,
-                    { httpOnly: true, sameSite: 'strict', 
+                    { 
+                        httpOnly: true,
+                        sameSite: 'strict', 
                         //secure: true, 
                         maxAge: 24 * 60 * 60 * 1000 
                     }

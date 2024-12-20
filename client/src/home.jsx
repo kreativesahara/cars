@@ -1,12 +1,12 @@
 import  useRefreshToken from './hooks/useRefreshToken';
-const ome = () => {
+const Home = () => {
   const refresh = useRefreshToken();
   return (
   <>
-      <div>ome</div>
+      <div>Home</div>
       <button onClick={() => refresh()}>Refresh</button>
   </>
   )
 }
 
-export default ome
+export default Home

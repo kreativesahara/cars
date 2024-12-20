@@ -5,22 +5,26 @@ import { Request, Response } from 'express';
 
 
 export const handleLogout = async (req:Request, res:Response) => {
-    const cookies = req.cookies;
-
-    if (!cookies?.jwt) return res.sendStatus(204); //No content
-    const refreshToken = cookies.jwt;
+    const authcookies = req.cookies;
+    console.log('Cookies to delete :', authcookies)
+    if (!authcookies?.refreshToken) return res.sendStatus(204); //No content
+    const refreshToken = authcookies.refreshToken;
     // Is refreshToken in db?
-    const foundUser = await db.select().from(users).where(eq(users.refreshToken, refreshToken)).limit(1);
+    const foundUser= await db.    
+        select().
+        from(users).
+        where(eq(users.refreshToken, refreshToken)).
+        limit(1);
     if (!foundUser) {
-        res.clearCookie('jwt', { 
+        res.clearCookie('authorization', { 
             httpOnly: true, 
-            sameSite: 'none', 
+            sameSite: 'strict', 
             secure: true });
         return res.sendStatus(204);
     }
 
     // Delete refreshToken in db
-    foundUser[0].refreshToken = '';
+    //foundUser[0].refreshToken = '';
     await db
         .update(users)
         .set({ refreshToken: refreshToken })

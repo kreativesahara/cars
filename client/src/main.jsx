@@ -3,7 +3,7 @@ import ReactDOM from 'react-dom/client';
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import App from './App.jsx';
 import Login from './login.jsx';
-import Ome from './ome.jsx';
+import Home from './home.jsx';
 
 import Product from './productPage.jsx';
 import Contacts from './contacts.jsx';
@@ -28,8 +28,8 @@ const AppRoutes = () => (
     {/* Public Routes */}
     <Route path="/" element={<App />} />
     <Route path="login" element={<Login />} />
-    <Route path="unauthorized" element={<div>Unauthorized</div>} />
-    <Route path="ome" element={<Ome />} />
+    <Route path="unauthorized" element={<div>Unauthorized!</div>} />
+    <Route path="home" element={<Home />} />
 
     {/* Protected Routes */}
     <Route element={<PersistLogin />}>

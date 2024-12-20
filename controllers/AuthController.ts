@@ -80,10 +80,9 @@ const registerUser = async (req: Request, res: Response): Promise<Response> => {
             { 
                 "email": foundUser[0].email,
                 "roles": roles
-
              },
             process.env.REFRESH_TOKEN_SECRET as string,
-            { expiresIn: '1d' }
+            { expiresIn: '12h' }
         );
         //Save current user with their refresh token
         await db

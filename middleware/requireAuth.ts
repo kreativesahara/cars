@@ -16,7 +16,7 @@ export const requireAuth = (req: Request, res: Response, next: NextFunction) => 
     try {
         // Extract the token from the Authorization cookie
         const authcookies = req.cookies['authorization'] || req.cookies.authorization as string;
-        console.log('AuthCookies:', authcookies);
+        console.log('AuthCookies from Require Auth:', authcookies);
         if (!authcookies) {
             console.error('Authorization header missing or invalid');
             return res.status(401).json({ error: 'Authorization token required' });
