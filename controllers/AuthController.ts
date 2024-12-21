@@ -90,7 +90,7 @@ const registerUser = async (req: Request, res: Response): Promise<Response> => {
             .set({ refreshToken: refreshToken })
             .where(eq(users.email, email));
 
-        // Creates Secure Cookie with access token
+        //Creates Secure Cookie with access token
         res.cookie('authorization', accessToken, { 
             httpOnly: true, 
            // secure: true,

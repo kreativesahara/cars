@@ -34,7 +34,11 @@ const AppRoutes = () => (
     {/* Protected Routes */}
     <Route element={<PersistLogin />}>
       {/* Nested Routes for Authorization */}
-      
+      <Route
+        element={<RequireAuth allowedRoles={[ROLES.Visitor, ROLES.Member, ROLES.Seller, ROLES.Modarator, ROLES.Admin]} />}
+      >
+        {/* <Route path="home" element={<Home />} /> */}
+      </Route> 
       <Route
         element={<RequireAuth allowedRoles={[ROLES.Visitor, ROLES.Member, ROLES.Seller, ROLES.Modarator, ROLES.Admin]} />}
       >
