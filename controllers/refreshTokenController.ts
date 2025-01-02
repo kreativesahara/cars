@@ -42,9 +42,14 @@ export const handleRefreshToken = async (req: Request, res: Response) => {
 
                 // Validate the decoded token matches the user
                 const userEmail = foundUser[0].email;
+                const userRoles = foundUser[0].roles;
+
                 if (userEmail !== decoded.email) {
                     console.error('Token email mismatch:', { tokenEmail: decoded.email, dbEmail: userEmail });
                     return res.status(403).json({ message: 'Token email mismatch.' });
+                } else if (userRoles !== decoded.roles) {
+                    console.error('Token roles mismatch:', { tokenRoles: decoded.roles, dbRoles: userRoles });
+                    return res.status(403).json({ message: 'Token roles mismatch.' });
                 }
 
                 // Generate new access token
@@ -52,14 +57,15 @@ export const handleRefreshToken = async (req: Request, res: Response) => {
                     {
                         UserInfo: {
                             email: userEmail,
-                            roles: foundUser[0].roles,
+                            roles: userRoles,
                         },
                     },
                     process.env.ACCESS_TOKEN_SECRET as string,
-                    { expiresIn: '30s' }
+                    { expiresIn: '2h' }
                 );
 
-                console.log('New access token generated for:', userEmail);
+                console.log('User email is:', userEmail);
+                console.log('User roles is:', userRoles);
 
                 //Set access token as a cookie in the response
                 res.cookie('authorization', accessToken,
@@ -70,7 +76,7 @@ export const handleRefreshToken = async (req: Request, res: Response) => {
                         maxAge: 24 * 60 * 60 * 1000 
                     }
                 );
-                return res.status(200).json({ accessToken });
+                return res.status(200).json({ roles: userRoles, accessToken});
             }
         );
     } catch (error) {

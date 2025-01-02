@@ -1,11 +1,12 @@
 import { Router } from "express";
-
+import { ROLES_LIST } from "../../config/roles_list";
+import { verifyRoles } from "../../middleware/verifyRoles";
 
 const router = Router();
 const { getAllProducts, getProduct, createProduct, updateSingleProduct,deleteProduct } = require("../../controllers/productsController");
 
 router.route("/")
-    .get(getAllProducts)
+    .get(verifyRoles(ROLES_LIST.Member,ROLES_LIST.Seller,ROLES_LIST.Modarator,ROLES_LIST.Admin),getAllProducts)
     .post(createProduct)
     // .put(updateSingleProduct)
     // .delete(deleteProduct);

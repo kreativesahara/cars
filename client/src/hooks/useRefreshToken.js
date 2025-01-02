@@ -27,7 +27,7 @@ const useRefreshToken = () => {
                 };
             });
             console.log('useRefreshToken --> new access token:', accessToken);
-            return accessToken; // Return the new access token
+           // return accessToken; // Return the new access token
         } catch (err) {
             console.error('Error in useRefreshToken:', err?.response?.data?.message || err.message);
             if (err?.response?.status === 401 || err?.response?.status === 403) {

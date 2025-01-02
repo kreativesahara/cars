@@ -97,7 +97,7 @@ export const createProduct = async (req: any, res: any): Promise<any> => {
             console.log('Error from client:', err);
             return res.status(500).json({ message: 'Image upload error.' });
         }
-        const { make, model, year, engine_capacity, fuel_type, transmission, driveSystem, mileage, features, condition, location, price, seller_id = 93 } = req.body;
+        const { make, model, year, engine_capacity, fuel_type, transmission, driveSystem, mileage, features, condition, location, price, seller_id = 129 } = req.body;
         const images: any = req.files;
 
         // Validate required fields
