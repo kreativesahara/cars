@@ -5,7 +5,8 @@ const router = Router();
 router.route("/")
     .post(registerUser)
 router.route("/login")
-    .post(handleLogin);
+    .post(handleLogin)
+    .get()
 router.route("/:id")
     .get()
     .put()

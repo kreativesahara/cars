@@ -15,6 +15,7 @@ export const handleLogout = async (req:Request, res:Response) => {
         from(users).
         where(eq(users.refreshToken, refreshToken)).
         limit(1);
+        
     if (!foundUser) {
         res.clearCookie('authorization', { 
             httpOnly: true, 
@@ -24,13 +25,13 @@ export const handleLogout = async (req:Request, res:Response) => {
     }
 
     // Delete refreshToken in db
-    //foundUser[0].refreshToken = '';
+    foundUser[0].refreshToken = '';
     await db
         .update(users)
         .set({ refreshToken: refreshToken })
         .where(eq(users.refreshToken, refreshToken));
 
-    res.clearCookie('jwt', { 
+    res.clearCookie('refreshToken', { 
         httpOnly: true, 
         sameSite: 'none', 
         secure: true })

@@ -4,6 +4,7 @@ import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import App from './App.jsx';
 import Login from './login.jsx';
 import Home from './home.jsx';
+import TestRefresh from './testRefresh';
 
 import Product from './productPage.jsx';
 import Contacts from './contacts.jsx';
@@ -29,7 +30,6 @@ const AppRoutes = () => (
     <Route path="/" element={<App />} />
     <Route path="login" element={<Login />} />
     <Route path="unauthorized" element={<div>Unauthorized!</div>} />
-    <Route path="home" element={<Home />} />
 
     {/* Protected Routes */}
     <Route element={<PersistLogin />}>
@@ -37,13 +37,19 @@ const AppRoutes = () => (
       <Route
         element={<RequireAuth allowedRoles={[ROLES.Visitor, ROLES.Member, ROLES.Seller, ROLES.Modarator, ROLES.Admin]} />}
       >
-        {/* <Route path="home" element={<Home />} /> */}
+        <Route path="home" element={<Home />} />
+      </Route> 
+      <Route
+        element={<RequireAuth allowedRoles={[ROLES.Visitor, ROLES.Member, ROLES.Seller, ROLES.Modarator, ROLES.Admin]} />}
+      >
+        <Route path="testrefresh" element={<TestRefresh />} />
       </Route> 
       <Route
         element={<RequireAuth allowedRoles={[ROLES.Visitor, ROLES.Member, ROLES.Seller, ROLES.Modarator, ROLES.Admin]} />}
       >
         <Route path="testproduct" element={<TestProduct />} />
       </Route> 
+    
       <Route
         element={<RequireAuth allowedRoles={[ROLES.Visitor, ROLES.Member, ROLES.Seller, ROLES.Modarator, ROLES.Admin]} />}
       >

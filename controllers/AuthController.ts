@@ -55,19 +55,22 @@ const registerUser = async (req: Request, res: Response): Promise<Response> => {
     if (!email || !password) return res.status(400).json({ 'message': 'Email and password are required.' });
 
     const foundUser = await db.select().from(users).where(eq(users.email, email)).limit(1);
-
+    //console.log('foundUser:', foundUser);
     if (!foundUser) return res.sendStatus(401); //Unauthorized
     // evaluate password
     const isMatch = await bcrypt.compare(password, foundUser[0].password??'');
     if (isMatch) {
-        const roles = foundUser[0].roles;
-        console.log('userRoles:', roles);
+        const { id, firstname, lastname, roles} = foundUser[0];
+        console.log('user Properties:', roles, id, firstname, lastname, email);
         // create JWTs
         //TODO: change access token expire
         const accessToken = jwt.sign(
             {
                 "UserInfo": {
-                    "email": foundUser[0].email,
+                    "id":id,
+                    "firstname": firstname,
+                    "lastname": lastname,
+                    "email": email,
                     "roles": roles
                 }
             },
@@ -78,7 +81,10 @@ const registerUser = async (req: Request, res: Response): Promise<Response> => {
 
         const refreshToken = jwt.sign(
             { 
-                "email": foundUser[0].email,
+                "id": id,
+                "firstname": firstname,
+                "lastname": lastname,
+                "email": email,
                 "roles": roles
              },
             process.env.REFRESH_TOKEN_SECRET as string,
@@ -103,9 +109,8 @@ const registerUser = async (req: Request, res: Response): Promise<Response> => {
             sameSite: 'strict',
             maxAge: 24 * 60 * 60 * 1000
         })
-        
         // Send authorization roles and access token to user
-        res.json({ roles ,accessToken,refreshToken });
+        res.json({ id, firstname, lastname, email, roles, accessToken, refreshToken});
         console.log('foundUser',foundUser);
     } else {
         res.sendStatus(401);

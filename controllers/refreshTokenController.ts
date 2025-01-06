@@ -22,6 +22,7 @@ export const handleRefreshToken = async (req: Request, res: Response) => {
             .from(users)
             .where(eq(users.refreshToken, refreshToken))
             .limit(1);
+        console.log('foundUser:', foundUser);
 
         if (foundUser.length === 0) {
             console.error('Refresh token does not match any user:', refreshToken);
@@ -41,9 +42,14 @@ export const handleRefreshToken = async (req: Request, res: Response) => {
                 console.log('Decoded token:', decoded);
 
                 // Validate the decoded token matches the user
-                const userEmail = foundUser[0].email;
-                const userRoles = foundUser[0].roles;
+                //const { id: userId, firstname: userFirstName, lastname:userLastName, email: userEmail, roles: userRoles }  = foundUser[0];
 
+                const userId = foundUser[0].id;
+                const userFirstName = foundUser[0].firstname;
+                const userLastName = foundUser[0].lastname;
+                const userEmail = foundUser[0].email;               
+                const userRoles = foundUser[0].roles;   
+               
                 if (userEmail !== decoded.email) {
                     console.error('Token email mismatch:', { tokenEmail: decoded.email, dbEmail: userEmail });
                     return res.status(403).json({ message: 'Token email mismatch.' });
@@ -56,6 +62,9 @@ export const handleRefreshToken = async (req: Request, res: Response) => {
                 const accessToken = jwt.sign(
                     {
                         UserInfo: {
+                            id: userId,
+                            firstname: userFirstName,
+                            lastname: userLastName,
                             email: userEmail,
                             roles: userRoles,
                         },
@@ -76,6 +85,7 @@ export const handleRefreshToken = async (req: Request, res: Response) => {
                         maxAge: 24 * 60 * 60 * 1000 
                     }
                 );
+
                 return res.status(200).json({ roles: userRoles, accessToken});
             }
         );
@@ -83,4 +93,5 @@ export const handleRefreshToken = async (req: Request, res: Response) => {
         console.error('Error in handleRefreshToken:', error);
         res.status(500).json({ message: 'Internal server error' });
     }
+   
 };

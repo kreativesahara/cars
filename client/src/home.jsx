@@ -1,10 +1,16 @@
-import  useRefreshToken from './hooks/useRefreshToken';
+import {useNavigate, Link} from 'react-router-dom'
+import useLogout from './hooks/useLogout'
 const Home = () => {
-  const refresh = useRefreshToken();
+  const navigate = useNavigate()
+  const logout = useLogout()
+  const signOut = async() => {
+    await logout()
+    navigate('/product', {replace: true})
+  }
   return (
   <>
-      <div>Home</div>
-      <button onClick={() => refresh()}>Refresh</button>
+      <div>Home with Logout</div>
+      <button onClick={signOut}>Logout</button>
   </>
   )
 }

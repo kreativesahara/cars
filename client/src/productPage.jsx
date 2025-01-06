@@ -1,16 +1,16 @@
-import React from 'react'
+import React, { useContext } from 'react'
 import { axiosPrivate } from './api/axios';
-import useAuth from './hooks/useAuth';
+import userProfile from './context/AuthProvider';
 import { useState, useEffect } from 'react';
 import Users from './users';
 import UploadForm from './components/forms/uploadForm'
 
 const productPage = () => {
-    const { auth } = useAuth();
+    const  Profile = useContext(userProfile)
+    console.log('user profile details :',Profile);
     const [products, setProducts] = useState([]); // State for fetched users
     const [isLoading, setIsLoading] = useState(false); // State for loading indicator
     const [error, setError] = useState(null); // State for error handling
-
     useEffect(() => {       
         const fetchAllProducts = async () => {
             setIsLoading(true); // Set loading state to true
@@ -28,8 +28,6 @@ const productPage = () => {
 
         fetchAllProducts();
     }, []); // Empty dependency array to fetch data once on component mount
-    console.log(auth.email);
-    // Handle loading and error states conditionally
     if (isLoading) {
         return <div>Loading bills...</div>; // Display loading indicator
     }
@@ -43,8 +41,8 @@ const productPage = () => {
     
     <div>
         <div>
-            <h2>Welcome, {auth?.email || "User"}!</h2>
-            <p>You are logged in as: {auth?.email}</p>
+            <h2>Welcome, {userProfile?.email || "User"}!</h2>
+            <p>You are logged in as: {userProfile?.email}</p>
         </div>
         <Users/>
         {products.length > 0 ? (
