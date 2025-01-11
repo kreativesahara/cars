@@ -27,7 +27,7 @@ const registerUser = async (req: Request, res: Response): Promise<Response> => {
             password: hashedPassword,
             roles: ROLES_LIST.Visitor
         })
-        console.log('User registered successfully:', newUser); 
+        //console.log('User registered successfully:', newUser); 
         // Exclude the password from the response
         return res.status(201).json({
             message: 'User registered successfully.',
