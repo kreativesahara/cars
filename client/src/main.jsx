@@ -27,7 +27,7 @@ const ROLES = {
 const AppRoutes = () => (
   <Routes>
     {/* Public Routes */}
-    <Route path="/" element={<App />} />
+    <Route path="/register" element={<App />} />
     <Route path="login" element={<Login />} />
     <Route path="unauthorized" element={<div>Unauthorized!</div>} />
 

@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import axios from './api/axios';
 //import { Outlet } from 'react-router-dom';
-import './App.css'; // Import for styling
+//import './App.css'; // Import for styling
 
 function Users() {
   const [users, setUsers] = useState([]); // State for fetched users

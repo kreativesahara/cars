@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 //import { Outlet } from 'react-router-dom';
 import UploadUserDetails from './components/forms/registerForm';
-import './App.css'; // Import for styling
+//import './App.css'; // Import for styling
 
 function App() {
   const [users, setUsers] = useState([]); // State for fetched users

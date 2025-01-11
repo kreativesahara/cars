@@ -11,7 +11,7 @@ const LoginForm = () => {
     const userRef = useRef();
     const errRef = useRef();
     const [errMsg, setErrMsg] = useState('');
-    const from = location.state?.from?.pathname || "/product";
+    const from = location.state?.from?.pathname || "/home";
 
     const [formData, setFormData] = useState({
         email: "",
@@ -115,7 +115,7 @@ const LoginForm = () => {
           <p>
               Need an Account?<br />
               <span className="line">
-                  <Link to="/">Sign Up</Link>
+                  <Link to="/register">Sign Up</Link>
               </span>
           </p>
     </>

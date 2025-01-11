@@ -1,8 +1,10 @@
 import React, { useState } from 'react';
 import axios from '../../api/axios';
 import imageCompression from 'browser-image-compression';
+import useAuth from '../../hooks/useAuth';
 
 const UploadListing = () => {
+    const { auth } = useAuth();
     const [values, setValues] = useState({
         make: '',
         model: '',
@@ -16,8 +18,9 @@ const UploadListing = () => {
         condition: '',
         location: '',
         price: '',
+        seller_id: auth.id
     });
-
+    
     const [images, setImages] = useState([]);
     const [preview, setPreview] = useState([]);
 
@@ -79,7 +82,7 @@ const UploadListing = () => {
                 withCredentials: true,
             });
 
-            console.log("Response from testproduct controller:", response.data);
+            console.log("Response from product controller:", response.data);
             alert("Car details uploaded successfully");
             // Reset form fields
             setValues({
@@ -110,6 +113,17 @@ const UploadListing = () => {
             <div>Upload Product</div>
             <form onSubmit={handleSubmit}>
                 <div>
+                    <label>User ID</label>
+                    <input
+                        name="seller_id"
+                        onChange={handleChange}
+                        type='number'
+                        //placeholder={auth.id}
+                        required
+                        value={auth.id}
+                        disabled
+                    />
+
                     <label>Upload Images:</label>
                     <input
                         type="file"

@@ -66,7 +66,6 @@ const upload: any = multer({
 
 // // Get all products
 export const getAllProducts = async (req: Request, res: Response): Promise<Response> => {
-    console.log('Fetching all products');
     const result = await db.select().from(testProduct);
     if (!result.length) return res.status(204).json({ message: 'No products found.' });
     return res.json(result);
@@ -97,9 +96,7 @@ export const createProduct = async (req: any, res: any): Promise<any> => {
             console.log('Error from client:', err);
             return res.status(500).json({ message: 'Image upload error.' });
         }
-        const { make, model, year, engine_capacity, fuel_type, transmission, driveSystem, mileage, features, condition, location, price, 
-                seller_id =130 
-            } = req.body;
+        const { make, model, year, engine_capacity, fuel_type, transmission, driveSystem, mileage, features, condition, location, price, seller_id } = req.body;
         const images: any = req.files;
 
         // Validate required fields

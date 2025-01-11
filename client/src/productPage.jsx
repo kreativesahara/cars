@@ -1,6 +1,6 @@
 import React, { useContext } from 'react'
 import { axiosPrivate } from './api/axios';
-// import userProfile from './context/AuthProvider';
+import Layout from './components/Layout';
 import { useState, useEffect } from 'react';
 import Users from './users';
 import UploadForm from './components/forms/uploadForm'
@@ -39,7 +39,7 @@ const productPage = () => {
     // Render content based on fetched bills
     return (    
     
-    <div>
+    <Layout>
         <div>
             <h2>Welcome, {auth?.firstname || "User"}!</h2>
             <p>You are logged in as: {auth?.email}</p>
@@ -72,7 +72,7 @@ const productPage = () => {
             <div>No vehicle found.</div>
         )}
         <UploadForm/>
-    </div>
+        </Layout>
   )
 }
 
