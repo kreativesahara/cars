@@ -13,7 +13,7 @@ export const handleRefreshToken = async (req: Request, res: Response) => {
             console.error('missing authorization cookie');
             return res.status(401).json({ error: 'Authorization token required' });
         }
-    
+
 
         const refreshToken = authcookies.refreshToken;
 
@@ -22,7 +22,6 @@ export const handleRefreshToken = async (req: Request, res: Response) => {
             .from(users)
             .where(eq(users.refreshToken, refreshToken))
             .limit(1);
-        console.log('foundUser:', foundUser);
 
         if (foundUser.length === 0) {
             console.error('Refresh token does not match any user:', refreshToken);
@@ -42,14 +41,12 @@ export const handleRefreshToken = async (req: Request, res: Response) => {
                 console.log('Decoded token:', decoded);
 
                 // Validate the decoded token matches the user
-                //const { id: userId, firstname: userFirstName, lastname:userLastName, email: userEmail, roles: userRoles }  = foundUser[0];
-
                 const userId = foundUser[0].id;
-                const userFirstName = foundUser[0].firstname;
-                const userLastName = foundUser[0].lastname;
-                const userEmail = foundUser[0].email;               
-                const userRoles = foundUser[0].roles;   
-               
+                const userFname = foundUser[0].firstname;
+                const userLname = foundUser[0].lastname;
+                const userEmail = foundUser[0].email;
+                const userRoles = foundUser[0].roles;
+
                 if (userEmail !== decoded.email) {
                     console.error('Token email mismatch:', { tokenEmail: decoded.email, dbEmail: userEmail });
                     return res.status(403).json({ message: 'Token email mismatch.' });
@@ -63,8 +60,8 @@ export const handleRefreshToken = async (req: Request, res: Response) => {
                     {
                         UserInfo: {
                             id: userId,
-                            firstname: userFirstName,
-                            lastname: userLastName,
+                            firstname: userFname,
+                            lastname: userLname,
                             email: userEmail,
                             roles: userRoles,
                         },
@@ -73,25 +70,21 @@ export const handleRefreshToken = async (req: Request, res: Response) => {
                     { expiresIn: '2h' }
                 );
 
-                console.log('User email is:', userEmail);
-                console.log('User roles is:', userRoles);
-
+                
                 //Set access token as a cookie in the response
                 res.cookie('authorization', accessToken,
-                    { 
+                    {
                         httpOnly: true,
-                        sameSite: 'strict', 
+                        sameSite: 'strict',
                         //secure: true, 
-                        maxAge: 24 * 60 * 60 * 1000 
+                        maxAge: 24 * 60 * 60 * 1000
                     }
                 );
-
-                return res.status(200).json({ roles: userRoles, accessToken});
+                return res.status(200).json({ id: userId, firstname: userFname, lastname: userLname, email: userEmail, roles: userRoles, accessToken });
             }
         );
     } catch (error) {
         console.error('Error in handleRefreshToken:', error);
         res.status(500).json({ message: 'Internal server error' });
     }
-   
 };

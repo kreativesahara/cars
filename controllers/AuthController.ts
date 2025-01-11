@@ -61,7 +61,6 @@ const registerUser = async (req: Request, res: Response): Promise<Response> => {
     const isMatch = await bcrypt.compare(password, foundUser[0].password??'');
     if (isMatch) {
         const { id, firstname, lastname, roles} = foundUser[0];
-        console.log('user Properties:', roles, id, firstname, lastname, email);
         // create JWTs
         //TODO: change access token expire
         const accessToken = jwt.sign(
@@ -82,7 +81,7 @@ const registerUser = async (req: Request, res: Response): Promise<Response> => {
         const refreshToken = jwt.sign(
             { 
                 "id": id,
-                "firstname": firstname,
+                //"firstname": firstname,
                 "lastname": lastname,
                 "email": email,
                 "roles": roles
@@ -110,7 +109,11 @@ const registerUser = async (req: Request, res: Response): Promise<Response> => {
             maxAge: 24 * 60 * 60 * 1000
         })
         // Send authorization roles and access token to user
-        res.json({ id, firstname, lastname, email, roles, accessToken, refreshToken});
+        res.json({ 
+           id, firstname, 
+            lastname, 
+            email,
+            roles, accessToken, refreshToken});
         console.log('foundUser',foundUser);
     } else {
         res.sendStatus(401);
