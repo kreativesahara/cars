@@ -5,29 +5,26 @@ const useRefreshToken = () => {
     const { setAuth } = useAuth();  
    
     const refresh = async () => {
-        console.log('Calling useRefreshToken...');
         try {
-            console.log('Starting token refresh process...');
-
+            console.log('Starting token refresh process...from refreshController');
             // Make the refresh token request
             const response = await axios.get('/refresh', {
                 withCredentials: true
             });
-            console.log('useRefreshToken --> response', response.data);
             // Destructure the response for better readability
-            const { roles, accessToken } = response.data;
-
+            const { id, firstname, lastname, email, roles, accessToken } = response.data;
             // Update auth state with the new token and roles
             setAuth(prev => {
-                console.log('useRefreshToken --> previous auth state:', JSON.stringify(prev));
                 return {
                     ...prev,
+                    id: id,
+                    firstname: firstname,
+                    lastname: lastname,
+                    email: email,
                     roles: roles,
                     accessToken: accessToken,
                 };
             });
-            console.log('useRefreshToken --> new access token:', accessToken);
-           // return accessToken; // Return the new access token
         } catch (err) {
             console.error('Error in useRefreshToken:', err?.response?.data?.message || err.message);
             if (err?.response?.status === 401 || err?.response?.status === 403) {

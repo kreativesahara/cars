@@ -1,13 +1,13 @@
 import React, { useContext } from 'react'
 import { axiosPrivate } from './api/axios';
-import userProfile from './context/AuthProvider';
+// import userProfile from './context/AuthProvider';
 import { useState, useEffect } from 'react';
 import Users from './users';
 import UploadForm from './components/forms/uploadForm'
+import useAuth from './hooks/useAuth';
 
 const productPage = () => {
-    const  Profile = useContext(userProfile)
-    console.log('user profile details :',Profile);
+    const  {auth} = useAuth();
     const [products, setProducts] = useState([]); // State for fetched users
     const [isLoading, setIsLoading] = useState(false); // State for loading indicator
     const [error, setError] = useState(null); // State for error handling
@@ -41,8 +41,8 @@ const productPage = () => {
     
     <div>
         <div>
-            <h2>Welcome, {userProfile?.email || "User"}!</h2>
-            <p>You are logged in as: {userProfile?.email}</p>
+            <h2>Welcome, {auth?.firstname || "User"}!</h2>
+            <p>You are logged in as: {auth?.email}</p>
         </div>
         <Users/>
         {products.length > 0 ? (
