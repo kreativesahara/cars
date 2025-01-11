@@ -27,7 +27,7 @@ const registerUser = async (req: Request, res: Response): Promise<Response> => {
             password: hashedPassword,
             roles: ROLES_LIST.Visitor
         })
-        console.log('User registered successfully:', newUser); 
+        //console.log('User registered successfully:', newUser); 
         // Exclude the password from the response
         return res.status(201).json({
             message: 'User registered successfully.',
@@ -61,7 +61,8 @@ const registerUser = async (req: Request, res: Response): Promise<Response> => {
     const isMatch = await bcrypt.compare(password, foundUser[0].password??'');
     if (isMatch) {
         const roles = foundUser[0].roles;
-        console.log('userRoles:', roles);
+        const username = foundUser[0].firstname;
+        console.log('users firstname:', username);
         // create JWTs
         //TODO: change access token expire
         const accessToken = jwt.sign(
