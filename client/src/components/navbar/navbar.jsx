@@ -37,13 +37,15 @@ function Navbar() {
                         </li>
                         <li>
                             <NavLink to="/blogs" className="navbar-link" data-nav-link>
-                                Feedback
+                                Support
                             </NavLink>
                         </li>
+                    </ul>
+                    <ul className={` navbar-list ${menuOpen ? "open" : ""}`}>
                         <li >
                             <Link to="/login" className="btn user-btn">
                                 <span>Login?</span>
-                            </Link>  
+                            </Link>
                         </li>
                         <li>
                             <Link to="/register" className="btn reg-btn">

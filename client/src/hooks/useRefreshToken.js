@@ -18,7 +18,7 @@ const useRefreshToken = () => {
                 return {
                     ...prev,
                     id: id,
-                    firstname: firstname,
+                    //firstname: firstname,
                     lastname: lastname,
                     email: email,
                     roles: roles,

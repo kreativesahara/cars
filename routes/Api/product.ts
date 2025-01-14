@@ -6,7 +6,7 @@ const router = Router();
 const { getAllProducts, getProduct, createProduct, updateSingleProduct,deleteProduct } = require("../../controllers/productsController");
 
 router.route("/")
-    .get(verifyRoles(ROLES_LIST.Member,ROLES_LIST.Seller,ROLES_LIST.Modarator,ROLES_LIST.Admin),getAllProducts)
+    .get(verifyRoles(ROLES_LIST.Visitor,ROLES_LIST.Member,ROLES_LIST.Seller,ROLES_LIST.Modarator,ROLES_LIST.Admin),getAllProducts)
     .post(createProduct)
     // .put(updateSingleProduct)
     // .delete(deleteProduct);

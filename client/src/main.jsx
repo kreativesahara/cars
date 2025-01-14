@@ -27,8 +27,10 @@ const ROLES = {
 const AppRoutes = () => (
   <Routes>
     {/* Public Routes */}
+    <Route path="/" element={<App />} />
     <Route path="/register" element={<App />} />
     <Route path="login" element={<Login />} />
+    <Route path="home" element={<Home />} />
     <Route path="unauthorized" element={<div>Unauthorized!</div>} />
 
     {/* Protected Routes */}
@@ -37,7 +39,7 @@ const AppRoutes = () => (
       <Route
         element={<RequireAuth allowedRoles={[ROLES.Visitor, ROLES.Member, ROLES.Seller, ROLES.Modarator, ROLES.Admin]} />}
       >
-        <Route path="home" element={<Home />} />
+        {/* <Route path="home" element={<Home />} /> */}
       </Route> 
       <Route
         element={<RequireAuth allowedRoles={[ROLES.Visitor, ROLES.Member, ROLES.Seller, ROLES.Modarator, ROLES.Admin]} />}

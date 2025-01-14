@@ -18,7 +18,7 @@ const productPage = () => {
             try {
                 const response = await axiosPrivate.get('products'); // Assuming endpoint returns users
                 setProducts(response.data); // Update users state
-                console.log(response.data);
+                console.log(response.id);
             } catch (error) {
                 setError(error); // Set error state for handling
             } finally {

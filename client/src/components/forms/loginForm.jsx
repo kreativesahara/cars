@@ -11,7 +11,7 @@ const LoginForm = () => {
     const userRef = useRef();
     const errRef = useRef();
     const [errMsg, setErrMsg] = useState('');
-    const from = location.state?.from?.pathname || "/home";
+    const from = location.state?.from?.pathname || "/product";
 
     const [formData, setFormData] = useState({
         email: "",
@@ -33,7 +33,7 @@ const LoginForm = () => {
         console.log(JSON.stringify(from))
         console.log(formData)
         try {
-            const response= await axios.post('auth/login', formData,
+            const response= await axios.post('/auth/login', formData,
                 {
                     headers: { 
                         'Content-Type': 'application/json',                                      
