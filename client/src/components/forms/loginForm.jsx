@@ -101,7 +101,7 @@ const LoginForm = () => {
                   onChange={handleChange}
                   required
               />
-              <button>Sign In</button>
+              <button className='bg-black text-white my-4 p-2'>Sign In</button>
               <div className="persistCheck">
                   <input
                       type="checkbox"

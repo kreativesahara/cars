@@ -41,14 +41,14 @@ const productPage = () => {
     
     <Layout>
         <div>
-            <h2>Welcome, {auth?.firstname || "User"}!</h2>
+            <h2>Welcome, {auth?.lastname || "User"}!</h2>
             <p>You are logged in as: {auth?.email}</p>
         </div>
         <Users/>
         {products.length > 0 ? (
             <table >
                 <thead>
-                    <tr className='bg-red-500'>
+                    <tr className='bg-blue-500'>
                         <th>Vehicle ID</th>
                         <th>Vehicle Make</th>
                         <th>vehicle Model</th>
