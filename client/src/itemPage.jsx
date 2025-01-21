@@ -1,35 +1,25 @@
 import React, { useEffect, useState } from 'react'
-import useAxiosPrivate from './api/useAxiosPrivate';
 import { useParams } from 'react-router-dom';
 import Layout from './components/Layout'
+import {useProductContext} from './context/ProductProvider';
 
 function Itempage() {
-    const axiosPrivate = useAxiosPrivate()
     const { productId } = useParams();
-    const [product, setProduct] = useState({});
+    const {products} = useProductContext();
+    const {product, setProduct} = useState({})
     const [isLoading, setIsLoading] = useState(false); // State for loading indicator
     const [error, setError] = useState(null); // State for error handling
 
-    //console.log(productId)
+    console.log('Product Id from Params :', productId)
 
     useEffect(() => {
         // Find the specific product in the global state based on the ID
-        const foundProduct = async () => {
-                    setIsLoading(true); // Set loading state to true
-                    setError(null); // Clear any previous errors 
-                    try {
-                        const response = await axiosPrivate.get('products'); // Assuming endpoint returns users
-                        setProduct(response.data[0].id === `${productId}`); // Update users state
-                        console.log(response.data[0].id);
-                    } catch (error) {
-                        setError('itempage',error); // Set error state for handling
-                    } finally {
-                        setIsLoading(false); // Set loading state to false after fetch (success or error)
-                    }
-                };
-        
-        foundProduct();
-    }, [ ]);
+        const foundProduct = products.find((p)) || {};
+        // products.find((p) => p._id === productId) || {};
+        setProduct(foundProduct);
+        console.log('Found product Id fro State :', foundProduct)
+
+    }, [productId, products]);
 
     if (isLoading) {
         return <div>Loading bills...</div>; // Display loading indicator

@@ -59,7 +59,7 @@ const AppRoutes = () => (
       <Route
         element={<RequireAuth allowedRoles={[ROLES.Visitor, ROLES.Member, ROLES.Seller, ROLES.Modarator, ROLES.Admin]} />}
       >
-        <Route path="itempage/:id" element={<ItemPage />} />
+        <Route path=" itempage/:id" element={<ItemPage />} />
       </Route>
       <Route
         element={<RequireAuth allowedRoles={[ROLES.Visitor, ROLES.Member, ROLES.Seller, ROLES.Modarator, ROLES.Admin]} />}

@@ -71,7 +71,7 @@ export const getAllProducts = async (req: Request, res: Response): Promise<Respo
     return res.json(result);
 };
 
-// Get single product
+//Get single product
 // export const getUpload = async (req: Request, res: Response): Promise<Response> => {
 //     const productId: any = req.params.id;
 

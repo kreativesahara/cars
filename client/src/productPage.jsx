@@ -1,78 +1,66 @@
-import React, { useContext } from 'react'
-import { axiosPrivate } from './api/axios';
+import { Link } from 'react-router-dom';
 import Layout from './components/Layout';
-import { useState, useEffect } from 'react';
-import Users from './users';
-import UploadForm from './components/forms/uploadForm'
-import useAuth from './hooks/useAuth';
+import { useProductContext } from './context/ProductProvider'
+
+// import UploadForm from './components/forms/uploadForm'
 
 const productPage = () => {
-    const  {auth} = useAuth();
-    const [products, setProducts] = useState([]); // State for fetched users
-    const [isLoading, setIsLoading] = useState(false); // State for loading indicator
-    const [error, setError] = useState(null); // State for error handling
-    useEffect(() => {       
-        const fetchAllProducts = async () => {
-            setIsLoading(true); // Set loading state to true
-            setError(null); // Clear any previous errors 
-            try {
-                const response = await axiosPrivate.get('products'); // Assuming endpoint returns users
-                setProducts(response.data); // Update users state
-                console.log(response.id);
-            } catch (error) {
-                setError(error); // Set error state for handling
-            } finally {
-                setIsLoading(false); // Set loading state to false after fetch (success or error)
-            }
-        };
-
-        fetchAllProducts();
-    }, []); // Empty dependency array to fetch data once on component mount
-    if (isLoading) {
-        return <div>Loading bills...</div>; // Display loading indicator
-    }
-
-    if (error) {
-        return <div>Error: {error.message}</div>; // Display error message
-    }
-
+    const {products} = useProductContext();
     // Render content based on fetched bills
+    console.log('Products from Product Page :', products)
     return (    
-    
-    <Layout>
-        <div>
-            <h2>Welcome, {auth?.lastname || "User"}!</h2>
-            <p>You are logged in as: {auth?.email}</p>
+    <Layout >
+        < div className="mt-8">
+            {!products.length ?
+                < p >
+                    No product to display
+                </p>
+                : (
+                    <ul className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
+                    {products.map(
+                        (product) =>
+                        <li key={product.id}>
+                        <Link to={`/itempage/${product.id}`}>
+                        <div className="border shadow-lg rounded-xl pointer hover:shadow-blue-300 cursor-pointer">
+                            <figure className="">
+                                <img src={product?.image_url} alt={product?.id} loading="lazy" width="440" height="300"
+                                    className="w-100 bg-slate-500 rounded shadow-lg opacity-75 hover:opacity-100 " />
+                            </figure>
+                            <div className="p-2">
+                                <div className="flex justify-between border-b-2 py-1.5">
+                                    <h3 className="uppercase text-xs">
+                                        {product?.make}
+                                    </h3>
+                                    <data className="border-2 border-dashed border-blue-600 rounded-3xl px-2 text-xs">{product?.year}</data>
+                                </div>
+                                <ul className="border-b py-2">
+                                    <li className="text-xs">
+                                        <span className="card-item-text font-bold">Model: {product?.model} </span>
+                                    </li>
+
+                                    <li className="text-xs">
+                                        <span className="card-item-text font-bold">Condition: {product?.condition}</span>
+                                    </li>
+                                    <li className="text-xs">
+                                        <span className="card-item-text font-bold">Location: {product?.location}</span>
+                                    </li>
+                                </ul>
+
+                                <div className="flex gap-1.5 py-2">
+                                    <span className="font-bold ">KSH</span>
+                                    <span className=" font-bold">{product?.price}</span>
+                                </div>
+                            </div>
+                        </div>
+                        </Link>
+                        </li>
+                    )}
+                    </ul>
+                )
+            }
         </div>
-        <Users/>
-        {products.length > 0 ? (
-            <table >
-                <thead>
-                    <tr className='bg-blue-500'>
-                        <th>Vehicle ID</th>
-                        <th>Vehicle Make</th>
-                        <th>vehicle Model</th>
-                        <th>Vehicle Image</th>
-                        <th>Vehicle Location</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    {products.map((product) => (
-                        <tr key={product.id}>
-                            <td>{product.id}</td>
-                            <td>{product.make}</td>
-                            <td>{product.model}</td>
-                            <td>{product.image_url}</td>
-                            <td>{product.location}</td>
-                        </tr>
-                    ))}
-                </tbody>
-            </table>
-        ) : (
-            <div>No vehicle found.</div>
-        )}
-        <UploadForm/>
-        </Layout>
+        {/* <UploadForm/> */}
+    </Layout>
   )
 }
 
