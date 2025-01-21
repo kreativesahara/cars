@@ -49,8 +49,7 @@ const uploadUserDetails = () => {
               <input type="text" name='email' placeholder='Email' onChange={handleChange} />
               <label>Password</label>
               <input type="text" name='password' placeholder='Password' onChange={handleChange} />
-              <button className='bg-black text-white my-4 p-2'>Submit Registration </button>
-            <button type='submit'>Upload</button>
+              <button type='submit' className='bg-black text-white my-4 p-2'>Submit Registration </button>
           </form>
     </>
   )

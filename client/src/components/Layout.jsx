@@ -4,8 +4,8 @@ function Layout ({children}) {
     return (
         <>
         <Navbar />
-        <main className="body w-full">
-            {children}
+        <main className="w-full px-4 min-h-screen">
+            { children }   
         </main>
         <Footer />
         </>

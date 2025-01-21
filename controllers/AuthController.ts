@@ -74,7 +74,7 @@ const registerUser = async (req: Request, res: Response): Promise<Response> => {
                 }
             },
             process.env.ACCESS_TOKEN_SECRET as string,
-            { expiresIn: '10s' },
+            { expiresIn: '2h' },
 
         );
 

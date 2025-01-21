@@ -2,7 +2,6 @@ import React, { useState } from 'react';
 import axios from '../../api/axios';
 import imageCompression from 'browser-image-compression';
 import useAuth from '../../hooks/useAuth';
-
 const UploadListing = () => {
     const { auth } = useAuth();
     const [values, setValues] = useState({

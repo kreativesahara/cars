@@ -1,66 +1,60 @@
-import React from 'react'
 
 function footer() {
   return (
-    <div className="footer px-20">
-        <div className="footer-top">
-            <div className="footer-brand">
-            <a href="#" className="logo">
-                <img src="#" alt="Spare Yangu" />
-            </a>
-            <p className="footer-text text-2xl">
-                Search for amazing spare parts in Kenya. With a diverse spare part portfolio, spare yangu offers its
-                consumers an
-                attractive and fun selection.
-            </p>
+    <div className="footer px-20 pt-20">
+        <div className="footer-top flex  md:space-x-64 flex-col md:flex-row ">
+            <div className="footer-brand w-full md:w-1/3 ">
+                <a href="/home" className="text-2xl font-bold">
+                    <img src="#" alt="Spare Yangu" />
+                </a>
+                <p className="footer-text text-lg py-4">
+                    Search for amazing spare parts in Kenya. With a diverse spare part portfolio, spare yangu offers its
+                    consumers an
+                    attractive and fun selection.
+                </p>
             </div>
+            <ul >
+                <li>
+                    <p className="text-xl font-bold pb-3">Company</p>
+                </li>
 
-            <ul className="footer-list">
+                <li>
+                    <a href="#" className="footer-link">About us</a>
+                </li>
 
-            <li>
-                <p className="footer-list-title">Company</p>
-            </li>
+                <li>
+                    <a href="#" className="footer-link">Pricing</a>
+                </li>
 
-            <li>
-                <a href="#" className="footer-link">About us</a>
-            </li>
+                <li>
+                    <a href="#" className="footer-link">Our blog</a>
+                </li>
 
-            <li>
-                <a href="#" className="footer-link">Pricing</a>
-            </li>
-
-            <li>
-                <a href="#" className="footer-link">Our blog</a>
-            </li>
-
-            <li>
-                <a href="#" className="footer-link">Contacts</a>
-            </li>
-
+                <li>
+                    <a href="#" className="footer-link">Contacts</a>
+                </li>
             </ul>
 
             <ul className="footer-list">
+                <li>
+                    <p className="text-xl font-bold pb-3">Support</p>
+                </li>
 
-            <li>
-                <p className="footer-list-title">Support</p>
-            </li>
+                <li>
+                    <a href="#" >Help center</a>
+                </li>
 
-            <li>
-                <a href="#" className="footer-link">Help center</a>
-            </li>
+                <li>
+                    <a href="#" >Ask a question</a>
+                </li>
 
-            <li>
-                <a href="#" className="footer-link">Ask a question</a>
-            </li>
+                <li>
+                    <a href="#" >Privacy policy</a>
+                </li>
 
-            <li>
-                <a href="#" className="footer-link">Privacy policy</a>
-            </li>
-
-            <li>
-                <a href="#" className="footer-link">Terms & conditions</a>
-            </li>
-
+                <li>
+                    <a href="#" >Terms & conditions</a>
+                </li>
             </ul>
         </div>
 

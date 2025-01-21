@@ -2,9 +2,13 @@ import { Link, NavLink } from "react-router-dom";
 import React from 'react';
 import { useState } from 'react';
 import './navbar.css';
+import useAuth from "../../hooks/useAuth";
+import Logout from "../../components/btnLogout";
 
 function Navbar() {
+    const { auth } = useAuth();
     const [menuOpen, setMenuOpen] = useState(false);
+    console.log(auth?.accessToken);
     return (
         <>
             <header className="header" data-header>
@@ -20,17 +24,17 @@ function Navbar() {
                     </div>
                     <ul className={` navbar-list ${menuOpen ? "open" : ""}`}>
                         <li>
-                            <NavLink to="/home" className="navbar-link" data-nav-link>
+                            <NavLink to="/home" className="navbar-link" >
                                 Home
                             </NavLink>
 
                         </li>
                         <li>
-                            <NavLink to="/product" className="navbar-link" data-nav-link>
+                            <NavLink to="/product" className="navbar-link" >
                                 Products
                             </NavLink>
                         </li>
-                        <li>
+                        {/* <li>
                             <NavLink to="/pricing" className="navbar-link" data-nav-link>
                                 Pricing
                             </NavLink>
@@ -39,19 +43,25 @@ function Navbar() {
                             <NavLink to="/blogs" className="navbar-link" data-nav-link>
                                 Support
                             </NavLink>
-                        </li>
-                    </ul>
-                    <ul className={` navbar-list ${menuOpen ? "open" : ""}`}>
-                        <li >
-                            <Link to="/login" className="btn user-btn">
-                                <span>Login?</span>
-                            </Link>
-                        </li>
-                        <li>
-                            <Link to="/register" className="btn reg-btn">
-                                <span id="aria-label-txt">Get Account?</span>
-                            </Link>
-                        </li>
+                        </li> */}
+                        {auth?.accessToken ? 
+                         ( 
+                            <Logout />                       
+                            ) : (
+                                <>
+                                    <li >
+                                        <Link to="/login" className="authbtn">
+                                            Login?
+                                        </Link>
+                                    </li>
+                                    <li>
+                                        <Link to="/register" className="authbtn">
+                                            Register
+                                        </Link>
+                                    </li>
+                                </>
+
+                            ) }
                     </ul>
                 </nav>
             </header>
