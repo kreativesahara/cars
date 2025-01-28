@@ -3,39 +3,62 @@ import { useParams } from 'react-router-dom';
 import Layout from './components/Layout'
 import {useProductContext} from './context/ProductProvider';
 
-function Itempage() {
+const  Itempage = () =>  {
     const { productId } = useParams();
     const {products} = useProductContext();
-    const {product, setProduct} = useState({})
+    const [product, setProduct] = useState({})
     const [isLoading, setIsLoading] = useState(false); // State for loading indicator
-    const [error, setError] = useState(null); // State for error handling
-
-    console.log('Product Id from Params :', productId)
-
+    const [error, setError] = useState(null); 
     useEffect(() => {
-        // Find the specific product in the global state based on the ID
-        const foundProduct = products.find((p)) || {};
-        // products.find((p) => p._id === productId) || {};
-        setProduct(foundProduct);
-        console.log('Found product Id fro State :', foundProduct)
-
+        try {
+            setIsLoading(true);
+            const foundProduct = products.find((p) => p.id === Number(productId)) || null;
+            console.log('Found Product:', foundProduct);
+            if (!foundProduct) {
+                throw new Error('Product not found'); 
+            }
+            setProduct(foundProduct);
+        } catch (err) {
+            setError(err); // Catch and set errors
+        } finally {
+            setIsLoading(false); // Ensure loading is stopped
+        }
     }, [productId, products]);
 
     if (isLoading) {
-        return <div>Loading bills...</div>; // Display loading indicator
+        return (
+            <Layout>
+                <div className="container text-center p-20">Loading...</div>
+            </Layout>
+        );
     }
 
     if (error) {
-        return <div>Error: {error.message}</div>; // Display error Message
+        return (
+            <Layout>
+                <div className="container text-center p-20 text-red-500">
+                    Error: {error.message}
+                </div>
+            </Layout>
+        );
+    }
+
+    if (!product) {
+        return (
+            <Layout>
+                <div className="container text-center p-20">No product found</div>
+            </Layout>
+        );
     }
 
     return (
         <Layout>
+            <div className='container flex flex-row'></div>
             {product ? (
                 <div className=' container sm:flex-row lg:flex py-6'>
                     <div className='lg:w-6/12 flex-col border-2 px-2 py-2'>
                         <div className='h-min cursor-pointer'>
-                            <img className='md:px-2 w-full h-96 lg:h-screen sm:object-cover' src='https://images.unsplash.com/photo-1494790108377-be9c29b29330?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=720&q=60' alt='item' />
+                            <img className='md:px-2 w-full h-96 lg:h-screen sm:object-cover' src={product.image_url} alt='item' />
                         </div>
                         <div className=' grid grid-cols-4 py-2 px-1 rounded-b gap-2 cursor-pointer'>
                             <img className='border-2 rounded  hover:border-blue-600 w-full object-cover ' src='https://images.unsplash.com/photo-1494790108377-be9c29b29330?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=500&q=60' alt='item' />
@@ -43,32 +66,55 @@ function Itempage() {
                             <img className='border-2 rounded hover:border-blue-600 w-full object-cover' src='https://images.unsplash.com/photo-1494790108377-be9c29b29330?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=500&q=60' alt='item' />
                             <img className='border-2 rounded hover:border-blue-600 w-full object-cover' src='https://images.unsplash.com/photo-1494790108377-be9c29b29330?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=500&q=60' alt='item' />
                         </div>
-                        <div className='h-40 p-3'>
+                        <div className=' p-3'>
                             <div className='flex justify-between'>
                                 <span className='flex-col'>
-                                    <h3 className='font-bold uppercase text-2xl'>{product.name}</h3>
-                                    <p className='tracking-widest text-md'>{product.category}</p>
+                                    <h3 className='font-bold uppercase text-2xl'>{product.make}</h3>
+                                    <p className='tracking-widest text-md'>{product.model}</p>
                                 </span>
                                 <strong className='font-black tracking-wider text-2xl '>KSH {product.price}</strong>
                             </div>
-                            <ul className='p-1 grid grid-cols-2 font-semibold justify-between'>
+                            <hr/>
+                            <ul className='p-1 grid grid-cols-2 font-semibold justify-between '>
                                 <li className='text-md py-2'>
-                                    <span>Brand: {product.brand}</span>
+                                    Transmission :
+                                    <span className='font-bold'> {product.transmission} </span>
                                 </li>
                                 <li className='text-md py-2'>
-                                    <span>Location: {product.location}</span>
+                                    Location :
+                                    <span className='font-bold'> {product.location} </span>
                                 </li>
                                 <li className='text-md py-2'>
-                                    <span className='card-item-text'> Manufactered: {product.year}</span>
+                                    Year of Manufacter : 
+                                    <span className='font-bold'> {product.year} </span>
                                 </li>
+                                <li className='text-md py-2'>
+                                    Engine Capacity :
+                                    <span className='font-bold'> {product.engine_capacity} </span>
+                                </li> 
+                                <li className='text-md py-2'>
+                                    Fuel Type :
+                                    <span className='font-bold'> {product.fuel_type} </span>
+                                </li>
+                                <li className='text-md py-2'>
+                                    Mileage :
+                                    <span className='font-bold'> {product.year} </span>
+                                </li>
+                                <li className='text-md py-2'>
+                                    Drive System :
+                                    <span className='font-bold'> {product.engine_capacity} </span>
+                                </li>                                 
                             </ul>
                         </div>
-                        <h3 className='px-4 py-2 font-bold text-xl'>
-                            Product Description
-                        </h3>
-                        <p className=' px-4 text-justify'>
-                            {product.description}
-                        </p>
+                        <div>
+                            <h3 className='px-4 py-2 font-bold text-xl'>
+                                Features
+                            </h3>
+                            <hr />
+                            <p className=' px-4 text-justify'>
+                                {product.features}
+                            </p>
+                        </div>
                     </div>
 
                     <div className='w-100 lg:w-1/3 p-4 mx-auto flex flex-col gap-3 '>

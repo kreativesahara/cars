@@ -7,11 +7,11 @@ const { getAllProducts, getProduct, createProduct, updateSingleProduct,deletePro
 
 router.route("/")
     .get(verifyRoles(ROLES_LIST.Visitor,ROLES_LIST.Member,ROLES_LIST.Seller,ROLES_LIST.Modarator,ROLES_LIST.Admin),getAllProducts)
-    .post(createProduct)
+    .post(verifyRoles(ROLES_LIST.Visitor, ROLES_LIST.Member, ROLES_LIST.Seller, ROLES_LIST.Modarator, ROLES_LIST.Admin), createProduct)
     // .put(updateSingleProduct)
     // .delete(deleteProduct);
-// router.route("/:id")
-//     .get(getProduct)
+router.route("/:id")
+    .get(verifyRoles(ROLES_LIST.Visitor, ROLES_LIST.Member, ROLES_LIST.Seller, ROLES_LIST.Modarator, ROLES_LIST.Admin), getProduct)
 export default router;
 
 //TODO: Add roles

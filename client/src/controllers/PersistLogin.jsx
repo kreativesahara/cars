@@ -16,8 +16,6 @@ const PersistLogin = () => {
                 setIsLoading(false); // Skip token verification if persistence is off
                 return;
             }
-
-            console.log("Verifying refresh token...");
             try {
                 await refresh(); // Refresh token and update auth state
             } catch (err) {

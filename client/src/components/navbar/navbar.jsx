@@ -1,4 +1,4 @@
-import { Link, NavLink } from "react-router-dom";
+import { Link, NavLink , useNavigate} from "react-router-dom";
 import React from 'react';
 import { useState } from 'react';
 import './navbar.css';
@@ -8,7 +8,11 @@ import Logout from "../../components/btnLogout";
 function Navbar() {
     const { auth } = useAuth();
     const [menuOpen, setMenuOpen] = useState(false);
-    console.log(auth?.accessToken);
+    const navigate = useNavigate()
+
+    const dashBoard =  () => {
+        navigate('/dashboard', { replace: true })
+    }
     return (
         <>
             <header className="header" data-header>
@@ -46,7 +50,10 @@ function Navbar() {
                         </li> */}
                         {auth?.accessToken ? 
                          ( 
-                            <Logout />                       
+                            <> 
+                                <button className='text-white  px-10 flex ' onClick={dashBoard}>Hi, {auth?.lastname}</button>
+                                <Logout /> 
+                            </>                     
                             ) : (
                                 <>
                                     <li >

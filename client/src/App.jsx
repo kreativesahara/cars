@@ -1,9 +1,11 @@
 import Layout from "./components/Layout";
 import Users from "./users";
 import useAuth from "./hooks/useAuth";
+
+
 function App() {
   const {auth } = useAuth();
-  console.log(auth);
+  console.log(auth?.roles);
   // Render content based on fetched bills
   return (
     <Layout>
@@ -13,8 +15,9 @@ function App() {
           <div>
             <h2>Welcome, {auth?.lastname || "User"}!</h2>
             <p>You are logged in as: {auth?.email}</p>
-          </div>) : null}
-        <Users />
+          </div>) : null
+        } 
+        {auth?.roles?  <Users /> : null}
       </main>
     </Layout>
   );

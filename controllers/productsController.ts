@@ -1,7 +1,7 @@
 import { Request, Response } from 'express';
 import db from '../db/dbConfig';
 // import { product } from '../db/schema/product';
-import { testProduct } from '../db/schema/testProduct';
+import { product } from '../db/schema/product';
 //import { productImage } from '../db/schema/ProductImage';
 import multer from 'multer';
 import { eq } from 'drizzle-orm';
@@ -66,27 +66,29 @@ const upload: any = multer({
 
 // // Get all products
 export const getAllProducts = async (req: Request, res: Response): Promise<Response> => {
-    const result = await db.select().from(testProduct);
+    const result = await db.select().from(product);
     if (!result.length) return res.status(204).json({ message: 'No products found.' });
     return res.json(result);
 };
 
 //Get single product
-// export const getUpload = async (req: Request, res: Response): Promise<Response> => {
-//     const productId: any = req.params.id;
+export const getProduct = async (req: Request, res: Response): Promise<Response> => {
+    const productId: any = req.params.id;
 
-//     if (!productId) {
-//         return res.status(400).json({ message: 'Product ID is required.' });
-//     }
+    console.log('ProductId :', productId)
 
-//     const singleProduct = await db.select().from(product).where(eq(product.id, productId));
+    if (!productId) {
+        return res.status(400).json({ message: 'Product ID is required.' });
+    }
 
-//     if (!singleProduct.length) { // Check if the array is empty
-//         return res.status(204).json({ message: 'No product found.' });
-//     }
+    const singleProduct = await db.select().from(product).where(eq(product.id, productId));
 
-//     return res.json(singleProduct[0]); // Return the first (and presumably only) product
-// };
+    if (!singleProduct.length) { // Check if the array is empty
+        return res.status(204).json({ message: 'No product found.' });
+    }
+
+    return res.json(singleProduct[0]); // Return the first (and presumably only) product
+};
 
 
 // Create product with images
@@ -128,7 +130,7 @@ export const createProduct = async (req: any, res: any): Promise<any> => {
 
             // Insert all values at once
             const result = await db
-                .insert(testProduct)
+                .insert(product)
                 .values(valuesToInsert);
             console.log('Inserted product IDs:', result);
 
