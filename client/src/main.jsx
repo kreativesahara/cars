@@ -5,18 +5,21 @@ import App from './App.jsx';
 import Register from './register.jsx';
 import Login from './login.jsx';
 import Home from './home.jsx';
-import TestRefresh from './testRefresh';
 
 import Product from './productPage.jsx';
 import ItemPage from './itemPage.jsx';
-import Contacts from './contacts.jsx';
+import AddProduct from './addProduct.jsx';
+import Pricing from './pricing.jsx';
+import Support from './support.jsx';
 
-import TestProduct from './testProductPage.jsx';
 import PersistLogin from './controllers/PersistLogin';
 import RequireAuth from './controllers/RequireAuth';
-import './index.css';
 import { AuthProvider } from './context/AuthProvider.jsx';
 import { ProductProvider } from './context/ProductProvider.jsx';
+
+import 'material-symbols';
+import './index.css';
+
 
 // Roles constant
 const ROLES = {
@@ -36,17 +39,21 @@ const AppRoutes = () => (
 
     {/* Protected Routes */}
     <Route element={<PersistLogin />}>
-      {/* <Route path="/" element={<Home />} /> */}
+      <Route path="/" element={< Home />} />
+      <Route path="home" element={< Home />} />
+      <Route path="pricing" element={<Pricing />} />
+      <Route path="support" element={<Support />} />
+
       {/* Nested Routes for Authorization */}
-      <Route
-        element={<RequireAuth allowedRoles={ROLES.Admin} />}
-      >
-        <Route path="home" element={<Home />} />
-      </Route> 
       <Route
         element={<RequireAuth allowedRoles={[ ROLES.Seller, ROLES.Modarator, ROLES.Admin]} />}
       >
              <Route path="dashboard" element={<App />} />
+      </Route> 
+      <Route
+        element={<RequireAuth allowedRoles={[ROLES.Seller, ROLES.Modarator, ROLES.Admin]} />}
+      >
+        <Route path="upload" element={<AddProduct />} />
       </Route> 
       <Route
       element={<RequireAuth allowedRoles={[ROLES.Visitor, ROLES.Member, ROLES.Seller, ROLES.Modarator, ROLES.Admin]} />}
@@ -54,25 +61,9 @@ const AppRoutes = () => (
         <Route path="itempage/:productId" element={<ItemPage />} />
     </Route> 
       <Route
-        element={<RequireAuth allowedRoles={[ROLES.Visitor, ROLES.Member, ROLES.Seller, ROLES.Modarator, ROLES.Admin]} />}
-      >
-        <Route path="testrefresh" element={<TestRefresh />} />
-      </Route> 
-      <Route
-        element={<RequireAuth allowedRoles={[ROLES.Visitor, ROLES.Member, ROLES.Seller, ROLES.Modarator, ROLES.Admin]} />}
-      >
-        <Route path="testproduct" element={<TestProduct />} />
-      </Route> 
-      <Route
         element={<RequireAuth allowedRoles={[ ROLES.Member, ROLES.Seller, ROLES.Modarator, ROLES.Admin]} />}
       >
         <Route path="product" element={<Product />} />
-      </Route>
-
-      <Route
-        element={<RequireAuth allowedRoles={[ROLES.Member, ROLES.Admin]} />}
-      >
-        <Route path="contact" element={<Contacts />} />
       </Route>
     </Route>
   </Routes>

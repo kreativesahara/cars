@@ -15,11 +15,12 @@ function Navbar() {
     }
     return (
         <>
-            <header className="header" data-header>
+            <header className="header  min-w-96" data-header>
             
-                <nav>
+                <nav className="flex justify-around">
                     <Link to="/home" className="logo">
-                        <h3>Spare Yangu</h3>
+                        <p className="md:text-2xl z-1 hover:text-red-600 transition animate-bounce duration-300">Diksx cars</p>
+                        <span className="px-4  lg:text-md">Automotive and Spares</span>                        
                     </Link>
                     <div className="menu" onClick={() => setMenuOpen(!menuOpen)}>
                         <span></span>
@@ -38,22 +39,24 @@ function Navbar() {
                                 Products
                             </NavLink>
                         </li>
-                        {/* <li>
+                        <li>
                             <NavLink to="/pricing" className="navbar-link" data-nav-link>
                                 Pricing
                             </NavLink>
                         </li>
                         <li>
-                            <NavLink to="/blogs" className="navbar-link" data-nav-link>
+                            <NavLink to="/support" className="navbar-link" data-nav-link>
                                 Support
                             </NavLink>
-                        </li> */}
-                        {auth?.accessToken ? 
-                         ( 
-                            <> 
-                                <button className='text-white  px-10 flex ' onClick={dashBoard}>Hi, {auth?.lastname}</button>
-                                <Logout /> 
-                            </>                     
+                        </li>
+                    </ul>
+                    <ul className={` navbar-list ${menuOpen ? "open" : ""}` }>
+                        {auth?.accessToken ?
+                            (
+                                <>
+                                    <button className='text-white mx-auto p-2 hover:bg-black hover:p-2 hover:rounded-md' onClick={dashBoard}>Dashboard</button>
+                                    <Logout />
+                                </>
                             ) : (
                                 <>
                                     <li >
@@ -68,7 +71,7 @@ function Navbar() {
                                     </li>
                                 </>
 
-                            ) }
+                            )}
                     </ul>
                 </nav>
             </header>

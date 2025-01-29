@@ -1,13 +1,13 @@
 
 function footer() {
   return (
-    <div className="footer px-20 pt-20">
-        <div className="footer-top flex  md:space-x-64 flex-col md:flex-row ">
+    <div className="footer  px-5 md:px-20 pt-14">
+        <div className="footer-top flex  md:justify-between flex-col md:flex-row ">
             <div className="footer-brand w-full md:w-1/3 ">
                 <a href="/home" className="text-2xl font-bold">
-                    <img src="#" alt="Spare Yangu" />
+                    <img src="#" alt="Diksx cars" />
                 </a>
-                <p className="footer-text text-lg py-4">
+                <p className="text-justify text-md py-4">
                     Search for amazing spare parts in Kenya. With a diverse spare part portfolio, spare yangu offers its
                     consumers an
                     attractive and fun selection.

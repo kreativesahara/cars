@@ -4,7 +4,7 @@ function Layout ({children}) {
     return (
         <>
         <Navbar />
-        <main className="w-full px-4 min-h-screen">
+        <main className="w-full px-4 min-h-screen min-w-96">
             { children }   
         </main>
         <Footer />

@@ -1,3 +1,11 @@
+.logo{
+    font-size: 1.1rem;
+    font-family: 'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif;
+    font-weight: 600;
+    margin: 0.75rem 0.5rem;
+    font-variant: small-caps;
+    color: aliceblue;
+}
 header{
     position: sticky;
     top: 0;
@@ -50,11 +58,6 @@ nav .menu span{
     margin: 0.25rem 0;
     border-radius: 0.25rem;
 }
-nav .logo{
-    font-size: 1.5rem;
-    margin: 1rem;
-    font-weight:bold;
-}
 
 .navbar-list  {
     display: flex;
@@ -65,7 +68,7 @@ nav .logo{
 
 .navbar-link{
     color: white !important;
-    font-weight: 800;
+    font-weight: 400;
     font-family: Verdana, Geneva, Tahoma, sans-serif;
     padding: 0.5rem;
     list-style: none;
@@ -77,10 +80,10 @@ nav li:hover{
     width: 100%;
 }
 .navbar-link:is(.active){
-    background-color: #ff0040; 
-    height: 30px;
+    background: #ff0040; 
 
 }
+
 @media (max-width: 800px) {
     nav .menu{
         display: flex;
