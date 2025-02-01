@@ -1,11 +1,11 @@
-
+import Logo from '../assets/diksx.png'
 function footer() {
   return (
     <div className="footer  px-5 md:px-20 pt-14">
         <div className="footer-top flex  md:justify-between flex-col md:flex-row ">
             <div className="footer-brand w-full md:w-1/3 ">
                 <a href="/home" className="text-2xl font-bold">
-                    <img src="#" alt="Diksx cars" />
+                    <img src={Logo} className="w-40" alt="Diksx cars" />
                 </a>
                 <p className="text-justify text-md py-4">
                     Search for amazing spare parts in Kenya. With a diverse spare part portfolio, spare yangu offers its

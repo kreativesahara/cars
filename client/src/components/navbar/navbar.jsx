@@ -15,8 +15,7 @@ function Navbar() {
     }
     return (
         <>
-            <header className="header  min-w-96" data-header>
-            
+            <header className="header  min-w-[400px]" data-header>
                 <nav className="flex justify-around">
                     <Link to="/home" className="logo">
                         <p className="md:text-2xl z-1 hover:text-red-600 transition animate-bounce duration-300">Diksx cars</p>

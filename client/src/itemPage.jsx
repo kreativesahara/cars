@@ -53,9 +53,9 @@ const  Itempage = () =>  {
 
     return (
         <Layout>
-            <div className='container flex flex-row'></div>
+            <div className='flex flex-row'></div>
             {product ? (
-                <div className=' container sm:flex-row lg:flex py-6'>
+                <div className=' flex-row lg:flex py-6'>
                     <div className='lg:w-6/12 flex-col border-2 px-2 py-2'>
                         <div className='h-min cursor-pointer'>
                             <img className='md:px-2 w-full h-96 lg:h-screen sm:object-cover' src={product.image_url} alt='item' />

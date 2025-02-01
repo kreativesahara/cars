@@ -111,10 +111,10 @@ function addProduct() {
   }
   return (
     <Layout>
-      <div className="w-full min-h-screen bg-gradient-to-br from-blue-50 to-purple-50 py-16 px-4">
-        <div className="max-w-7xl mx-auto">
-          <h1 className="text-4xl font-bold text-center mb-2">This Form Uploads Vehicle's</h1>
-      <form onSubmit={handleSubmit} className="w-auto">
+      <div className="w-auto min-h-screen bg-gradient-to-br from-blue-50 to-purple-50 py-16 px-2">
+        <div className="w-[600px] mx-auto place-content-center">
+          <h1 className="text-4xl font-bold text-center mb-2 pb-6">Upload Vehicle</h1>
+          <form onSubmit={handleSubmit} className=" w-full bg-white rounded-xl p-6 shadow-lg">
         <div>
           <label className="block text-sm text-neutral-900 mb-1">
             User ID
@@ -122,7 +122,6 @@ function addProduct() {
     
         </div>
         <div>
-         
           {/* <input
             type="file"
             name="image"
