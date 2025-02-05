@@ -2,9 +2,9 @@ import { Request, Response } from 'express';
 import db from '../db/dbConfig';
 // import { product } from '../db/schema/product';
 import { product } from '../db/schema/product';
-//import { productImage } from '../db/schema/ProductImage';
+import { carImages } from '../db/schema/carImages';
 import multer from 'multer';
-import { eq } from 'drizzle-orm';
+import { eq, inArray } from 'drizzle-orm';
 import path from 'path';
 import fs from 'fs';
 
@@ -66,38 +66,128 @@ const upload: any = multer({
 
 // // Get all products
 export const getAllProducts = async (req: Request, res: Response): Promise<Response> => {
-    const result = await db.select().from(product);
-    if (!result.length) return res.status(204).json({ message: 'No products found.' });
-    return res.json(result);
+    try {
+        const cars = await db.select().from(product);
+        if (!cars.length) return res.status(204).json({ message: 'No products found.' });
+
+        const carIds = cars.map(car => car.id);
+        const images = await db.select().from(carImages).where(inArray(carImages.car_id, carIds));
+
+        const carsWithImages = cars.map(car => ({
+            ...car,
+            images: images
+                .filter(img => img.car_id === car.id)
+                .map(img => img.image_url)
+        }));
+
+        return res.json(carsWithImages);
+    } catch (error) {
+        console.error('Error fetching products:', error);
+        return res.status(500).json({ message: 'Internal server error.' });
+    }
 };
+
 
 //Get single product
 export const getProduct = async (req: Request, res: Response): Promise<Response> => {
-    const productId: any = req.params.id;
+    try {
+        const productId: any = req.params.id;
+        console.log('ProductId:', productId);
 
-    console.log('ProductId :', productId)
+        if (!productId) {
+            return res.status(400).json({ message: 'Product ID is required.' });
+        }
 
-    if (!productId) {
-        return res.status(400).json({ message: 'Product ID is required.' });
+        // Retrieve car details from the carDetail table
+        const singleProduct = await db
+            .select()
+            .from(product)
+            .where(eq(product.id, Number(productId)));
+
+        if (!singleProduct.length) {
+            return res.status(204).json({ message: 'No product found.' });
+        }
+
+        const viewProduct = singleProduct[0];
+        console.log('ViewProduct:', viewProduct);
+        // Retrieve associated images from the carImages table
+        const images = await db
+            .select()
+            .from(carImages)
+            .where(eq(carImages.car_id, viewProduct.id));
+        const imageUrls = images.map(img => img.image_url);
+        console.log('Imagesurl:', imageUrls);
+
+        // Merge car details with its images and return
+        return res.json({ ...viewProduct, images: imageUrls });
+    } catch (error) {
+        console.error('Error fetching product:', error);
+        return res.status(500).json({ message: 'Internal server error.' });
     }
-
-    const singleProduct = await db.select().from(product).where(eq(product.id, productId));
-
-    if (!singleProduct.length) { // Check if the array is empty
-        return res.status(204).json({ message: 'No product found.' });
-    }
-
-    return res.json(singleProduct[0]); // Return the first (and presumably only) product
 };
 
 
 // Create product with images
+// export const createProduct = async (req: any, res: any): Promise<any> => {
+//     upload.array('images')(req, res, async (err: any) => {
+//         if (err) {
+//             console.log('Error from client:', err);
+//             return res.status(500).json({ message: 'Image upload error.' });
+//         }
+//         const { make, model, year, engine_capacity, fuel_type, transmission, driveSystem, mileage, features, condition, location, price, seller_id } = req.body;
+//         const images: any = req.files;
+
+//         // Validate required fields
+//         if (!make || !model || !year || !engine_capacity || !fuel_type || !transmission || !driveSystem || !mileage || !features || !condition || !location || !price) {
+//             return res.status(400).json({ message: 'All fields are required.' });
+//         }
+//         try {
+//             // Handle image uploads and prepare data for bulk insertion
+//             // Construct the image URL (adjust based on how you serve static files)
+//             let imageUrl = `${req.protocol}://${req.get('host')}/${images[0].path}`;
+//             // Replace backward slashes with forward slashes in the URL for compatibility
+//             imageUrl = imageUrl.replace(/\\/g, '/');
+//             const valuesToInsert = images.map((img: any) => ({
+//                 make: make,
+//                 model: model,
+//                 year: year,
+//                 engine_capacity: engine_capacity,
+//                 fuel_type: fuel_type,
+//                 transmission: transmission,
+//                 driveSystem: driveSystem,
+//                 mileage: mileage,
+//                 features: features,
+//                 condition: condition,
+//                 location: location,
+//                 price: price,
+//                 seller_id: seller_id,
+//                 image_url: imageUrl // Save the image URL/path
+//             }));
+
+//             // Insert all values at once
+//             const result = await db
+//                 .insert(product)
+//                 .values(valuesToInsert);
+//             console.log('Inserted product IDs:', result);
+
+//             // Check if the products were inserted successfully
+//             if (!result) {
+//                 return res.status(500).json({ message: 'Failed to insert products.' });
+//             }
+//             return res.status(201).json({ message: 'Products created successfully.', result });
+//         } catch (err) {
+//             return res.status(500).json({ message: 'Internal server error.' });
+//         }
+//     });
+// };
+
 export const createProduct = async (req: any, res: any): Promise<any> => {
     upload.array('images')(req, res, async (err: any) => {
         if (err) {
-            console.log('Error from client:', err);
+            console.error('Error from client:', err);
             return res.status(500).json({ message: 'Image upload error.' });
         }
+
         const { make, model, year, engine_capacity, fuel_type, transmission, driveSystem, mileage, features, condition, location, price, seller_id } = req.body;
         const images: any = req.files;
 
@@ -105,45 +195,69 @@ export const createProduct = async (req: any, res: any): Promise<any> => {
         if (!make || !model || !year || !engine_capacity || !fuel_type || !transmission || !driveSystem || !mileage || !features || !condition || !location || !price) {
             return res.status(400).json({ message: 'All fields are required.' });
         }
+
         try {
-            // Handle image uploads and prepare data for bulk insertion
-            // Construct the image URL (adjust based on how you serve static files)
-            let imageUrl = `${req.protocol}://${req.get('host')}/${images[0].path}`;
-            // Replace backward slashes with forward slashes in the URL for compatibility
-            imageUrl = imageUrl.replace(/\\/g, '/');
-            const valuesToInsert = images.map((img: any) => ({
-                make: make,
-                model: model,
-                year: year,
-                engine_capacity: engine_capacity,
-                fuel_type: fuel_type,
-                transmission: transmission,
-                driveSystem: driveSystem,
-                mileage: mileage,
-                features: features,
-                condition: condition,
-                location: location,
-                price: price,
-                seller_id: seller_id,
-                image_url: imageUrl // Save the image URL/path
+            // Insert car details and return the generated car_id
+            const [carDetails] = await db
+                .insert(product)
+                .values({
+                    make,
+                    model,
+                    year,
+                    engine_capacity,
+                    fuel_type,
+                    transmission,
+                    driveSystem,
+                    mileage,
+                    features,
+                    condition,
+                    location,
+                    price,
+                    seller_id
+                })
+                .$returningId(); // Ensure it returns the ID
+
+            // Ensure car_id exists
+            if (!carDetails || !carDetails?.id) {
+                console.error('Failed to retrieve car_id after inserting car details.');
+                return res.status(500).json({ message: 'Car details insertion failed.' });
+            }
+
+            const car_id = carDetails.id;
+            console.log('Car_id:', car_id);
+
+            // Prepare image URLs
+            const imageUrls = images.map((img: any) => {
+                let imageUrl = `${req.protocol}://${req.get('host')}/${img.path}`;
+                return imageUrl.replace(/\\/g, '/');
+            });
+
+            // Insert images into the CarImages table
+            const newcarImages = imageUrls.map((url: string) => ({
+                car_id,
+                image_url: url
             }));
 
-            // Insert all values at once
-            const result = await db
-                .insert(product)
-                .values(valuesToInsert);
-            console.log('Inserted product IDs:', result);
+            const imageInsertResult = await db.insert(carImages).values(newcarImages);
 
-            // Check if the products were inserted successfully
-            if (!result) {
-                return res.status(500).json({ message: 'Failed to insert products.' });
+            if (!imageInsertResult) {
+                console.error('Error inserting car images:', imageInsertResult);
+                return res.status(500).json({ message: 'Failed to insert car images.' });
             }
-            return res.status(201).json({ message: 'Products created successfully.', result });
+
+            return res.status(201).json({
+                message: 'Product created successfully.',
+                carDetails,
+                carImages: imageInsertResult
+            });
         } catch (err) {
+            console.error('Error inserting data:', err);
             return res.status(500).json({ message: 'Internal server error.' });
         }
     });
 };
+
+
 
 // // Update product
 // export const updateUpload = async (req: Request, res: Response): Promise<Response> => {

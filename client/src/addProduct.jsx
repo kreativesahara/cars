@@ -27,12 +27,20 @@ function addProduct() {
   const [preview, setPreview] = useState([]);
 
   const handleChange = (e) => {
-    setValues((prev) => ({
-      ...prev,
-      [e.target.name]: e.target.value
-    }),
-      // console.log(values)
-    );
+    const { name, value } = e.target;
+    if (name === "mileage" || name === "price") {
+      // Remove any non-numeric characters except for digits
+      const rawValue = value.replace(/\D/g, "");
+      setValues((prev) => ({
+        ...prev,
+        [name]: rawValue, // Store raw numeric value in state
+      }));
+    } else {
+      setValues((prev) => ({
+        ...prev,
+        [name]: value,
+      }));
+    }
   };
 
   const handleImageChange = async (e) => {
@@ -112,25 +120,11 @@ function addProduct() {
   return (
     <Layout>
       <div className="w-auto min-h-screen bg-gradient-to-br from-blue-50 to-purple-50 py-16 px-2">
-        <div className="w-[600px] mx-auto place-content-center">
+        <div className="md:w-[600px] mx-auto place-content-center">
           <h1 className="text-4xl font-bold text-center mb-2 pb-6">Upload Vehicle</h1>
-          <form onSubmit={handleSubmit} className=" w-full bg-white rounded-xl p-6 shadow-lg">
-        <div>
-          <label className="block text-sm text-neutral-900 mb-1">
-            User ID
-          </label>
-    
-        </div>
-        <div>
-          {/* <input
-            type="file"
-            name="image"
-            multiple
-            accept="image/*"
-            onChange={handleImageChange}
-            className="block borderw-[750px] h-[200px] w-full border-slate-700 bg-amber-200 rounded-md p-2 text-neutral-900"
-            required
-          /> */}
+          <form onSubmit={handleSubmit} className="w-full bg-white rounded-xl p-6 shadow-lg">
+            <div>
+              <label className="block text-sm text-neutral-900 mb-1">User ID</label>
               <input
                 name="seller_id"
                 onChange={handleChange}
@@ -140,178 +134,153 @@ function addProduct() {
                 value={auth.id}
                 disabled
               />
-              <label className="block text-sm text-neutral-900 mb-1">
-                Upload Images
-              </label>
-              {/* /////////////////////////// */}
-              {/* <div className="w-full max-w-md mx-auto p-6 bg-white rounded-xl shadow-lg hover:shadow-xl transition-shadow duration-300"> */}
-              <div className="relative group h-64 w-full mb-4 border-2  border-dashed border-gray-300 rounded-lg hover:border-blue-500 transition-colors duration-300 flex items-center justify-center overflow-hidden">
-                <input
-                  type="file"
-                  accept="image/*"
-                  multiple
-                  onChange={handleImageChange}
-                  className="absolute inset-0 w-full h-full opacity-0 cursor-pointer z-10"
-                />
-                <div className="flex flex-col items-center justify-center transform group-hover:scale-95 transition-transform duration-300">
-                  <span className="material-symbols-outlined text-5xl text-gray-400 group-hover:text-blue-500 mb-2">
-                    add_photo_alternate
-                  </span>
-                  <p className="text-sm text-gray-500">
-                    Drag and drop your image here
-                  </p>
-                  <p className="text-xs text-gray-400 mt-1">or click to browse</p>
-                </div>
-              </div>
-
-              <div className="space-y-3">
-                <div className="flex items-center justify-between">
-                  <p className="text-sm font-medium">Upload limits</p>
-                  <span className="text-xs text-gray-500">Max size: 5MB</span>
-                </div>
-
-                <div className="h-2 bg-gray-200 rounded-full overflow-hidden">
-                  <div className="h-full w-1/3 bg-blue-500 rounded-full transform transition-all duration-500 hover:w-1/2" />
-                </div>
-              </div>
-              {/* </div> */}
-              {/* /////////////////////////// */}
-          {preview.length > 0 && (
-            <div className="flex  w-auto gap-3 mt-4">
-              {preview.map((src, index) => (
-                <img
-                  key={index}
-                  src={src}
-                  alt={`Preview ${index + 1}`}
-                  className="h-[80px] w-[80px] rounded-md object-cover"
-                />
-              ))}
             </div>
-          )}
-        </div>
-        
-        {[      
-          {
-            label: "Vehicle Make",
-            name: "make",
-            type: "text",
-            placeholder: "Enter Vehicle Make",
-            value: values.make,
-          },
-          {
-            label: "Vehicle Model",
-            name: "model",
-            type: "text",
-            placeholder: "Enter Vehicle Model",
-            value: values.model,
-          },
-          {
-            label: "Year of Manufacture",
-            name: "year",
-            type: "number",
-            placeholder: "Enter Year of Manufacture",
-            value: values.year,
-          },
-          {
-            label: "Engine Capacity CC",
-            name: "engine_capacity",
-            type: "number",
-            placeholder: "Enter Engine Capacity",
-            value: values.engine_capacity,
-          },
-          {
-            label: "Fuel Type",
-            name: "fuel_type",
-            type: "text",
-            placeholder: "Enter Fuel Type i.e., Diesel",
-            value: values.fuel_type,
-          },
-          {
-            label: "Transmission",
-            name: "transmission",
-            type: "text",
-            placeholder: "Enter Transmission i.e., Manual",
-            value: values.transmission,
-          },
-          {
-            label: "Driving System",
-            name: "driveSystem",
-            type: "text",
-            placeholder: "Enter Drive System i.e., 2WD",
-            value: values.driveSystem,
-          },
-          {
-            label: "Mileage",
-            name: "mileage",
-            type: "number",
-            placeholder: "Enter Mileage in KM",
-            value: values.mileage,
-          },
-          {
-            label: "Car Condition",
-            name: "condition",
-            type: "text",
-            placeholder: "Car Condition",
-            value: values.condition,
-          },
-          {
-            label: "Location",
-            name: "location",
-            type: "text",
-            placeholder: "Enter Location",
-            value: values.location,
-          },
-          {
-            label: "Price",
-            name: "price",
-            type: "number",
-            placeholder: "Enter Price",
-            value: values.price,
-          },
-        ].map((field) => (
-          <div key={field.name}>
-            <label
-              htmlFor={field.name}
-              className="block text-sm text-neutral-900 mb-1"
-            >
-              {field.label}
-            </label>
+
+            {[
+              {
+                label: "Vehicle Make",
+                name: "make",
+                options: ["Toyota", "Nissan", "Honda", "Ford", "BMW"],
+              },
+              {
+                label: "Vehicle Model",
+                name: "model",
+                options: ["Corolla", "Civic", "Ranger", "X5", "Altima"],
+              },
+              {
+                label: "Fuel Type",
+                name: "fuel_type",
+                options: ["Petrol", "Diesel", "Hybrid", "Electric"],
+              },
+              {
+                label: "Transmission",
+                name: "transmission",
+                options: ["Automatic", "Manual", "CVT"],
+              },
+              {
+                label: "Car Condition",
+                name: "condition",
+                options: ["New", "Used", "Reconditioned"],
+              },
+              {
+                label: "Driving System",
+                name: "driveSystem",
+                options: ["2WD", "4WD", "AWD"],
+              },
+            ].map((field) => (
+              <div key={field.name}>
+                <label htmlFor={field.name} className="block text-sm text-neutral-900 mb-1">{field.label}</label>
+                <select
+                  name={field.name}
+                  onChange={handleChange}
+                  required
+                  value={values[field.name]}
+                  className="block w-full border border-neutral-300 rounded-md p-2 text-neutral-900"
+                >
+                  <option value="">Select {field.label}</option>
+                  {field.options.map((option) => (
+                    <option key={option} value={option}>{option}</option>
+                  ))}
+                </select>
+              </div>
+            ))}
+
+            {[
+              {
+                label: "Year of Manufacture",
+                name: "year",
+                type: "number",
+                placeholder: "Enter Year of Manufacture",
+                value: values.year,
+              },
+              {
+                label: "Engine Capacity CC",
+                name: "engine_capacity",
+                type: "number",
+                placeholder: "Enter Engine Capacity",
+                value: values.engine_capacity,
+              },
+              {
+                label: "Location",
+                name: "location",
+                type: "text",
+                placeholder: "Enter Location",
+                value: values.location,
+              },
+              
+            ].map((field) => (
+              <div key={field.name}>
+                <label htmlFor={field.name} className="block text-sm text-neutral-900 mb-1">{field.label}</label>
+                <input
+                  name={field.name}
+                  onChange={handleChange}
+                  type={field.type}
+                  placeholder={field.placeholder}
+                  required
+                  value={field.value}
+                  className="block w-full border border-neutral-300 rounded-md p-2 text-neutral-900"
+                />
+              </div>
+            ))}
+            <label className="block text-sm text-neutral-900 mb-1">Mileage</label>
             <input
-              name={field.name}
+              name="mileage"
               onChange={handleChange}
-              type={field.type}
-              placeholder={field.placeholder}
+              type="text"
+              placeholder="Enter Mileage in KM"
               required
-              value={field.value}
+              value={values.mileage ? Number(values.mileage).toLocaleString() : ""}
               className="block w-full border border-neutral-300 rounded-md p-2 text-neutral-900"
             />
-          </div>
-        ))}
-        <div>
-          <label
-            htmlFor="features"
-            className="block text-sm text-neutral-900 mb-1"
-          >
-            Features Description
-          </label>
-          <textarea
-            name="features"
-            onChange={handleChange}
-            className="block w-full border border-neutral-300 rounded-md p-2 text-neutral-900"
-            placeholder="Describe the features of the Vehicle"
-            required
-            value={values.features}
-          />
+            <label className="block text-sm text-neutral-900 mb-1">Price</label>
+            <input
+              name="price"
+              onChange={handleChange}
+              type="text"
+              placeholder="Enter Price"
+              required
+              value={values.price ? Number(values.price).toLocaleString() : ""}
+              className="block w-full border border-neutral-300 rounded-md p-2 text-neutral-900"
+            />
+
+            <label htmlFor="features" className="block text-sm text-neutral-900 mb-1">Features Description</label>
+            <textarea
+              name="features"
+              onChange={handleChange}
+              className="block w-full border border-neutral-300 rounded-md p-2 text-neutral-900"
+              placeholder="Describe the features of the Vehicle"
+              required
+              value={values.features}
+            />
+            <label className="block text-sm text-neutral-900 mb-1">Upload Images</label>
+            <div className="relative group h-64 w-full mb-4 border-2 border-dashed border-gray-300 rounded-lg hover:border-blue-500 transition-colors duration-300 flex items-center justify-center overflow-hidden">
+              <input
+                type="file"
+                accept="image/*"
+                multiple
+                onChange={handleImageChange}
+                className="absolute inset-0 w-full h-full opacity-0 cursor-pointer z-10"
+                required
+              />
+              <div className="flex flex-col items-center justify-center transform group-hover:scale-95 transition-transform duration-300">
+                <span className="material-symbols-outlined text-5xl text-gray-400 group-hover:text-blue-500 mb-2">add_photo_alternate</span>                
+                <p className="text-sm text-gray-500">Drag and drop your image here</p>
+                <p className="text-xs text-gray-400 mt-1">or click to browse</p>
+                {preview.length > 0 && (
+                  <div className="flex w-auto gap-3 mt-4">
+                    {preview.map((src, index) => (
+                      <img key={index} src={src} alt={`Preview ${index + 1}`} className="h-[80px] w-[80px] rounded-md object-cover" />
+                    ))}
+                  </div>
+                )}
+              </div>
+            </div>
+          
+            <button type="submit" className="bg-black text-white rounded-md px-4 mt-4 py-2 text-sm w-full">Listing</button>
+          </form>
         </div>
-        <button
-          type="submit"
-          className="bg-primary-500 text-primary-50 rounded-md px-4 py-2 text-sm w-full"
-        >
-          Listing
-        </button>
-      </form>
       </div>
-      </div>
+
     </Layout>
   )
 }
