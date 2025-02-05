@@ -10,7 +10,6 @@ import testRoute from './routes/test'
 import authRoute from './routes/Api/auth';
 import usersRoute from './routes/Api/user';
 import productsRoute from './routes/Api/product';
-import imagesRoute from './routes/Api/image';
 import testProductRoute from './routes/Api/testProduct'
 
 import refreshRoute from './routes/Api/refresh'
@@ -48,7 +47,6 @@ app.use("/test", requireAuth, testRoute)
 //API Routes
 app.use("/products", requireAuth, productsRoute)
 app.use("/testproduct", requireAuth, testProductRoute)
-app.use("/image", imagesRoute)
 
 
 

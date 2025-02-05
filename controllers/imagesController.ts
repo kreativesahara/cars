@@ -1,7 +1,7 @@
 // controllers/imagesController.ts
 import db from '../db/dbConfig';
 import { eq } from 'drizzle-orm';
-import { image } from '../db/schema/image';
+import { carImages } from '../db/schema/carImages';
 import { product } from '../db/schema/product';
 import multer from 'multer';
 import path from 'path';
@@ -61,57 +61,3 @@ const upload = multer({
     limits: { fileSize: 5 * 1024 * 1024 }, // Limit file size to 5MB
     fileFilter,
 });
-export const getAllImage = async (req:any, res:any) => {
-    console.log('hello from images controller');
-    const result: any = await db.select().from(image)
-    if (!result) return res.status(204).json({ 'message': 'No product found.' });
-    res.json(result);
-    console.log(result);
-}
-// Controller function to handle image upload
-export const uploadImage = [
-    upload.single('image'), // 'image' is the field name in the form
-    async (req:any, res:any) => {
-        console.log('uploaded image file',req.file)
-        try {
-            if (!req.file) {
-                return res.status(500).json({ message: 'No file uploaded' });
-            }
-
-            const { filename, path: filePath } = req.file;
-            const { car_id } = req.body;
-
-            if (!car_id) {
-                // Delete the uploaded file since car_id is missing
-                fs.unlinkSync(filePath);
-                return res.status(400).json({ message: 'car_id is required' });
-            }
-
-            // Optional: Verify that the car_id exists in the products table
-            const car = await db.select().from(product).where(eq(product.id, parseInt(car_id))).execute();
-            if (car.length === 0) {
-                // Delete the uploaded file since car_id is invalid
-                fs.unlinkSync(filePath);
-                return res.status(400).json({ message: 'Invalid car_id' });
-            }
-
-            // Construct the image URL (adjust based on how you serve static files)
-            let imageUrl = `${req.protocol}://${req.get('host')}/${filePath}`;
-            // Replace backward slashes with forward slashes in the URL for compatibility
-            imageUrl = imageUrl.replace(/\\/g, '/');
-            // Insert image data into the database
-            await db
-                .insert(image)
-                .values({
-                    car_id: parseInt(car_id),
-                    image_url: imageUrl,
-                })
-                .execute();
-
-            res.status(201).json({ message: 'Image uploaded successfully', image_url: imageUrl });
-        } catch (error) {
-            console.error('Error uploading image:', error);
-            res.status(500).json({ message: 'Internal server error' });
-        }
-    },
-];
