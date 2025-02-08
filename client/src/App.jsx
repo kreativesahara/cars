@@ -1,33 +1,47 @@
 import Layout from "./components/Layout";
 import useAuth from "./hooks/useAuth";
-import Users from "./users";
 import BtnUpload from "./components/btnUpload";
+import { useProductContext } from "./context/ProductProvider";
+import { useSellerContext } from "./context/SellerProvider";
+import { useState, useEffect } from "react";
 
 
 function App() {
   const {auth } = useAuth();
-  // const 
-  console.log(auth?.roles);
+  const { products } = useProductContext();
+  const { sellers } = useSellerContext();
+  const [user, setUser] = useState(null);
+  const [product, setProduct] = useState(null);
+  const  SellerId = Number(auth?.id);
+
+  console.log('User ID:', SellerId);
+  console.log('products context:', products);
+
+  useEffect(()=>{
+    const findProducts = products.filter((p) => p.seller_id === Number(SellerId));
+    if (findProducts) {
+      setProduct(findProducts);
+    }else{
+      console.error('no user found');
+    }
+  },[products, SellerId])
+
+  console.log('found products',product)
+
   // Render content based on fetched bills
   return (
     <Layout>
       <main className="mt-10 mx-8">
-        {/* {auth?.roles === 1 && <Users />} */}
         <div>
           <div className='w-full bg-white shadow rounded-lg p-6 flex flex-col gap-6'>
-            <h3 className=' font-semibold text-center'>
-              <h1 className='text-4xl font-title  text-neutral-950'>Your Dashboard</h1>
-             
-            </h3>
+            <div className=' font-semibold text-center'>
+              <h3 className='text-2xl md:text-4xl font-title  text-neutral-950'>Your Dashboard</h3>
+            </div>
             <div className='p-4 bg-neutral-50 rounded-md flex flex-col gap-2'>
               <h2 className='text-lg font-medium text-neutral-950'>User's Details</h2>
               <p className='text-sm text-neutral-600'>User's Name: {auth?.lastname || "User"}</p>
               <p className='text-sm text-neutral-600'>Your Email: {auth?.email}</p>
             </div>
-
-            <h3 className=''>
-              <h1 className='text-2xl font-title text-neutral-950'>Your Subscription</h1>
-            </h3>
             <div className='p-4 bg-neutral-50 rounded-md flex flex-col gap-2'>
               <h2 className='text-lg font-medium text-neutral-950'>Subscription Details</h2>
               <p className='text-sm text-neutral-600'>Plan: Pro Membership</p>
@@ -37,22 +51,34 @@ function App() {
             <section className='flex flex-col gap-4'>
            
               {auth?.roles === 3 && 
-              <div className='p-4 bg-neutral-50 rounded-md flex flex-col gap-4'>
+              <div className='md:p-4 bg-neutral-50 rounded-md flex flex-col gap-4'>
                 <div className="flex justify-between items-center">
-                  <h2 className='text-lg font-medium text-neutral-950'>Uploaded Product</h2>
+                  <h2 className='md:text-lg font-medium text-neutral-950'>Uploaded Product</h2>
                   <BtnUpload />
                 </div>
-                <div className='flex items-center gap-4'>
-                  <img
-                    src='https://tools-api.webcrumbs.org/image-placeholder/100/100/products/1'
-                    alt='Uploaded Product'
-                    className='w-[100px] h-[100px] rounded-md object-cover'
-                  />
-                  <div>
-                    <p className='text-sm text-neutral-950 font-medium'>Make: Toyota</p>
-                    <p className='text-sm text-neutral-600'>Model: Premio</p>
-                    <p className='text-sm text-neutral-600'>Year: 2023</p>
-                  </div>
+                <div>
+                  {!product? <p className='text-sm text-neutral-600'>No Product Uploaded</p>: 
+                      (<ul >{product.map((vehicle)=>
+                    <li className="md:flex p-2 rounded-md bg-slate-200 m-4 gap-4" key={vehicle.id}>
+                      <img 
+                        src={vehicle.images[0]}
+                        alt='Uploaded Product'
+                        className='md:w-[100px] md:h-[100px] h-[200px] rounded-md object-cover'                      
+                      />
+                      <div className="w-10/12 mx-auto pt-4">
+                        <p className='text-sm text-neutral-950 font-medium'>Make : {vehicle.make}</p>
+                            <p className='text-sm text-neutral-600'>Model : {vehicle.model}</p>
+                            <p className='text-sm text-neutral-600'>Year : {vehicle.year}</p>
+                            <p className='text-sm text-neutral-600'>Price : {vehicle.price}</p>
+
+                      </div> 
+                      <div className="py-4 flex flex-col" >
+                        <button className="bg-black text-white px-8 rounded-sm py-1.5 mb-2">Edit</button> 
+                        <button className="bg-black text-white px-6 rounded-sm py-1.5">Delete</button>
+                      </div>                     
+                    </li>
+                  )}
+                  </ul>)}
                 </div>
               </div>}
             </section>

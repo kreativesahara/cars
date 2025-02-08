@@ -24,7 +24,6 @@ export const SellerProvider = ({ children }) => {
         const controller = new AbortController();
         return() =>controller.abort();
     },[axiosPrivate])
-    console.log("sellers", sellers)
     return(
         <SellerContext.Provider value={{sellers, setSellers}}>
             {children}

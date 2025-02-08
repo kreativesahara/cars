@@ -77,53 +77,53 @@ const Itempage = () => {
                         {product.images.map((img, index) => (
                             <img
                                 key={index}
-                                className="border-2 rounded hover:border-blue-600 w-full object-cover"
+                                className="border-2 rounded hover:border-blue-600  object-cover"
                                 src={img}
                                 alt={`Thumbnail ${index + 1}`}
                             />
                         ))}
                     </div>
                     <div className=' p-3'>
-                            <div className='flex justify-between'>
-                                <span className='flex-col'>
-                        <h3 className='font-bold uppercase text-2xl'>{product.make}</h3>
-                        <p className='tracking-widest text-md'>{product.model}</p>
-                                </span>
-                                <strong className='font-black tracking-wider text-2xl '>KSH {product.price}</strong>
-                            </div>
-                            <hr/>
-                            <ul className='p-1 grid grid-cols-2 font-semibold justify-between '>
-                                <li className='text-md py-2'>
-                                    Transmission :
-                                    <span className='font-bold'> {product.transmission} </span>
-                                </li>
-                                <li className='text-md py-2'>
-                                    Location :
-                                    <span className='font-bold'> {product.location} </span>
-                                </li>
-                                <li className='text-md py-2'>
-                                    Year of Manufacter : 
-                                    <span className='font-bold'> {product.year} </span>
-                                </li>
-                                <li className='text-md py-2'>
-                                    Engine Capacity :
-                                    <span className='font-bold'> {product.engine_capacity} </span>
-                                </li> 
-                                <li className='text-md py-2'>
-                                    Fuel Type :
-                                    <span className='font-bold'> {product.fuel_type} </span>
-                                </li>
-                                <li className='text-md py-2'>
-                                    Mileage :
-                                    <span className='font-bold'> {product.year} </span>
-                                </li>
-                                <li className='text-md py-2'>
-                                    Drive System :
-                                    <span className='font-bold'> {product.engine_capacity} </span>
-                                </li> 
-                                {seller.hasFinancing !== null && <li className='py-2'>Financing Available: <span className='font-bold text-emerald-600'>{seller.hasFinancing ? 'Yes' : 'No'}</span></li>}
-                                {seller.acceptsTradeIn !== null && <li className='py-2'>Accepts Trade-in: <span className='font-bold text-emerald-600'>{seller.acceptsTradeIn ? 'Yes' : 'No'}</span></li>}                                
-                            </ul>
+                        <div className='flex justify-between'>
+                            <span className='flex-col px-2'>
+                                <h3 className='font-bold uppercase text-2xl'>{product.make}</h3>
+                                <p className='tracking-widest text-lg'>{product.model}</p>
+                            </span>
+                            <strong className='font-bold tracking-widest text-2xl '>KSH {product.price}</strong>
+                        </div>
+                        <hr />
+                        <ul className='p-1 grid grid-cols-2 font-semibold justify-between '>
+                            <li className='text-md py-2'>
+                                Transmission :
+                                <span className='font-bold'> {product.transmission} </span>
+                            </li>
+                            <li className='text-md py-2'>
+                                Location :
+                                <span className='font-bold'> {product.location} </span>
+                            </li>
+                            <li className='text-md py-2'>
+                                Year of Manufacter :
+                                <span className='font-bold'> {product.year} </span>
+                            </li>
+                            <li className='text-md py-2'>
+                                Engine Capacity :
+                                <span className='font-bold'> {product.engine_capacity} </span>
+                            </li>
+                            <li className='text-md py-2'>
+                                Fuel Type :
+                                <span className='font-bold'> {product.fuel_type} </span>
+                            </li>
+                            <li className='text-md py-2'>
+                                Mileage :
+                                <span className='font-bold'> {product.year} </span>
+                            </li>
+                            <li className='text-md py-2'>
+                                Drive System :
+                                <span className='font-bold'> {product.engine_capacity} </span>
+                            </li>
+                            {seller.hasFinancing !== null && <li className='py-2'>Financing Available: <span className='font-bold text-emerald-600'>{seller.hasFinancing ? 'Yes' : 'No'}</span></li>}
+                            {seller.acceptsTradeIn !== null && <li className='py-2'>Accepts Trade-in: <span className='font-bold text-emerald-600'>{seller.acceptsTradeIn ? 'Yes' : 'No'}</span></li>}
+                        </ul>
                     </div>
                     <div>
                         <h3 className='px-4 py-2 font-bold text-xl'>
@@ -135,40 +135,40 @@ const Itempage = () => {
                         </p>
                     </div>
                 </div>
-        
+
                 <div className='lg:w-5/12  mx-auto flex flex-col gap-3'>
                     <button className='bg-blue-500 hover:bg-blue-800 text-white w-100 py-2 tracking-widest font-black'>Call Seller</button>
                     <button className='bg-green-500 hover:bg-green-800 text-white w-100 py-2 tracking-wider font-bold'>Message Seller</button>
                     <div className='border shadow-lg h-min p-4'>
                         <h3 className='text-sm font-bold uppercase'>Seller Details</h3>
                         <div className='flex p-2 pt-8'>
-                                <img className='w-20 h-20 rounded-full object-cover' src='https://images.unsplash.com/photo-1494790108377-be9c29b29330?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=720&q=60' alt='' />
+                            <img className='w-20 h-20 rounded-full object-cover' src='https://images.unsplash.com/photo-1494790108377-be9c29b29330?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=720&q=60' alt='' />
                             <span className='ml-4 my-auto'>
                                 <p className='uppercase font-semibold'>{seller.username}</p>
                                 <p className='font-semibold'>Seller Type : <span className='font-bold'>{seller.accountType}</span></p>
                                 {/* <p className='tracking-widest'>{seller.contact || 'Seller not provided'}</p> */}
                             </span>
-                            </div>
                         </div>
-                        <div className='border shadow-lg p-2'>
-                            <h3 className='py-3 uppercase -tracking-widertext-sm font-bold'>Related Products</h3>
-                            <ul className='grid grid-cols-3 w-100 cursor-pointer  gap-0.5'>
-                                <li>
-                                    <img className='p-2 hover:border-2 hover:border-blue-600 rounded object-cover' src='https://images.unsplash.com/photo-1494790108377-be9c29b29330?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=720&q=60' alt='' />
-                                </li>
-                                <li>
-                                    <img className='p-2 hover:border-2 hover:border-blue-600 rounded object-cover' src='https://images.unsplash.com/photo-1494790108377-be9c29b29330?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=720&q=60' alt='' />
-                                </li>
-                                <li>
-                                    <img className='rounded p-2 hover:border-2 hover:border-blue-600 object-cover' src='https://images.unsplash.com/photo-1494790108377-be9c29b29330?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=720&q=60' alt='' />
-                                </li>
-                                <li>
-                                    <img className='p-2 hover:border-2 hover:border-blue-600 rounded object-cover' src='https://images.unsplash.com/photo-1494790108377-be9c29b29330?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=720&q=60' alt='' />
-                                </li>
-                            </ul>
-                        </div>
+                    </div>
+                    <div className='border shadow-lg p-2'>
+                        <h3 className='py-3 uppercase -tracking-widertext-sm font-bold'>Related Products</h3>
+                        <ul className='grid grid-cols-3 w-100 cursor-pointer  gap-0.5'>
+                            <li>
+                                <img className='p-2 hover:border-2 hover:border-blue-600 rounded object-cover' src='https://images.unsplash.com/photo-1494790108377-be9c29b29330?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=720&q=60' alt='' />
+                            </li>
+                            <li>
+                                <img className='p-2 hover:border-2 hover:border-blue-600 rounded object-cover' src='https://images.unsplash.com/photo-1494790108377-be9c29b29330?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=720&q=60' alt='' />
+                            </li>
+                            <li>
+                                <img className='rounded p-2 hover:border-2 hover:border-blue-600 object-cover' src='https://images.unsplash.com/photo-1494790108377-be9c29b29330?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=720&q=60' alt='' />
+                            </li>
+                            <li>
+                                <img className='p-2 hover:border-2 hover:border-blue-600 rounded object-cover' src='https://images.unsplash.com/photo-1494790108377-be9c29b29330?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=720&q=60' alt='' />
+                            </li>
+                        </ul>
+                    </div>
                 </div>
-              </div>  
+            </div>
         </Layout>
     );
 };
