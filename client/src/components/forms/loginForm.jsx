@@ -52,7 +52,7 @@ const LoginForm = () => {
            
             setFormData({ email: "", password: "" });
             alert("User login successfully")
-            navigate(from, { replace: true });
+            window.location.href = from
            
             
         } catch (error) {

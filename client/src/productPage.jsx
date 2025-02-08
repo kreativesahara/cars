@@ -5,12 +5,13 @@ import { useProductContext } from './context/ProductProvider'
 // import UploadForm from './components/forms/uploadForm'
 
 const productPage = () => {
-    const {products} = useProductContext();
+     const {products} = useProductContext();
     // Render content based on fetched bills
     console.log('Products from Product Page :', products)
     return (    
     <Layout >
         < div className="mt-8">
+
             {!products.length ?
                 < p >
                     No product to display
@@ -23,7 +24,7 @@ const productPage = () => {
                         <Link to={`/itempage/${product.id}`}>
                         <div className="border shadow-lg rounded-xl pointer hover:shadow-blue-300 cursor-pointer">
                             <figure className="">
-                                <img src={product?.image_url} alt={product?.id} loading="lazy" width="440" height="300"
+                                <img src={product?.images[0]} alt={product?.id} loading="lazy" width="440" height="300"
                                     className="w-100 bg-slate-500 rounded shadow-lg opacity-75 hover:opacity-100 " />
                             </figure>
                             <div className="p-2">

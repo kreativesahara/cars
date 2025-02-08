@@ -1,12 +1,12 @@
 import { Request, Response } from 'express';
 import db from '../db/dbConfig';
-// import { product } from '../db/schema/product';
 import { product } from '../db/schema/product';
 import { carImages } from '../db/schema/carImages';
 import multer from 'multer';
 import { eq, inArray } from 'drizzle-orm';
 import path from 'path';
 import fs from 'fs';
+import { seller } from '../db/schema/seller';
 
 
 // Configure multer for image uploads
@@ -118,8 +118,13 @@ export const getProduct = async (req: Request, res: Response): Promise<Response>
         const imageUrls = images.map(img => img.image_url);
         console.log('Imagesurl:', imageUrls);
 
+        const productSeller = await db
+            .select()
+            .from(seller)
+            .where(eq(seller.userId, viewProduct.seller_id))
+        console.log('product seller', productSeller[0])
         // Merge car details with its images and return
-        return res.json({ ...viewProduct, images: imageUrls });
+        return res.json({ ...viewProduct, images: imageUrls, productSeller});
     } catch (error) {
         console.error('Error fetching product:', error);
         return res.status(500).json({ message: 'Internal server error.' });

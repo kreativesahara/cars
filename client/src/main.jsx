@@ -16,6 +16,8 @@ import PersistLogin from './controllers/PersistLogin';
 import RequireAuth from './controllers/RequireAuth';
 import { AuthProvider } from './context/AuthProvider.jsx';
 import { ProductProvider } from './context/ProductProvider.jsx';
+import { SellerProvider } from './context/SellerProvider.jsx';
+
 
 import 'material-symbols';
 import './index.css';
@@ -73,9 +75,11 @@ ReactDOM.createRoot(document.getElementById('root')).render(
   <React.StrictMode>
     <AuthProvider>
       <ProductProvider>
+        <SellerProvider>
         <Router>
           <AppRoutes />
         </Router>
+        </SellerProvider >
       </ProductProvider>
     </AuthProvider>
   </React.StrictMode>
