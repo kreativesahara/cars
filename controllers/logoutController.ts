@@ -1,4 +1,4 @@
-import { users } from '../db/schema/user';
+import { user } from '../db/schema/user';
 import db from '../db/dbConfig';
 import { eq } from 'drizzle-orm';
 import { Request, Response } from 'express';
@@ -12,8 +12,8 @@ export const handleLogout = async (req:Request, res:Response) => {
     // Is refreshToken in db?
     const foundUser= await db.    
         select().
-        from(users).
-        where(eq(users.refreshToken, refreshToken)).
+        from(user).
+        where(eq(user.refreshToken, refreshToken)).
         limit(1);
         
     if (!foundUser) {
@@ -27,9 +27,9 @@ export const handleLogout = async (req:Request, res:Response) => {
     // Delete refreshToken in db
     foundUser[0].refreshToken = '';
     await db
-        .update(users)
+        .update(user)
         .set({ refreshToken: refreshToken })
-        .where(eq(users.refreshToken, refreshToken));
+        .where(eq(user.refreshToken, refreshToken));
 
     res.clearCookie('refreshToken', { 
         httpOnly: true, 

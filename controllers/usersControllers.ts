@@ -1,13 +1,13 @@
 import { Request, Response } from 'express';
 import { eq } from 'drizzle-orm';
-import { users } from '../db/schema/user';
+import { user } from '../db/schema/user';
 import db from '../db/dbConfig';
 
 // Fetch all users
 const getAllUsers = async (req: Request, res: Response): Promise<Response> => {
     try {
         console.log('Fetching all users');
-        const result = await db.select().from(users);
+        const result = await db.select().from(user);
 
         if (!result || result.length === 0) {
             return res.status(204).json({ message: 'No Test found OR Created.' });
@@ -30,15 +30,14 @@ const getUser = async (req: Request, res: Response): Promise<Response> => {
 
     try {
         console.log(`Fetching Data with Created ID: ${userId}`);
-        const user = await db
+        const foundUser = await db
             .select()
-            .from(users)
-            .where(eq(users.id, userId));
-        if (!user) {
+            .from(user)
+            .where(eq(user.id, userId));
+        if (!foundUser) {
             return res.status(404).json({ message: `No Data found with this ID: ${userId}.` });
         }
-
-        return res.status(200).json(user);
+        return res.status(200).json(foundUser);
     } catch (error) {
         console.error(`Error fetching Data with ID ${userId}:`, error);
         return res.status(500).json({ message: 'Internal server error.' });
@@ -55,7 +54,7 @@ const createUser = async (req: Request, res: Response): Promise<any> => {
 
     try {
         console.log('Creating a new user');
-        const result = await db.insert(users).values({
+        const result = await db.insert(user).values({
             firstname,
             lastname,
             email,
@@ -84,10 +83,10 @@ const updateUser = async (req: Request, res: Response): Promise<Response> => {
 
     try {
         console.log(`Updating user with ID: ${userId}`);
-       const user = await db
+       const foundUser = await db
             .select()
-            .from(users)
-            .where(eq(users.id, userId));
+            .from(user)
+            .where(eq(user.id, userId));
         if (!user) {
             return res.status(404).json({ message: `No user found with ID ${userId}.` });
         }
@@ -101,9 +100,9 @@ const updateUser = async (req: Request, res: Response): Promise<Response> => {
         // Add other fields if necessary
 
         const [updatedUser] = await db
-            .update(users)
+            .update(user)
             .set(updatedFields)
-            .where(eq(users.id, userId));
+            .where(eq(user.id, userId));
 
         return res.status(200).json(updatedUser);
     } catch (error) {
@@ -122,16 +121,16 @@ const deleteUser = async (req: Request, res: Response): Promise<Response> => {
 
     try {
         console.log(`Deleting user with ID: ${userId}`);
-        const user = await db
+        const foundUser = await db
             .select()
-            .from(users)
-            .where(eq(users.id, userId));
+            .from(user)
+            .where(eq(user.id, userId));
 
-        if (!user) {
+        if (!foundUser) {
             return res.status(404).json({ message: `No user found with ID ${userId}.` });
         }
 
-        await db.delete(users).where(eq(users.id, userId));
+        await db.delete(user).where(eq(user.id, userId));
 
         return res.status(200).json({ message: `User with ID ${userId} has been deleted.` });
     } catch (error) {

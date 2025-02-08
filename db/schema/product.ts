@@ -1,5 +1,5 @@
 import { int, varchar, decimal, json, mysqlTable, text } from 'drizzle-orm/mysql-core';
-
+import { seller } from './seller';
 export const product = mysqlTable('cars', {
     id: int('id').primaryKey().autoincrement(),
     make: varchar('make', { length: 255 }).notNull(),
@@ -14,7 +14,5 @@ export const product = mysqlTable('cars', {
     condition: varchar('car_condition', { length: 50 }).notNull(),
     location: varchar('view_location', { length: 255 }).notNull(),
     price: text('price').notNull(),
-    seller_id: int('seller_id').notNull(),
-    //seller_id: int('seller_id').notNull().references('sellers.id'),
-    //image_url: text('image_url').notNull(),
+    seller_id: int('seller_id').notNull().references(()=>seller.userId)
 });

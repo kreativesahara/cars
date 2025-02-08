@@ -1,7 +1,7 @@
 import db from '../db/dbConfig'
 import bcrypt from 'bcrypt';
 import { Request, Response } from 'express';
-import { users } from '../db/schema/user'; // Adjust the import path as necessary
+import { user } from '../db/schema/user'; // Adjust the import path as necessary
 import { eq } from 'drizzle-orm';import jwt from 'jsonwebtoken';
 import { ROLES_LIST } from '../config/roles_list';
 
@@ -19,7 +19,7 @@ const registerUser = async (req: Request, res: Response): Promise<Response> => {
         const hashedPassword = await bcrypt.hash(password, saltRounds);
         // Insert the new user into the database
         const [newUser] = await db
-            .insert(users)
+            .insert(user)
         .values({
             firstname,
             lastname,
@@ -54,7 +54,7 @@ const registerUser = async (req: Request, res: Response): Promise<Response> => {
     const { email, password} = req.body;
     if (!email || !password) return res.status(400).json({ 'message': 'Email and password are required.' });
 
-    const foundUser = await db.select().from(users).where(eq(users.email, email)).limit(1);
+    const foundUser = await db.select().from(user).where(eq(user.email, email)).limit(1);
     //console.log('foundUser:', foundUser);
     if (!foundUser) return res.sendStatus(401); //Unauthorized
     // evaluate password
@@ -91,9 +91,9 @@ const registerUser = async (req: Request, res: Response): Promise<Response> => {
         );
         //Save current user with their refresh token
         await db
-            .update(users)
+            .update(user)
             .set({ refreshToken: refreshToken })
-            .where(eq(users.email, email));
+            .where(eq(user.email, email));
 
         //Creates Secure Cookie with access token
         res.cookie('authorization', accessToken, { 

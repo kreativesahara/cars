@@ -1,4 +1,4 @@
-import { users } from '../db/schema/user';
+import { user } from '../db/schema/user';
 import db from '../db/dbConfig';
 import { eq } from 'drizzle-orm';
 import jwt from 'jsonwebtoken';
@@ -19,8 +19,8 @@ export const handleRefreshToken = async (req: Request, res: Response) => {
 
         // Fetch user with matching refresh token
         const foundUser = await db.select()
-            .from(users)
-            .where(eq(users.refreshToken, refreshToken))
+            .from(user)
+            .where(eq(user.refreshToken, refreshToken))
             .limit(1);
 
         if (foundUser.length === 0) {

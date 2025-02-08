@@ -1,6 +1,6 @@
 import { int, varchar, datetime, mysqlTable } from 'drizzle-orm/mysql-core';
 
-export const users = mysqlTable('users', {
+export const user = mysqlTable('users', {
     id: int('id').primaryKey().autoincrement(),
     firstname: varchar('first_name', { length: 255 }),
     lastname: varchar('last_name', { length: 255 }),

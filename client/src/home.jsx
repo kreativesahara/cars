@@ -8,7 +8,7 @@ function home() {
     <Layout>
         <Header />
         <Search />
-        <Newsletter />
+        {/* <Newsletter /> */}
     </Layout>      
   )
 }
