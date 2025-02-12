@@ -48,9 +48,9 @@ app.use("/test", requireAuth, testRoute)
 //API Routes
 app.use("/products", requireAuth, productsRoute)
 app.use("/testproduct", requireAuth, testProductRoute)
-app.use("/sellers", requireAuth,sellersRoute)
+app.use("/sellers", requireAuth, sellersRoute)
 
-app.use('/refresh', requireAuth,refreshRoute)
+app.use('/refresh', refreshRoute)
 app.use('/logout', requireAuth, logoutRoute)
 
 // Start the server

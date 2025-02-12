@@ -1,17 +1,16 @@
 import Layout from "./components/Layout";
 import useAuth from "./hooks/useAuth";
 import BtnUpload from "./components/btnUpload";
-import BtnBeSeller from "./components/btnBeSeller";
 import { useProductContext } from "./context/ProductProvider";
-//import { useSellerContext } from "./context/SellerProvider";
+import { useSellerContext } from "./context/SellerProvider";
 import { useState, useEffect } from "react";
 
 
 function App() {
   const {auth } = useAuth();
   const { products } = useProductContext();
-  //const { sellers } = useSellerContext();
-  //const [user, setUser] = useState(null);
+  const { sellers } = useSellerContext();
+  const [user, setUser] = useState(null);
   const [product, setProduct] = useState(null);
   const  SellerId = Number(auth?.id);
 
@@ -63,8 +62,8 @@ function App() {
                     <li className="md:flex p-2 rounded-md bg-slate-200 m-4 gap-4" key={vehicle.id}>
                       <img 
                         src={vehicle.images[0]}
-                        alt={`Missing Image for Vehicle ${vehicle.id}`}
-                        className='md:w-[100px] md:h-[100px] h-[200px] font-serif text-xs place-content-center rounded-md object-cover'                      
+                        alt='Uploaded Product'
+                        className='md:w-[100px] md:h-[100px] h-[200px] rounded-md object-cover'                      
                       />
                       <div className="w-10/12 mx-auto pt-4">
                         <p className='text-sm text-neutral-950 font-medium'>Make : {vehicle.make}</p>
@@ -82,13 +81,6 @@ function App() {
                   </ul>)}
                 </div>
               </div>}
-              {auth?.roles === 1 && 
-              <div className='md:p-4 bg-neutral-50 rounded-md flex flex-col gap-4'>
-                <div className="flex justify-between items-center">
-                  <h2 className='md:text-lg font-medium text-neutral-950'>Get Started</h2>
-                  <BtnBeSeller />
-                </div>
-                </div>}
             </section>
           </div>
         </div>
