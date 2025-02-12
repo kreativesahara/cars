@@ -11,6 +11,8 @@ import ItemPage from './itemPage.jsx';
 import AddProduct from './addProduct.jsx';
 import Pricing from './pricing.jsx';
 import Support from './support.jsx';
+import BecomeSeller from './becomeSeller.jsx';
+import UpdateProduct from './updateProduct.jsx';
 
 import PersistLogin from './controllers/PersistLogin';
 import RequireAuth from './controllers/RequireAuth';
@@ -48,22 +50,32 @@ const AppRoutes = () => (
 
       {/* Nested Routes for Authorization */}
       <Route
-        element={<RequireAuth allowedRoles={[ ROLES.Seller, ROLES.Modarator, ROLES.Admin]} />}
+        element={<RequireAuth allowedRoles={[ROLES.Seller, ROLES.Modarator, ROLES.Admin]} />}
       >
-             <Route path="dashboard" element={<App />} />
-      </Route> 
+        <Route path="dashboard" element={<App />} />
+      </Route>
       <Route
         element={<RequireAuth allowedRoles={[ROLES.Seller, ROLES.Modarator, ROLES.Admin]} />}
       >
         <Route path="upload" element={<AddProduct />} />
-      </Route> 
+      </Route>
       <Route
-      element={<RequireAuth allowedRoles={[ROLES.Visitor, ROLES.Member, ROLES.Seller, ROLES.Modarator, ROLES.Admin]} />}
+        element={<RequireAuth allowedRoles={[ROLES.Visitor, ROLES.Member, ROLES.Seller, ROLES.Modarator, ROLES.Admin]} />}
       >
         <Route path="itempage/:productId" element={<ItemPage />} />
-    </Route> 
+      </Route>
       <Route
-        element={<RequireAuth allowedRoles={[ ROLES.Member, ROLES.Seller, ROLES.Modarator, ROLES.Admin]} />}
+        element={<RequireAuth allowedRoles={[ROLES.Visitor, ROLES.Member, ROLES.Seller, ROLES.Modarator, ROLES.Admin]} />}
+      >
+        <Route path="updateproduct" element={<UpdateProduct />} />
+      </Route>
+      <Route
+        element={<RequireAuth allowedRoles={[ROLES.Visitor, ROLES.Member, ROLES.Seller, ROLES.Modarator, ROLES.Admin]} />}
+      >
+        <Route path="upgrade" element={<BecomeSeller />} />
+      </Route>
+      <Route
+        element={<RequireAuth allowedRoles={[ROLES.Member, ROLES.Seller, ROLES.Modarator, ROLES.Admin]} />}
       >
         <Route path="product" element={<Product />} />
       </Route>
@@ -76,9 +88,9 @@ ReactDOM.createRoot(document.getElementById('root')).render(
     <AuthProvider>
       <ProductProvider>
         <SellerProvider>
-        <Router>
-          <AppRoutes />
-        </Router>
+          <Router>
+            <AppRoutes />
+          </Router>
         </SellerProvider >
       </ProductProvider>
     </AuthProvider>
