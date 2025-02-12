@@ -4,6 +4,7 @@ import BtnUpload from "./components/btnUpload";
 import { useProductContext } from "./context/ProductProvider";
 import { useSellerContext } from "./context/SellerProvider";
 import { useState, useEffect } from "react";
+import BtnBeSeller from "./components/btnBeSeller";
 
 
 function App() {
@@ -13,6 +14,9 @@ function App() {
   const [user, setUser] = useState(null);
   const [product, setProduct] = useState(null);
   const  SellerId = Number(auth?.id);
+  //const { sellers } = useSellerContext();
+  //const [user, setUser] = useState(null);
+
 
   console.log('User ID:', SellerId);
   console.log('products context:', products);
@@ -80,6 +84,13 @@ function App() {
                   )}
                   </ul>)}
                 </div>
+                </div>}
+              {auth?.roles === 1 &&
+                <div className='md:p-4 bg-neutral-50 rounded-md flex flex-col gap-4'>
+                  <div className="flex justify-between items-center">
+                    <h2 className='md:text-lg font-medium text-neutral-950'>Get Started</h2>
+                    <BtnBeSeller />
+                  </div>
               </div>}
             </section>
           </div>

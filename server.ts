@@ -50,7 +50,8 @@ app.use("/products", requireAuth, productsRoute)
 app.use("/testproduct", requireAuth, testProductRoute)
 app.use("/sellers", requireAuth, sellersRoute)
 
-app.use('/refresh', refreshRoute)
+app.use('/refresh', requireAuth, refreshRoute)
+
 app.use('/logout', requireAuth, logoutRoute)
 
 // Start the server
