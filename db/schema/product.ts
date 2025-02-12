@@ -14,5 +14,6 @@ export const product = mysqlTable('cars', {
     condition: varchar('car_condition', { length: 50 }).notNull(),
     location: varchar('view_location', { length: 255 }).notNull(),
     price: text('price').notNull(),
-    seller_id: int('seller_id').notNull().references(()=>seller.userId)
+    seller_id: int('seller_id').notNull().references
+    (()=>seller.userId)
 });

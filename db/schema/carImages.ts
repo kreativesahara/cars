@@ -3,7 +3,8 @@ import { product } from './product';
 
 export const carImages = mysqlTable('car_images', {
     id: int('id').primaryKey().autoincrement(),
-    car_id: int('car_id').notNull().references(() => product.id),
+    car_id: int('car_id').notNull().references
+    (() => product.id),
     image_url: varchar('image_url',{length:255}).notNull(),
     created_at: timestamp('created_at').defaultNow().notNull(),
 });
