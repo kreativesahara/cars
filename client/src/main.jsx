@@ -69,7 +69,7 @@ const AppRoutes = () => (
       <Route 
       element={<RequireAuth allowedRoles={[ROLES.Visitor, ROLES.Member, ROLES.Seller, ROLES.Modarator, ROLES.Admin]} />}
       >
-      <Route path="updateproduct" element={<UpdateProduct />} />
+      <Route path="app/:productId" element={<UpdateProduct />} />
     </Route>
     <Route
       element={<RequireAuth allowedRoles={[ROLES.Visitor, ROLES.Member, ROLES.Seller, ROLES.Modarator, ROLES.Admin]} />}
