@@ -1,19 +1,21 @@
+import { useState, useEffect } from "react";
+import { useNavigate, Link } from 'react-router-dom'
 import Layout from "./components/Layout";
 import useAuth from "./hooks/useAuth";
 import BtnUpload from "./components/btnUpload";
 import { useProductContext } from "./context/ProductProvider";
 import { useSellerContext } from "./context/SellerProvider";
-import { useState, useEffect } from "react";
 import BtnBeSeller from "./components/btnBeSeller";
 
 
 function App() {
-  const {auth } = useAuth();
+  const { auth } = useAuth();
+  const navigate = useNavigate()
   const { products } = useProductContext();
   const { sellers } = useSellerContext();
   const [user, setUser] = useState(null);
   const [product, setProduct] = useState(null);
-  const  SellerId = Number(auth?.id);
+  const SellerId = Number(auth?.id);
   //const { sellers } = useSellerContext();
   //const [user, setUser] = useState(null);
 
@@ -21,16 +23,20 @@ function App() {
   console.log('User ID:', SellerId);
   console.log('products context:', products);
 
-  useEffect(()=>{
+  useEffect(() => {
     const findProducts = products.filter((p) => p.seller_id === Number(SellerId));
     if (findProducts) {
       setProduct(findProducts);
-    }else{
+    } else {
       console.error('no user found');
     }
-  },[products, SellerId])
+  }, [products, SellerId])
 
-  console.log('found products',product)
+  console.log('found products', product)
+
+  function handleProductEdit() {
+    navigate('/dashboard', { replace: true })
+  }
 
   // Render content based on fetched bills
   return (
@@ -53,37 +59,38 @@ function App() {
             </div>
 
             <section className='flex flex-col gap-4'>
-           
-              {auth?.roles === 3 && 
-              <div className='md:p-4 bg-neutral-50 rounded-md flex flex-col gap-4'>
-                <div className="flex justify-between items-center">
-                  <h2 className='md:text-lg font-medium text-neutral-950'>Uploaded Product</h2>
-                  <BtnUpload />
-                </div>
-                <div>
-                  {!product? <p className='text-sm text-neutral-600'>No Product Uploaded</p>: 
-                      (<ul >{product.map((vehicle)=>
-                    <li className="md:flex p-2 rounded-md bg-slate-200 m-4 gap-4" key={vehicle.id}>
-                      <img 
-                        src={vehicle.images[0]}
-                        alt='Uploaded Product'
-                        className='md:w-[100px] md:h-[100px] h-[200px] rounded-md object-cover'                      
-                      />
-                      <div className="w-10/12 mx-auto pt-4">
-                        <p className='text-sm text-neutral-950 font-medium'>Make : {vehicle.make}</p>
+
+              {auth?.roles === 3 &&
+                <div className='md:p-4 bg-neutral-50 rounded-md flex flex-col gap-4'>
+                  <div className="flex justify-between items-center">
+                    <h2 className='md:text-lg font-medium text-neutral-950'>Uploaded Product</h2>
+                    <BtnUpload />
+                  </div>
+                  <div>
+                    {!product ? <p className='text-sm text-neutral-600'>No Product Uploaded</p> :
+                      (<ul >{product.map((vehicle) =>
+                        <Link key={vehicle.id} className="md:flex p-2 rounded-md bg-slate-200 m-4 gap-4" to={`/app/${vehicle.id}`}>
+                          <img
+                            src={vehicle.images[0]}
+                            alt='Uploaded Product'
+                            className='md:w-[100px] md:h-[100px] h-[200px] rounded-md object-cover'
+                          />
+                          <div className="w-10/12 mx-auto pt-4">
+                            <p className='text-sm text-neutral-950 font-medium'>Make : {vehicle.make}</p>
                             <p className='text-sm text-neutral-600'>Model : {vehicle.model}</p>
                             <p className='text-sm text-neutral-600'>Year : {vehicle.year}</p>
                             <p className='text-sm text-neutral-600'>Price : {vehicle.price}</p>
 
-                      </div> 
-                      <div className="py-4 flex flex-col" >
-                        <button className="bg-black text-white px-8 rounded-sm py-1.5 mb-2">Edit</button> 
-                        <button className="bg-black text-white px-6 rounded-sm py-1.5">Delete</button>
-                      </div>                     
-                    </li>
-                  )}
-                  </ul>)}
-                </div>
+                          </div>
+                          <div className="py-4 flex flex-col" >
+                            <button className="bg-black text-white px-8 rounded-sm py-1.5 mb-2" onClick={handleProductEdit}>Edit</button>
+                            <button className="bg-black text-white px-6 rounded-sm py-1.5">Delete</button>
+                          </div>
+                        </Link>
+
+                      )}
+                      </ul>)}
+                  </div>
                 </div>}
               {auth?.roles === 1 &&
                 <div className='md:p-4 bg-neutral-50 rounded-md flex flex-col gap-4'>
@@ -91,7 +98,7 @@ function App() {
                     <h2 className='md:text-lg font-medium text-neutral-950'>Get Started</h2>
                     <BtnBeSeller />
                   </div>
-              </div>}
+                </div>}
             </section>
           </div>
         </div>
