@@ -11,6 +11,9 @@ import ItemPage from './itemPage.jsx';
 import AddProduct from './addProduct.jsx';
 import Pricing from './pricing.jsx';
 import Support from './support.jsx';
+import BecomeSeller from './becomeSeller.jsx';
+import UpdateProduct from './updateProduct.jsx';
+
 
 import PersistLogin from './controllers/PersistLogin';
 import RequireAuth from './controllers/RequireAuth';
@@ -45,6 +48,7 @@ const AppRoutes = () => (
       <Route path="home" element={< Home />} />
       <Route path="pricing" element={<Pricing />} />
       <Route path="support" element={<Support />} />
+      
 
       {/* Nested Routes for Authorization */}
       <Route
@@ -62,7 +66,17 @@ const AppRoutes = () => (
       >
         <Route path="itempage/:productId" element={<ItemPage />} />
     </Route> 
-      <Route
+      <Route 
+      element={<RequireAuth allowedRoles={[ROLES.Visitor, ROLES.Member, ROLES.Seller, ROLES.Modarator, ROLES.Admin]} />}
+      >
+      <Route path="updateproduct" element={<UpdateProduct />} />
+    </Route>
+    <Route
+      element={<RequireAuth allowedRoles={[ROLES.Visitor, ROLES.Member, ROLES.Seller, ROLES.Modarator, ROLES.Admin]} />}
+    >
+      <Route path="upgrade" element={<BecomeSeller />} />
+    </Route>
+    <Route
         element={<RequireAuth allowedRoles={[ ROLES.Member, ROLES.Seller, ROLES.Modarator, ROLES.Admin]} />}
       >
         <Route path="product" element={<Product />} />

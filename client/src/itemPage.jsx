@@ -60,7 +60,7 @@ const Itempage = () => {
             </Layout>
         );
     }
-
+    
     return (
         <Layout>
             <div className='flex flex-row'></div>
@@ -137,15 +137,15 @@ const Itempage = () => {
                 </div>
 
                 <div className='lg:w-5/12  mx-auto flex flex-col gap-3'>
-                    <button className='bg-blue-500 hover:bg-blue-800 text-white w-100 py-2 tracking-widest font-black'>Call Seller</button>
-                    <button className='bg-green-500 hover:bg-green-800 text-white w-100 py-2 tracking-wider font-bold'>Message Seller</button>
+                    <a href={`tel:${seller.contact}`} className='hover:bg-[#3DC2EC] transition-colors duration-100 bg-black p-2 rounded-md text-center text-white w-100 py-2 tracking-widest font-black'>Call Seller</a>
+                    {/* <button className='bg-green-500 hover:bg-green-800 text-white w-100 py-2 tracking-wider font-bold'>Message Seller</button> */}
                     <div className='border shadow-lg h-min p-4'>
                         <h3 className='text-sm font-bold uppercase'>Seller Details</h3>
                         <div className='flex p-2 pt-8'>
                             <img className='w-20 h-20 rounded-full object-cover' src='https://images.unsplash.com/photo-1494790108377-be9c29b29330?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=720&q=60' alt='' />
                             <span className='ml-4 my-auto'>
                                 <p className='uppercase font-semibold'>{seller.username}</p>
-                                <p className='font-semibold'>Seller Type : <span className='font-bold'>{seller.accountType}</span></p>
+                                <p className='font-semibold'>Seller Type : <span className='font-bold text-emerald-600'>{seller.accountType}</span></p>
                                 {/* <p className='tracking-widest'>{seller.contact || 'Seller not provided'}</p> */}
                             </span>
                         </div>

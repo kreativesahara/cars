@@ -1,6 +1,6 @@
 import {useNavigate} from 'react-router-dom'
 import useLogout from '../hooks/useLogout'
-const Home = () => {
+const btnLogout = () => {
   const navigate = useNavigate()
   const logout = useLogout()
   const signOut = async() => {
@@ -12,4 +12,4 @@ const Home = () => {
   )
 }
 
-export default Home
+export default btnLogout
