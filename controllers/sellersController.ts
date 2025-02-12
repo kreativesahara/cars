@@ -22,46 +22,49 @@ const getAllSellers = async (req: Request, res: Response): Promise<Response> => 
 };
 
 // Fetch a single user by ID
-const getUser = async (req: Request, res: Response): Promise<Response> => {
-    const userId: any = req.params.id;
+const getSeller = async (req: Request, res: Response): Promise<Response> => {
+    const sellerId: any = req.params.id;
 
-    if (!userId) {
-        return res.status(400).json({ message: 'An ID is required to fetch some data.' });
+    if (!sellerId) {
+        return res.status(400).json({ message: 'An ID is required to fetch Seller data.' });
     }
 
     try {
-        console.log(`Fetching Data with Created ID: ${userId}`);
-        const singleUser = await db
+        console.log(`Fetching Data with Created ID: ${sellerId}`);
+        const foundSeller = await db
             .select()
-            .from(user)
-            .where(eq(user.id, userId));
-        if (!singleUser) {
-            return res.status(404).json({ message: `No Data found with this ID: ${userId}.` });
+            .from(seller)
+            .where(eq(seller.userId, sellerId));
+        if (!foundSeller) {
+            return res.status(404).json({ message: `No Seller found with this ID: ${sellerId}.` });
         }
 
-        return res.status(200).json(singleUser);
+        return res.status(200).json(foundSeller);
     } catch (error) {
-        console.error(`Error fetching Data with ID ${userId}:`, error);
+        console.error(`Error fetching Data with ID ${sellerId}:`, error);
         return res.status(500).json({ message: 'Internal server error.' });
     }
 };
 
 // Create a new user
-const createUser = async (req: Request, res: Response): Promise<any> => {
-    const { firstname, lastname, email, password } = req.body;
-    console.log(req.body);
-    if (!firstname || !lastname || !email || !password) {
+const createSeller = async (req: Request, res: Response): Promise<any> => {
+    const { username, accountType, contact, place ,hasFinancing, acceptsTradeIn } = req.body;
+    const setId = req.body.userId;
+    console.log('seller data', req.body);
+    if (!username || !accountType || !contact || !hasFinancing || !acceptsTradeIn) {
         return res.status(400).json({ message: 'Firstname, lastname, email, and password are required.' });
     }
 
     try {
         console.log('Creating a new user');
-        const result = await db.insert(user).values({
-            firstname,
-            lastname,
-            email,
-            password,
-            roles: 0,
+        const result = await db.insert(seller).values({
+            username, 
+            accountType, 
+            contact, 
+            hasFinancing,
+            place, 
+            acceptsTradeIn,
+            userId: setId
         });
         return res.status(201).json(result);
     } catch (error) {
@@ -71,80 +74,83 @@ const createUser = async (req: Request, res: Response): Promise<any> => {
 };
 
 // Update an existing user
-const updateUser = async (req: Request, res: Response): Promise<Response> => {
-    const userId:any = req.body.id;
-    const { firstname, lastname, email, password } = req.body;
+const updateSeller = async (req: Request, res: Response): Promise<Response> => {
+    const sellerId= req.body.userId;
+    console.log('Seller Id', sellerId);
+    const { username, accountType, contact, hasFinancing, acceptsTradeIn } = req.body;
 
-    if (!userId) {
-        return res.status(400).json({ message: 'User ID is required.' });
+    if (!sellerId) {
+        return res.status(400).json({ message: 'Seller ID is required.' });
     }
 
-    if (!firstname && !lastname && !email && !password) {
-        return res.status(400).json({ message: 'At least one field (firstname, lastname, email, password) is required to update.' });
+    if (!username && !accountType && !contact && !hasFinancing && !acceptsTradeIn ) {
+        return res.status(400).json({ message: 'At least one field (username, accountType, contact, has Financing, accepts Trade In ) is required to update.' });
     }
 
     try {
-        console.log(`Updating user with ID: ${userId}`);
-       const foundUser = await db
+        console.log(`Updating Seller with ID: ${sellerId}`);
+       const foundSeller = await db
             .select()
-            .from(user)
-            .where(eq(user.id, userId));
-        if (!foundUser) {
-            return res.status(404).json({ message: `No user found with ID ${userId}.` });
+            .from(seller)
+            .where(eq(seller.userId, sellerId));
+        if (!foundSeller) {
+            return res.status(404).json({ message: `No Seller found with ID ${sellerId}.` });
         }
 
         const updatedFields: any = {};
 
-        if (firstname) updatedFields.firstname = firstname;
-        if (lastname) updatedFields.lastname = lastname;
-        if (email) updatedFields.email = email;
-        if (password) updatedFields.password = password;
+        if (username) updatedFields.username = username;
+        if (accountType) updatedFields.accountType = accountType;
+        if (contact) updatedFields.contact = contact;
+        if (hasFinancing) updatedFields.hasFinancing = hasFinancing;
+        if (acceptsTradeIn) updatedFields.acceptsTradeIn = acceptsTradeIn;
+
         // Add other fields if necessary
 
-        const [updatedUser] = await db
-            .update(user)
+        const [updatedSeller] = await db
+            .update(seller)
             .set(updatedFields)
-            .where(eq(user.id, userId));
+            .where(eq(seller.userId, sellerId));
 
-        return res.status(200).json(updatedUser);
+        return res.status(200).json(updatedSeller);
     } catch (error) {
-        console.error(`Error updating user with ID ${userId}:`, error);        
+        console.error(`Error updating Seller with ID ${sellerId}:`, error);        
         return res.status(500).json({ message: 'Internal server error.' });
     }
 };
 
 // Delete a user
-const deleteUser = async (req: Request, res: Response): Promise<Response> => {
-    const userId: any = req.body.id;
-
-    if (!userId) {
-        return res.status(400).json({ message: 'User ID is required.' });
+const deleteSeller = async (req: Request, res: Response): Promise<Response> => {
+    const sellerId: any = req.body.userId;
+    console.log('Seller Id', sellerId);
+    if (!sellerId) {
+        return res.status(400).json({ message: 'Seller ID is required.' });
     }
 
     try {
-        console.log(`Deleting user with ID: ${userId}`);
-        const foundUser = await db
+        console.log(`Deleting Seller with ID: ${sellerId}`);
+        const foundSeller = await db
             .select()
-            .from(user)
-            .where(eq(user.id, userId));
+            .from(seller)
+            .where(eq(seller.userId, sellerId));
 
-        if (!user) {
-            return res.status(404).json({ message: `No user found with ID ${userId}.` });
+        if (!foundSeller) {
+            return res.status(404).json({ message: `No Seller found with ID ${sellerId}.` });
         }
 
-        await db.delete(user).where(eq(user.id, userId));
+        await db.delete(seller).where(eq(seller.userId, sellerId));
 
-        return res.status(200).json({ message: `User with ID ${userId} has been deleted.` });
+        return res.status(200).json({ message: `Seller with ID ${sellerId} has been deleted.` });
     } catch (error) {
-        console.error(`Error deleting user with ID ${userId}:`, error);
+        console.error(`Error deleting seller with ID ${sellerId}:`, error);
         return res.status(500).json({ message: 'Internal server error.' });
     }
 };
 
 export {
     getAllSellers,
-    getUser,
-    createUser,
-    updateUser,
-    deleteUser
+    getSeller,
+    createSeller,
+    updateSeller,
+    deleteSeller
 };
