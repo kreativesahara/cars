@@ -131,61 +131,6 @@ export const getProduct = async (req: Request, res: Response): Promise<Response>
     }
 };
 
-
-// Create product with images
-// export const createProduct = async (req: any, res: any): Promise<any> => {
-//     upload.array('images')(req, res, async (err: any) => {
-//         if (err) {
-//             console.log('Error from client:', err);
-//             return res.status(500).json({ message: 'Image upload error.' });
-//         }
-//         const { make, model, year, engine_capacity, fuel_type, transmission, driveSystem, mileage, features, condition, location, price, seller_id } = req.body;
-//         const images: any = req.files;
-
-//         // Validate required fields
-//         if (!make || !model || !year || !engine_capacity || !fuel_type || !transmission || !driveSystem || !mileage || !features || !condition || !location || !price) {
-//             return res.status(400).json({ message: 'All fields are required.' });
-//         }
-//         try {
-//             // Handle image uploads and prepare data for bulk insertion
-//             // Construct the image URL (adjust based on how you serve static files)
-//             let imageUrl = `${req.protocol}://${req.get('host')}/${images[0].path}`;
-//             // Replace backward slashes with forward slashes in the URL for compatibility
-//             imageUrl = imageUrl.replace(/\\/g, '/');
-//             const valuesToInsert = images.map((img: any) => ({
-//                 make: make,
-//                 model: model,
-//                 year: year,
-//                 engine_capacity: engine_capacity,
-//                 fuel_type: fuel_type,
-//                 transmission: transmission,
-//                 driveSystem: driveSystem,
-//                 mileage: mileage,
-//                 features: features,
-//                 condition: condition,
-//                 location: location,
-//                 price: price,
-//                 seller_id: seller_id,
-//                 image_url: imageUrl // Save the image URL/path
-//             }));
-
-//             // Insert all values at once
-//             const result = await db
-//                 .insert(product)
-//                 .values(valuesToInsert);
-//             console.log('Inserted product IDs:', result);
-
-//             // Check if the products were inserted successfully
-//             if (!result) {
-//                 return res.status(500).json({ message: 'Failed to insert products.' });
-//             }
-//             return res.status(201).json({ message: 'Products created successfully.', result });
-//         } catch (err) {
-//             return res.status(500).json({ message: 'Internal server error.' });
-//         }
-//     });
-// };
-
 export const createProduct = async (req: any, res: any): Promise<any> => {
     upload.array('images')(req, res, async (err: any) => {
         if (err) {
@@ -264,66 +209,67 @@ export const createProduct = async (req: any, res: any): Promise<any> => {
 
 
 
-// // Update product
-// export const updateUpload = async (req: Request, res: Response): Promise<Response> => {
-//     const productId = req.body.id;
-//     const { make, model, year, engine_capacity, fuel_type, transmission, driveSystem, mileage, features, condition, location, price, seller_id } = req.body;
+// Update product
+export const updateUpload = async (req: Request, res: Response): Promise<Response> => {
+    const productId = req.body.id;
+    console.log('ProductId:', productId);
+    const { make, model, year, engine_capacity, fuel_type, transmission, driveSystem, mileage, features, condition, location, price, seller_id } = req.body;
 
-//     if (!productId) {
-//         return res.status(400).json({ message: 'Product ID is required.' });
-//     }
+    if (!productId) {
+        return res.status(400).json({ message: 'Product ID is required.' });
+    }
 
-//     const updatedFields: any = {};
+    const updatedFields: any = {};
 
-//     if (make) updatedFields.make = make;
-//     if (model) updatedFields.model = model;
-//     if (year) updatedFields.year = year;
-//     if (engine_capacity) updatedFields.engine_capacity = engine_capacity;
-//     if (fuel_type) updatedFields.fuel_type = fuel_type;
-//     if (transmission) updatedFields.transmission = transmission;
-//     if (driveSystem) updatedFields.driveSystem = driveSystem;
-//     if (mileage) updatedFields.mileage = mileage;
-//     if (features) updatedFields.features = features;
-//     if (condition) updatedFields.condition = condition;
-//     if (location) updatedFields.location = location;
-//     if (price) updatedFields.price = price;
-//     if (seller_id) updatedFields.seller_id = seller_id;
+    if (make) updatedFields.make = make;
+    if (model) updatedFields.model = model;
+    if (year) updatedFields.year = year;
+    if (engine_capacity) updatedFields.engine_capacity = engine_capacity;
+    if (fuel_type) updatedFields.fuel_type = fuel_type;
+    if (transmission) updatedFields.transmission = transmission;
+    if (driveSystem) updatedFields.driveSystem = driveSystem;
+    if (mileage) updatedFields.mileage = mileage;
+    if (features) updatedFields.features = features;
+    if (condition) updatedFields.condition = condition;
+    if (location) updatedFields.location = location;
+    if (price) updatedFields.price = price;
+    if (seller_id) updatedFields.seller_id = seller_id;
 
-//     try {
-//         console.log(`Updating Product with ID: ${productId}`);
-//         const vehicle = await db.select().from(product).where(eq(product.id, productId));
-//         if (!vehicle) {
-//             return res.status(404).json({ message: `No Product found with ID ${productId}.` });
-//         }
+    try {
+        console.log(`Updating Product with ID: ${productId}`);
+        const vehicle = await db.select().from(product).where(eq(product.id, productId));
+        if (!vehicle) {
+            return res.status(404).json({ message: `No Product found with ID ${productId}.` });
+        }
 
-//         const [updatedProduct] = await db.update(product).set(updatedFields).where(eq(product.id, productId));
-//         return res.status(200).json(updatedProduct);
-//     } catch (error) {
-//         console.error(`Error updating Product with ID ${productId}:`, error);
-//         return res.status(500).json({ message: 'Internal server error.' });
-//     }
-// };
+        const [updatedProduct] = await db.update(product).set(updatedFields).where(eq(product.id, productId));
+        return res.status(200).json(updatedProduct);
+    } catch (error) {
+        console.error(`Error updating Product with ID ${productId}:`, error);
+        return res.status(500).json({ message: 'Internal server error.' });
+    }
+};
 
-// // Delete product
-// export const deleteUpload = async (req: Request, res: Response): Promise<Response> => {
-//     const productId = req.body.id;
+// Delete product
+export const deleteUpload = async (req: Request, res: Response): Promise<Response> => {
+    const productId = req.body.id;
 
-//     if (!productId) {
-//         return res.status(400).json({ message: 'Product ID is required.' });
-//     }
+    if (!productId) {
+        return res.status(400).json({ message: 'Product ID is required.' });
+    }
 
-//     try {
-//         console.log(`Deleting Product with ID: ${productId}`);
-//         const vehicle = await db.select().from(product).where(eq(product.id, productId));
+    try {
+        console.log(`Deleting Product with ID: ${productId}`);
+        const vehicle = await db.select().from(product).where(eq(product.id, productId));
 
-//         if (!vehicle) {
-//             return res.status(404).json({ message: `No Product found with ID ${productId}.` });
-//         }
+        if (!vehicle) {
+            return res.status(404).json({ message: `No Product found with ID ${productId}.` });
+        }
 
-//         await db.delete(product).where(eq(product.id, productId));
-//         return res.status(200).json({ message: `Product with ID ${productId} has been deleted.` });
-//     } catch (error) {
-//         console.error(`Error deleting Product with ID ${productId}:`, error);
-//         return res.status(500).json({ message: 'Internal server error.' });
-//     }
-// };
+        await db.delete(product).where(eq(product.id, productId));
+        return res.status(200).json({ message: `Product with ID ${productId} has been deleted.` });
+    } catch (error) {
+        console.error(`Error deleting Product with ID ${productId}:`, error);
+        return res.status(500).json({ message: 'Internal server error.' });
+    }
+};
