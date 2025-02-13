@@ -49,7 +49,7 @@ const productPage = () => {
 
                                 <div className="flex gap-1.5 py-2">
                                     <span className="font-bold ">KSH</span>
-                                    <span className=" font-bold">{product?.price}</span>
+                                                <span className=" font-bold">{product?.price ? Number(product.price).toLocaleString() : ""}</span>
                                 </div>
                             </div>
                         </div>
