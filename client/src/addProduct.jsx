@@ -27,6 +27,7 @@ function addProduct() {
   const [preview, setPreview] = useState([]);
 
   const handleChange = (e) => {
+    e.preventDefault();
     const { name, value } = e.target;
     if (name === "mileage" || name === "price") {
       // Remove any non-numeric characters except for digits
