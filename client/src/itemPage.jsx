@@ -63,12 +63,11 @@ const Itempage = () => {
     
     return (
         <Layout>
-            <div className='flex flex-row'></div>
-            <div className=' md:flex-row lg:flex py-6'>
-                <div className="lg:w-6/12 flex-col border-2 px-2 py-2">
+            <div className='  lg:flex py-6'>
+                <div className="lg:w-6/12  border-2 px-2 py-2">
                     <div className="h-min cursor-pointer">
                         <img
-                            className="md:px-2 w-full h-96 sm:object-cover"
+                            className="md:px-2 w-max md:h-[500px] md:object-cover"
                             src={product.images[0]}
                             alt={product.make}
                         />
@@ -77,22 +76,22 @@ const Itempage = () => {
                         {product.images.map((img, index) => (
                             <img
                                 key={index}
-                                className="border-2 rounded hover:border-blue-600  object-cover"
+                                className="border-2 rounded hover:border-blue-600 object-cover"
                                 src={img}
                                 alt={`Thumbnail ${index + 1}`}
                             />
                         ))}
                     </div>
                     <div className=' p-3'>
-                        <div className='flex justify-between'>
+                        <div className='flex justify-between '>
                             <span className='flex-col px-2'>
-                                <h3 className='font-bold uppercase text-2xl'>{product.make}</h3>
-                                <p className='tracking-widest text-lg'>{product.model}</p>
+                                <h3 className='font-bold uppercase md:text-2xl'>{product.make}</h3>
+                                <p className='tracking-widest md:text-lg'>{product.model}</p>
                             </span>
-                            <strong className='font-bold tracking-widest text-2xl '>KSH {product?.price ? Number(product.price).toLocaleString() : ""}</strong>
+                            <strong className='font-bold tracking-widest md:text-2xl '>KSH {product?.price ? Number(product.price).toLocaleString() : ""}</strong>
                         </div>
                         <hr />
-                        <ul className='p-1 grid grid-cols-2 font-semibold justify-between '>
+                        <ul className='p-1 md:grid grid-cols-2  md:font-semibold'>
                             <li className='text-md py-2'>
                                 Transmission :
                                 <span className='font-bold'> {product.transmission} </span>
@@ -137,8 +136,6 @@ const Itempage = () => {
                 </div>
 
                 <div className='lg:w-5/12  mx-auto flex flex-col gap-3'>
-                    <a href={`tel:${seller.contact}`} className='hover:bg-[#3DC2EC] transition-colors duration-100 bg-black p-2 rounded-md text-center text-white w-100 py-2 tracking-widest font-black'>Call Seller</a>
-                    {/* <button className='bg-green-500 hover:bg-green-800 text-white w-100 py-2 tracking-wider font-bold'>Message Seller</button> */}
                     <div className='border shadow-lg h-min p-4'>
                         <h3 className='text-sm font-bold uppercase'>Seller Details</h3>
                         <div className='flex p-2 pt-8'>
@@ -150,6 +147,8 @@ const Itempage = () => {
                             </span>
                         </div>
                     </div>
+                    <a href={`tel:${seller.contact}`} className='hover:bg-[#3DC2EC] transition-colors duration-100 bg-black p-2 rounded-md text-center text-white w-100 py-2 tracking-widest font-black'>Call Seller</a>
+                    {/* <button className='bg-green-500 hover:bg-green-800 text-white w-100 py-2 tracking-wider font-bold'>Message Seller</button> */}
                     <div className='border shadow-lg p-2'>
                         <h3 className='py-3 uppercase -tracking-widertext-sm font-bold'>Related Products</h3>
                         <ul className='grid grid-cols-3 w-100 cursor-pointer  gap-0.5'>

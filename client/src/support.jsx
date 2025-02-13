@@ -4,7 +4,7 @@ import Layout from './components/Layout'
 function support () {
     return (
         <Layout>
-        <div className='mt-10'>
+        <div className='mt-10 flex justify-center'>
             <div className='w-[1200px] bg-white shadow rounded-lg p-10 flex flex-col gap-6'>
                 <h3 className='flex justify-between items-center'>
                     <h1 className='text-2xl  text-neutral-950'>Welcome to Our Support Center</h1>

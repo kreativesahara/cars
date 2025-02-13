@@ -1,13 +1,13 @@
 import Navbar from "./navbar/navbar.jsx"
 import Footer from "./footer"
-function Layout ({children}) {
+function Layout({ children }) {
     return (
         <>
-        <Navbar />
-            <main className="w-full px-4 min-h-screen min-w-96 justify-center mx-auto">
-            { children }   
-        </main>
-        <Footer />
+            <Navbar />
+            <main className=" px-4 min-h-screen mx-auto">
+                {children}
+            </main>
+            <Footer />
         </>
     )
 }

@@ -89,7 +89,7 @@ function addProduct() {
     try {
       // Send data without manually setting Content-Type header
       const response = await axiosPrivate.post('products', form, {
-        headers: { 'Content-Type': 'application/json' },
+        headers: { 'Content-Type': 'multipart/form-data' },
         withCredentials: true,
       });
 

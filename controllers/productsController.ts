@@ -252,7 +252,7 @@ export const updateUpload = async (req: Request, res: Response): Promise<Respons
 
 // Delete product
 export const deleteUpload = async (req: Request, res: Response): Promise<Response> => {
-    const productId = req.body.id;
+    const productId = Number(req.params.id); // Get from URL params
 
     if (!productId) {
         return res.status(400).json({ message: 'Product ID is required.' });
@@ -262,7 +262,7 @@ export const deleteUpload = async (req: Request, res: Response): Promise<Respons
         console.log(`Deleting Product with ID: ${productId}`);
         const vehicle = await db.select().from(product).where(eq(product.id, productId));
 
-        if (!vehicle) {
+        if (vehicle.length === 0) {
             return res.status(404).json({ message: `No Product found with ID ${productId}.` });
         }
 
