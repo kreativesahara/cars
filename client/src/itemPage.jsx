@@ -89,7 +89,7 @@ const Itempage = () => {
                                 <h3 className='font-bold uppercase text-2xl'>{product.make}</h3>
                                 <p className='tracking-widest text-lg'>{product.model}</p>
                             </span>
-                            <strong className='font-bold tracking-widest text-2xl '>KSH {product.price}</strong>
+                            <strong className='font-bold tracking-widest text-2xl '>KSH {product?.price ? Number(product.price).toLocaleString() : ""}</strong>
                         </div>
                         <hr />
                         <ul className='p-1 grid grid-cols-2 font-semibold justify-between '>
@@ -115,7 +115,7 @@ const Itempage = () => {
                             </li>
                             <li className='text-md py-2'>
                                 Mileage :
-                                <span className='font-bold'> {product.year} </span>
+                                <span className='font-bold'> {product?.mileage ? Number(product.mileage).toLocaleString() : ""} </span>
                             </li>
                             <li className='text-md py-2'>
                                 Drive System :
