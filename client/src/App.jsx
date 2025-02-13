@@ -6,6 +6,7 @@ import BtnUpload from "./components/btnUpload";
 import { useProductContext } from "./context/ProductProvider";
 import { useSellerContext } from "./context/SellerProvider";
 import BtnBeSeller from "./components/btnBeSeller";
+import { axiosPrivate } from "./api/axios";
 
 
 function App() {
@@ -24,19 +25,38 @@ function App() {
   console.log('products context:', products);
 
   useEffect(() => {
+    if (!Array.isArray(products) || products.length === 0) {
+      console.log('Products array is empty or not yet loaded.');
+      setProduct(null);
+      return; // Skip the filter if no products.
+    }
     const findProducts = products.filter((p) => p.seller_id === Number(SellerId));
     if (findProducts) {
       setProduct(findProducts);
     } else {
-      console.error('no user found');
+      console.error('no product found');
     }
   }, [products, SellerId])
 
-  console.log('found products', product)
 
-  function handleProductEdit() {
-    navigate('/dashboard', { replace: true })
-  }
+
+  const handleDelete = async (productId) => {
+    try {
+      const confirmDelete = window.confirm("Are you sure you want to delete this product?");
+      if (!confirmDelete) return;
+      const response = await axiosPrivate.delete(`products/${productId}`);
+      console.log("Product to be deleted:", response);
+      if (response.status === 200) {
+        setProduct(prevProducts => prevProducts.filter(product => product.id !== productId));
+        navigate('/dashboard', { replace: true })
+        alert("Product deleted successfully.");
+      }
+    } catch (error) {
+      console.error("Failed to delete product:", error);
+      alert("Failed to delete product. Please try again.");
+    }
+  };
+
 
   // Render content based on fetched bills
   return (
@@ -59,9 +79,8 @@ function App() {
             </div>
 
             <section className='flex flex-col gap-4'>
-
               {auth?.roles === 3 &&
-                <div className='md:p-4 bg-neutral-50 rounded-md flex flex-col gap-4'>
+                <div className='md:p-4 bg-neutral-50 rounded-md  gap-4 '>
                   <div className="flex justify-between items-center">
                     <h2 className='md:text-lg font-medium text-neutral-950'>Uploaded Product</h2>
                     <BtnUpload />
@@ -69,7 +88,7 @@ function App() {
                   <div>
                     {!product ? <p className='text-sm text-neutral-600'>No Product Uploaded</p> :
                       (<ul >{product.map((vehicle) =>
-                        <Link key={vehicle.id} className="md:flex p-2 rounded-md bg-slate-200 m-4 gap-4" to={`/app/${vehicle.id}`}>
+                        <li key={vehicle.id} className="md:flex p-2 rounded-md bg-slate-200 m-4 gap-4 ">
                           <img
                             src={vehicle.images[0]}
                             alt={`Missing Image for ${vehicle.id}`}
@@ -82,11 +101,12 @@ function App() {
                             <p className='text-sm text-neutral-600'>Price : {vehicle.price}</p>
 
                           </div>
-                          <div className="py-4 flex flex-col" >
-                            <button className="bg-black text-white px-8 rounded-sm py-1.5 mb-2" onClick={handleProductEdit}>Edit</button>
-                            <button className="bg-black text-white px-6 rounded-sm py-1.5">Delete</button>
+                          <div className="py-4 flex flex-col " >
+                            <Link to={`/app/${vehicle.id}`} className="bg-black  text-white px-8 rounded-sm py-1.5 mb-2 text-center">Edit</Link>
+                            <button onClick={() => handleDelete(vehicle.id)}
+                              className="bg-black text-white px-6 rounded-sm py-1.5">Delete</button>
                           </div>
-                        </Link>
+                        </li>
 
                       )}
                       </ul>)}
