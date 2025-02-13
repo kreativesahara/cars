@@ -72,8 +72,8 @@ function App() {
                         <Link key={vehicle.id} className="md:flex p-2 rounded-md bg-slate-200 m-4 gap-4" to={`/app/${vehicle.id}`}>
                           <img
                             src={vehicle.images[0]}
-                            alt='Uploaded Product'
-                            className='md:w-[100px] md:h-[100px] h-[200px] rounded-md object-cover'
+                            alt={`Missing Image for ${vehicle.id}`}
+                            className='font-serif text-xs md:w-[100px] md:h-[100px] h-[200px] rounded-md place-content-center j object-cover'
                           />
                           <div className="w-10/12 mx-auto pt-4">
                             <p className='text-sm text-neutral-950 font-medium'>Make : {vehicle.make}</p>
