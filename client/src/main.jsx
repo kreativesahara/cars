@@ -20,6 +20,7 @@ import RequireAuth from './controllers/RequireAuth';
 import { AuthProvider } from './context/AuthProvider.jsx';
 import { ProductProvider } from './context/ProductProvider.jsx';
 import { SellerProvider } from './context/SellerProvider.jsx';
+import { SearchProvider } from './context/SearchProvider.jsx';
 
 
 import 'material-symbols';
@@ -48,7 +49,8 @@ const AppRoutes = () => (
       <Route path="home" element={< Home />} />
       <Route path="pricing" element={<Pricing />} />
       <Route path="support" element={<Support />} />
-      
+      <Route path="product" element={<Product />} />
+      <Route path="itempage/:productId" element={<ItemPage />} />      
 
       {/* Nested Routes for Authorization */}
       <Route
@@ -89,11 +91,13 @@ ReactDOM.createRoot(document.getElementById('root')).render(
   <React.StrictMode>
     <AuthProvider>
       <ProductProvider>
+        <SearchProvider>
         <SellerProvider>
         <Router>
           <AppRoutes />
         </Router>
         </SellerProvider >
+        </SearchProvider>
       </ProductProvider>
     </AuthProvider>
   </React.StrictMode>
