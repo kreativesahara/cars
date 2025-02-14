@@ -8,7 +8,6 @@ import path from 'path';
 import fs from 'fs';
 import { seller } from '../db/schema/seller';
 
-
 // Configure multer for image uploads
 const storage = multer.diskStorage({
     destination: (req: any, file: any, cb: any) => {
@@ -22,7 +21,6 @@ const storage = multer.diskStorage({
     filename: (req: any, file: any, cb: any) => {
         // Extract the extension
         let fileExtension = path.extname(file.originalname);
-
         // Fallback to MIME type if no extension is found
         if (!fileExtension) {
             switch (file.mimetype) {
@@ -39,14 +37,11 @@ const storage = multer.diskStorage({
                     return cb(new Error('File does not have a valid extension or recognized MIME type'));
             }
         }
-
         // Generate a unique filename using timestamp and original name with extension
         const uniqueSuffix = `${Date.now()}-${Math.round(Math.random() * 1E9)}`;
         cb(null, uniqueSuffix + fileExtension);
     }
-
 });
-
 // File filter to accept only images
 const fileFilter = (req: any, file: any, cb: any) => {
     const allowedTypes = ['image/jpeg', 'image/png', 'image/gif', 'image/jpg'];
@@ -56,7 +51,6 @@ const fileFilter = (req: any, file: any, cb: any) => {
         cb(new Error('Only images are allowed'), false); // Reject the file
     }
 };
-
 // Initialize Multer with disk storage
 const upload: any = multer({
     storage,
