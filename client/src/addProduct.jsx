@@ -161,7 +161,7 @@ function addProduct() {
               {
                 label: "Car Condition",
                 name: "condition",
-                options: ["New", "Used", "Reconditioned"],
+                options: ["New", "Used", "Reconditioned","Certified Pre-Owned"],
               },
               {
                 label: "Driving System",
