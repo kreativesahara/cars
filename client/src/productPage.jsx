@@ -11,7 +11,6 @@ const productPage = () => {
     return (    
     <Layout >
         < div className="mt-8">
-
             {!products.length ?
                 < p >
                     No product to display
