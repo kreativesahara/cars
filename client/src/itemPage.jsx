@@ -1,11 +1,13 @@
 import React, { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
 import Layout from './components/Layout';
+import useAuth from "./hooks/useAuth";
 import { useProductContext } from './context/ProductProvider';
 import { useSellerContext } from './context/SellerProvider';
 
 const Itempage = () => {
     const { productId } = useParams();
+    const { auth } = useAuth();
     const { products } = useProductContext();
     const { sellers } = useSellerContext();
     const [product, setProduct] = useState(null);
@@ -118,7 +120,7 @@ const Itempage = () => {
                             </li>
                             <li className='text-md py-2'>
                                 Drive System :
-                                <span className='font-bold'> {product.engine_capacity} </span>
+                                <span className='font-bold'> {product.driveSystem} </span>
                             </li>
                             {seller.hasFinancing !== null && <li className='py-2'>Financing Available: <span className='font-bold text-emerald-600'>{seller.hasFinancing ? 'Yes' : 'No'}</span></li>}
                             {seller.acceptsTradeIn !== null && <li className='py-2'>Accepts Trade-in: <span className='font-bold text-emerald-600'>{seller.acceptsTradeIn ? 'Yes' : 'No'}</span></li>}
@@ -137,21 +139,23 @@ const Itempage = () => {
 
                 <div className='lg:w-5/12  mx-auto flex flex-col gap-3'>
                     <div className='border shadow-lg h-min p-4'>
-                        <h3 className='text-sm font-bold uppercase'>Seller Details</h3>
+                        <h3 className='text-sm font-bold uppercase p-2'>Seller Details</h3>
+                        <hr />
                         <div className='flex p-2 pt-8'>
                             <img className='w-20 h-20 rounded-full object-cover' src='https://images.unsplash.com/photo-1494790108377-be9c29b29330?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=720&q=60' alt='' />
                             <span className='ml-4 my-auto'>
                                 <p className='uppercase font-semibold'>{seller.username}</p>
                                 <p className='font-semibold'>Seller Type : <span className='font-bold text-emerald-600'>{seller.accountType}</span></p>
-                                {/* <p className='tracking-widest'>{seller.contact || 'Seller not provided'}</p> */}
                             </span>
                         </div>
                     </div>
-                    <a href={`tel:${seller.contact}`} className='hover:bg-[#3DC2EC] transition-colors duration-100 bg-black p-2 rounded-md text-center text-white w-100 py-2 tracking-widest font-black'>Call Seller</a>
+                    {auth?.roles === 2 || auth?.roles === 3 && (<a href={`tel:${seller.contact}`} className='hover:bg-[#3DC2EC] transition-colors duration-100 bg-black p-2 rounded-md text-center text-white w-100 py-2 tracking-widest font-black'>Call Seller</a>)}
+                    {auth?.roles === 1 && (<a href='tel:254706823590' className='hover:bg-[#3DC2EC] transition-colors duration-100 bg-black p-2 rounded-md text-center text-white w-100 py-2 tracking-widest font-black'>Call Seller</a>)}                    
                     {/* <button className='bg-green-500 hover:bg-green-800 text-white w-100 py-2 tracking-wider font-bold'>Message Seller</button> */}
-                    <div className='border shadow-lg p-2'>
-                        <h3 className='py-3 uppercase -tracking-widertext-sm font-bold'>Related Products</h3>
-                        <ul className='grid grid-cols-3 w-100 cursor-pointer  gap-0.5'>
+                    {/* <div className='border shadow-lg p-2'>
+                        <h3 className='p-3 uppercase -tracking-widertext-sm font-bold'>Related Products</h3>
+                        <hr />
+                        <ul className='grid grid-cols-3 w-100 cursor-pointer  gap-0.5 pt-2'>
                             <li>
                                 <img className='p-2 hover:border-2 hover:border-blue-600 rounded object-cover' src='https://images.unsplash.com/photo-1494790108377-be9c29b29330?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=720&q=60' alt='' />
                             </li>
@@ -165,7 +169,7 @@ const Itempage = () => {
                                 <img className='p-2 hover:border-2 hover:border-blue-600 rounded object-cover' src='https://images.unsplash.com/photo-1494790108377-be9c29b29330?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=720&q=60' alt='' />
                             </li>
                         </ul>
-                    </div>
+                    </div> */}
                 </div>
             </div>
         </Layout>

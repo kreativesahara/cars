@@ -2,8 +2,8 @@ import { int, text, varchar, datetime, mysqlTable } from 'drizzle-orm/mysql-core
 import { user } from './user';
 
 export const seller = mysqlTable('sellers', {
-    Id: int('id').primaryKey().autoincrement(),
-    // userId: int('user_id').notNull().references(() => user.id),
+    Id: int('id').primaryKey().autoincrement()
+    .references(() => user.id),
     userId: int('user_id').notNull(),
     username: text('username').notNull(),
     accountType: varchar('account_type', { length: 255 }),

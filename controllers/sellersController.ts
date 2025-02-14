@@ -50,7 +50,21 @@ const getSeller = async (req: Request, res: Response): Promise<Response> => {
 const createSeller = async (req: Request, res: Response): Promise<any> => {
     const { username, accountType, contact, place ,hasFinancing, acceptsTradeIn } = req.body;
     const setId = req.body.userId;
-    console.log('seller data', req.body);
+
+    try {
+        const foundUser = await db.select().from(user).where(eq(user.id, setId));
+        if (foundUser.length > 0) {
+            const foundRole = Number(foundUser[0].roles);  
+            
+            if (foundRole) {
+               const newrole =await db.update(user).set({ roles: 3 }).where(eq(user.id, setId));
+               console.log('Role Updated', newrole);
+            }
+        }
+    } catch (error) {
+        console.log(error)
+    }
+   
     if (!username || !accountType || !contact || !hasFinancing || !acceptsTradeIn) {
         return res.status(400).json({ message: 'Firstname, lastname, email, and password are required.' });
     }

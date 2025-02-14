@@ -1,4 +1,4 @@
-import { createContext, useState, useContext, useMemo } from "react";
+import { createContext, useState, useContext, useMemo, useEffect } from "react";
 import useAxiosPrivate  from "../api/useAxiosPrivate";
 
 const ProductContext = createContext();
@@ -13,7 +13,7 @@ export const useProductContext = () => {
 export const ProductProvider = ({ children }) => {
     const axiosPrivate = useAxiosPrivate();
     const [products, setProducts] = useState([]);
-    useMemo(() =>{
+    useEffect(() =>{
         const getProducts= async () =>{
             try{
                 const response = await axiosPrivate.get('/products')

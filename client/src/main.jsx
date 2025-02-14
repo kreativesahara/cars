@@ -52,12 +52,12 @@ const AppRoutes = () => (
 
       {/* Nested Routes for Authorization */}
       <Route
-        element={<RequireAuth allowedRoles={[ ROLES.Seller, ROLES.Modarator, ROLES.Admin]} />}
+        element={<RequireAuth allowedRoles={[ROLES.Visitor, ROLES.Member, ROLES.Seller, ROLES.Modarator, ROLES.Admin]} />}
       >
              <Route path="dashboard" element={<App />} />
       </Route> 
       <Route
-        element={<RequireAuth allowedRoles={[ROLES.Seller, ROLES.Modarator, ROLES.Admin]} />}
+        element={<RequireAuth allowedRoles={[ROLES.Visitor, ROLES.Member, ROLES.Seller, ROLES.Modarator, ROLES.Admin]} />}
       >
         <Route path="upload" element={<AddProduct />} />
       </Route> 
@@ -77,7 +77,7 @@ const AppRoutes = () => (
       <Route path="upgrade" element={<BecomeSeller />} />
     </Route>
     <Route
-        element={<RequireAuth allowedRoles={[ ROLES.Member, ROLES.Seller, ROLES.Modarator, ROLES.Admin]} />}
+        element={<RequireAuth allowedRoles={[ROLES.Visitor, ROLES.Member, ROLES.Seller, ROLES.Modarator, ROLES.Admin]} />}
       >
         <Route path="product" element={<Product />} />
       </Route>
