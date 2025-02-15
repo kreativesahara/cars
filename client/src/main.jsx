@@ -1,26 +1,27 @@
 import React from 'react';
 import ReactDOM from 'react-dom/client';
-import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
-import App from './App.jsx';
-import Register from './register.jsx';
-import Login from './login.jsx';
-import Home from './home.jsx';
+import { Route, BrowserRouter as Router, Routes } from 'react-router-dom';
 
-import Product from './productPage.jsx';
+import Home from './home.jsx';
+import Login from './login.jsx';
+import Register from './register.jsx';
+import App from './App/App.jsx';
+import AddProduct from './components/forms/addProduct.jsx';
+import BecomeSeller from './components/forms/becomeSeller.jsx';
 import ItemPage from './itemPage.jsx';
-import AddProduct from './addProduct.jsx';
 import Pricing from './pricing.jsx';
+// import SubscriptionPage from './subscriptionPage.jsx';
+import Product from './productPage.jsx';
 import Support from './support.jsx';
-import BecomeSeller from './becomeSeller.jsx';
 import UpdateProduct from './updateProduct.jsx';
 
 
-import PersistLogin from './controllers/PersistLogin';
-import RequireAuth from './controllers/RequireAuth';
 import { AuthProvider } from './context/AuthProvider.jsx';
 import { ProductProvider } from './context/ProductProvider.jsx';
-import { SellerProvider } from './context/SellerProvider.jsx';
 import { SearchProvider } from './context/SearchProvider.jsx';
+import { SellerProvider } from './context/SellerProvider.jsx';
+import PersistLogin from './controllers/PersistLogin';
+import RequireAuth from './controllers/RequireAuth';
 
 
 import 'material-symbols';
@@ -48,6 +49,7 @@ const AppRoutes = () => (
       <Route path="/" element={< Home />} />
       <Route path="home" element={< Home />} />
       <Route path="pricing" element={<Pricing />} />
+      {/* <Route path="subscription" element={<SubscriptionPage />} /> */}
       <Route path="support" element={<Support />} />
       <Route path="product" element={<Product />} />
       <Route path="itempage/:productId" element={<ItemPage />} />      

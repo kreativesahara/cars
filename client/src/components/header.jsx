@@ -1,5 +1,5 @@
 import React from 'react'
-import headerImage from '../img/headerspareyangu.jpeg'
+import headerImage from '../assets/headerspareyangu.jpeg'
 
 function header() {
   return (

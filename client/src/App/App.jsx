@@ -2,10 +2,10 @@ import { useState, useEffect } from "react";
 import { useNavigate, Link } from 'react-router-dom'
 import Layout from "../components/Layout";
 import useAuth from "../hooks/useAuth";
-import BtnUpload from "../components/btnUpload";
+import BtnUpload from "../components/button/btnUpload";
 import { useProductContext } from "../context/ProductProvider";
 import { useSellerContext } from "../context/SellerProvider";
-import BtnBeSeller from "../components/btnBeSeller";
+import BtnBeSeller from "../components/button/btnBeSeller";
 import { axiosPrivate } from "../api/axios";
 import SubscriptionCard from  "../components/subscriptionCard"
 

@@ -3,7 +3,7 @@ import React from 'react';
 import { useState } from 'react';
 import './navbar.css';
 import useAuth from "../../hooks/useAuth";
-import Logout from "../../components/btnLogout";
+import Logout from "../button/btnLogout";
 
 function Navbar() {
     const { auth } = useAuth();
