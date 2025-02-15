@@ -56,6 +56,7 @@ const Search = () => {
 
   return (
     <div className="md:w-full">
+      
       <form
         onSubmit={handleSearch}
         className="flex flex-col lg:flex-row flex-wrap md:justify-center gap-4 items-center bg-white shadow-lg rounded-lg p-3 mb-12"
