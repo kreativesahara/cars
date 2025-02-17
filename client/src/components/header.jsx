@@ -6,7 +6,7 @@ function header() {
     <>
     <div className='flex flex-col'>
       <img src={headerImage} alt="header" className="w-full rounded-xl" />
-      <section className="items-center py-8 px-6">
+      <section className="items-center py-8 px-6 text-center">
           <h2 className="font-bold md:text-4xl text-xl md:font-semibold ">
             The easy way to find a Car.
             <br />
