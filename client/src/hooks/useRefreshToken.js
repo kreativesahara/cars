@@ -1,4 +1,4 @@
-import  axios from '../api/axios';
+import  axiosPrivate from '../api/axios';
 import useAuth from './useAuth';
 
 const useRefreshToken = () => {
@@ -8,7 +8,7 @@ const useRefreshToken = () => {
         try {
             console.log('Starting token refresh process...from refreshController');
             // Make the refresh token request
-            const response = await axios.get('/refresh', {
+            const response = await axiosPrivate.get('/refresh', {
                 withCredentials: true
             });
             // Destructure the response for better readability

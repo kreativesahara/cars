@@ -1,9 +1,7 @@
 import React from 'react';
-import { useProductContext } from '../../context/ProductProvider';
+import axios from '../../api/axios';
 
-const FilterForm = () => {
-    const { filters, setFilters } = useProductContext();
-
+const FilterForm = ({ filters, setFilters, onFilterSubmit }) => {
     // Handle onChange event for all inputs/selects
     const handleFilterChange = (e) => {
         const { name, value } = e.target;
@@ -13,15 +11,21 @@ const FilterForm = () => {
         }));
     };
 
-    // Handle form submission (if additional logic is needed)
-    const handleFilterSubmit = (e) => {
+    // Handle form submission
+    const handleSubmit = async (e) => {
         e.preventDefault();
-        console.log("Submitting Filters:", filters);
-        // Since the ProductProvider is watching filters changes (via useEffect),
-        // the product list will update automatically.
+        // Clean the filters by removing empty or undefined values
+        const cleanedFilters = Object.fromEntries(
+            Object.entries(filters).filter(([_, value]) => value !== '' && value !== undefined)
+        );
+        console.log("Cleaned Filters:", cleanedFilters);
+        // Use the provided callback to update the products
+        if (onFilterSubmit) {
+            onFilterSubmit(cleanedFilters);
+        }
     };
 
-    // Clear filters by resetting the context state.
+    // Reset filters to initial state
     const handleClearFilters = () => {
         setFilters({
             make: '',
@@ -36,14 +40,13 @@ const FilterForm = () => {
             location: '',
             condition: '',
             features: [],
-            // Including extra fields from the form:
             driveSystem: '',
             engine_capacity: '',
         });
     };
 
     return (
-        <form onSubmit={handleFilterSubmit} className="w-full md:w-[600px] mt-6 bg-white rounded-xl p-6 shadow-2xl">
+        <form onSubmit={handleSubmit} className="w-full md:w-[600px] mt-6 bg-white rounded-xl p-6 shadow-2xl">
             <h2 className="text-xl font-semibold mb-4">Filter Vehicles</h2>
 
             {[
@@ -59,7 +62,7 @@ const FilterForm = () => {
                 },
                 {
                     label: "Fuel Type",
-                    name: "fuelType", // adjusted to match provider
+                    name: "fuelType",
                     options: ["Petrol", "Diesel", "Hybrid", "Electric"],
                 },
                 {
@@ -74,7 +77,7 @@ const FilterForm = () => {
                 },
                 {
                     label: "Driving System",
-                    name: "driveSystem", // extra field not originally in provider state
+                    name: "driveSystem",
                     options: ["2WD", "4WD", "AWD"],
                 },
             ].map((field) => (
@@ -101,7 +104,7 @@ const FilterForm = () => {
             {[
                 {
                     label: "Year From",
-                    name: "yearFrom", // changed from "year"
+                    name: "yearFrom",
                     type: "number",
                     placeholder: "Enter Start Year",
                     value: filters.yearFrom,
@@ -115,7 +118,7 @@ const FilterForm = () => {
                 },
                 {
                     label: "Engine Capacity CC",
-                    name: "engine_capacity", // extra field; not in provider's default state but added on clear
+                    name: "engine_capacity",
                     type: "number",
                     placeholder: "Enter Engine Capacity",
                     value: filters.engine_capacity || '',
@@ -145,7 +148,7 @@ const FilterForm = () => {
 
             <label className="block text-sm text-neutral-900 mb-1">Mileage</label>
             <input
-                name="mileageRange" // adjusted to match provider
+                name="mileageRange"
                 onChange={handleFilterChange}
                 type="text"
                 placeholder="Enter Mileage in KM"
@@ -156,7 +159,7 @@ const FilterForm = () => {
             <label className="block text-sm text-neutral-900 mb-1">Price Range</label>
             <div className="grid grid-cols-2 gap-4">
                 <input
-                    name="priceMin" // adjusted to match provider
+                    name="priceMin"
                     onChange={handleFilterChange}
                     type="number"
                     placeholder="Min Price"
@@ -164,7 +167,7 @@ const FilterForm = () => {
                     className="block w-full border border-neutral-300 rounded-md p-2 text-neutral-900"
                 />
                 <input
-                    name="priceMax" // adjusted to match provider
+                    name="priceMax"
                     onChange={handleFilterChange}
                     type="number"
                     placeholder="Max Price"

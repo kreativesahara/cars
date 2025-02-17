@@ -22,7 +22,7 @@ connection.connect((err) => {
         console.log('There Is Error In DB Connection:' + err);
     }
     else {
-        console.log('DB Connected Succefully')
+        console.log('DB Connected Successfully')
     }
 })
 //+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++

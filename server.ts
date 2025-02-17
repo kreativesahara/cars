@@ -14,6 +14,7 @@ import sellersRoute from './routes/Api/seller'
 import testProductRoute from './routes/Api/testProduct'
 
 import searchCarsRoute from './routes/Api/searchCars'
+import  filterCarRoute from './routes/Api/filterCars';
 import refreshRoute from './routes/Api/refresh'
 import logoutRoute from './routes/Api/logout'
 
@@ -43,14 +44,14 @@ app.get('/', (req: express.Request, res: express.Response ) => {
 app.use('/users',usersRoute )
 app.use("/auth", authRoute)
 app.use('/search', searchCarsRoute)
-
+app.use('/filter', filterCarRoute)
 //Test Case
 app.use("/test", requireAuth, testRoute)
 
 //API Routes
-app.use("/products", requireAuth, productsRoute)
+app.use("/products",  productsRoute)
 app.use("/testproduct", requireAuth, testProductRoute)
-app.use("/sellers", requireAuth, sellersRoute)
+app.use("/sellers", sellersRoute)
 
 app.use('/refresh', requireAuth, refreshRoute)
 app.use('/logout', requireAuth, logoutRoute)
