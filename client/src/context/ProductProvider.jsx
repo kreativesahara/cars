@@ -1,35 +1,50 @@
-import { createContext, useState, useContext, useMemo, useEffect } from "react";
-import useAxiosPrivate  from "../api/useAxiosPrivate";
+import { createContext, useState, useContext, useEffect } from "react";
+import useAxiosPrivate from "../api/useAxiosPrivate";
 
 const ProductContext = createContext();
-
-// console.log('Product Context', ProductContext.Provider);
 
 export const useProductContext = () => {
     return useContext(ProductContext);
 };
 
-
 export const ProductProvider = ({ children }) => {
     const axiosPrivate = useAxiosPrivate();
     const [products, setProducts] = useState([]);
-    useEffect(() =>{
-        const getProducts= async () =>{
-            try{
-                const response = await axiosPrivate.get('/products')
+    const [filters, setFilters] = useState({
+        make: '',
+        model: '',
+        yearFrom: '',
+        yearTo: '',
+        priceMin: '',
+        priceMax: '',
+        fuelType: '',
+        transmission: '',
+        mileageRange: '',
+        location: '',
+        condition: '',
+        features: []
+    });
+
+    useEffect(() => {
+        const getProducts = async () => {
+            try {
+                const response = await axiosPrivate.get('/products', {
+                    params: filters  // Pass filters as query parameters
+                });
                 setProducts(response.data);
-            }catch(err){
-                console.error(err)
+            } catch (err) {
+                console.error(err);
             }
-        }
-        getProducts()
+        };
+        getProducts();
+
         const controller = new AbortController();
-        return() =>controller.abort();
-    },[axiosPrivate])
-    console.log("products", products)
-    return(
-        <ProductContext.Provider value={{products, setProducts}}>
+        return () => controller.abort();
+    }, [axiosPrivate, filters]);  // Refetch whenever filters change
+
+    return (
+        <ProductContext.Provider value={{ products, setProducts, filters, setFilters }}>
             {children}
         </ProductContext.Provider>
-    )
-}
+    );
+};
