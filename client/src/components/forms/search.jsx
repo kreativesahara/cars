@@ -57,11 +57,11 @@ const Search = () => {
   return (
     <>
       <div className="md:w-[85%] mx-auto bg-[#3DC2EC] items-center shadow-lg rounded-lg p-6 mb-12 opacity-70">
-        <h2 className="text-xl md:text-3xl p-2 text-white font-extrabold mb-4 text-center tracking-widest ">Search By Category</h2>
-        <hr className='border-2 w-[80%] my-4 mx-auto' />
+        <h2 className="text-xl md:text-3xl  text-white font-extrabold  text-center tracking-widest ">Search By Category</h2>
+        <hr className='border-1 w-[80%] my-4 mx-auto' />
         <form
           onSubmit={handleSearch}
-          className="flex flex-col lg:flex-row flex-wrap md:justify-center gap-4 opacity-100"
+          className="flex flex-col lg:flex-row flex-wrap md:justify-center pt-4 gap-4 opacity-100"
         >
           {renderSelect("make", make, (e) => setMake(e.target.value), ["Toyota", "Nissan"], "Select Make")}
           {renderSelect("model", model, (e) => setModel(e.target.value), ["Corolla", "X5"], "Select Model")}
