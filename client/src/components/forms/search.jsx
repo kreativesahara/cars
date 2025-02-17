@@ -89,10 +89,10 @@ const Search = () => {
 
           {renderSelect("location", location, (e) => setLocation(e.target.value), ["Kiserian Ngong", "Mombasa"], "Select Location")}
           {renderSelect("condition", condition, (e) => setCondition(e.target.value), ["New", "Used", "Reconditioned"], "Select Condition")}
-
+        
           <button
             type="submit"
-            className="w-[100%] lg:w-auto bg-[#3DC2EC] text-white font-bold px-6 py-2 rounded-lg hover:bg-black transition duration-300"
+            className="w-[100%] lg:w-auto bg-[#3DC2EC] text-white font-bold px-6 py-2 rounded-lg hover:bg-black border-double mt-2 border-4 border-white lg:px-[200px]  transition duration-300"
           >
             Search
           </button>
