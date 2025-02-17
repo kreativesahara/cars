@@ -14,6 +14,10 @@ const FilterForm = ({ filters, setFilters, onFilterSubmit }) => {
     // Handle form submission
     const handleSubmit = async (e) => {
         e.preventDefault();
+        console.log("Submitting Filters:", filters);
+        // Since the ProductProvider is watching filters changes (via useEffect),
+        // the product list will update automatically.
+
         // Clean the filters by removing empty or undefined values
         const cleanedFilters = Object.fromEntries(
             Object.entries(filters).filter(([_, value]) => value !== '' && value !== undefined)

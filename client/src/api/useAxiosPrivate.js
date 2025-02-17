@@ -24,10 +24,6 @@ const useAxiosPrivate = () => {
             async (error) => {
                 const prevRequest = error?.config;
 
-                // Only attempt a token refresh if:
-                // 1. The response status is 403 (Forbidden)
-                // 2. A refresh token exists (i.e. the user is logged in)
-                // 3. We haven't already retried this request
                 if (
                     error?.response?.status === 403 &&
                     auth?.refreshToken &&
@@ -36,7 +32,6 @@ const useAxiosPrivate = () => {
                     prevRequest.sent = true;
                     try {
                         const newAccessToken = await refresh();
-
                         // If a new token was successfully obtained, update the header and retry
                         if (newAccessToken) {
                             prevRequest.headers["authorization"] = `Bearer ${newAccessToken}`;

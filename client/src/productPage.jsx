@@ -66,7 +66,7 @@ const ProductPage = () => {
                         <ul className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
                             {products.map((product) => (
                                 <li key={product.id}>
-                                    <Link to={`/itempage/${product.make}-${product.model}-${product.id}`}>
+                                    <Link to={`/itempage/${product.id}`}>
                                         <div className="border shadow-lg rounded-xl hover:shadow-blue-300 cursor-pointer">
                                             <figure>
                                                 <img
