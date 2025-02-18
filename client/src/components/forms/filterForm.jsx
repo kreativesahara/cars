@@ -15,14 +15,20 @@ const FilterForm = ({ filters, setFilters, onFilterSubmit }) => {
     const handleSubmit = async (e) => {
         e.preventDefault();
         console.log("Submitting Filters:", filters);
-        // Since the ProductProvider is watching filters changes (via useEffect),
-        // the product list will update automatically.
 
-        // Clean the filters by removing empty or undefined values
         const cleanedFilters = Object.fromEntries(
             Object.entries(filters).filter(([_, value]) => value !== '' && value !== undefined)
         );
         console.log("Cleaned Filters:", cleanedFilters);
+
+        const isEmpty = Object.values(cleanedFilters).every(
+            (value) => value === '' || (Array.isArray(value) && value.length === 0)
+        );
+
+        if (isEmpty) {
+            alert("Please select at least one filter before submitting.");
+            return;
+        }
         // Use the provided callback to update the products
         if (onFilterSubmit) {
             onFilterSubmit(cleanedFilters);
@@ -50,7 +56,7 @@ const FilterForm = ({ filters, setFilters, onFilterSubmit }) => {
     };
 
     return (
-        <form onSubmit={handleSubmit} className="w-full md:w-[600px] mt-6 bg-white rounded-xl p-6 shadow-2xl">
+        <form onSubmit={handleSubmit} className="min-w-[400px] md:w-[600px] mt-6  rounded-xl p-6 shadow-2xl">
             <h2 className="text-xl font-semibold mb-4">Filter Vehicles</h2>
 
             {[
@@ -180,9 +186,17 @@ const FilterForm = ({ filters, setFilters, onFilterSubmit }) => {
                 />
             </div>
 
-            <button type="submit" className="bg-black text-white rounded-md px-4 mt-4 py-2 text-sm w-full">
+         
+            <button
+                type="submit"
+                className="bg-black text-white rounded-md px-4 mt-4 py-2 text-sm w-full"
+                disabled={Object.values(filters).every(
+                    (value) => value === '' || (Array.isArray(value) && value.length === 0)
+                )}
+            >
                 Apply Filters
             </button>
+
             <button
                 type="button"
                 onClick={handleClearFilters}

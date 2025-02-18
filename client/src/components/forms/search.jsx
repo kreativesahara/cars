@@ -56,7 +56,7 @@ const Search = () => {
 
   return (
     <>
-      <div className="md:w-[85%] mx-auto bg-[#3DC2EC] items-center shadow-lg rounded-lg p-6 mb-12 opacity-70">
+      <div className="md:w-[85%] mx-auto min-w-[300px] max-w-[2000px] bg-[#3DC2EC] items-center shadow-lg rounded-lg p-6 mb-12 opacity-70">
         <h2 className="text-xl md:text-3xl  text-white font-extrabold  text-center tracking-widest ">Search By Category</h2>
         <hr className='border-1 w-[80%] my-4 mx-auto' />
         <form
@@ -109,7 +109,7 @@ const Search = () => {
               return (
                 <li key={result.id}>
                   <Link to={`/itempage/${result.id}`}>
-                    <div className="border shadow-lg rounded-xl pointer hover:shadow-blue-300 cursor-pointer">
+                    <div className="border min-w-[150px] shadow-lg rounded-xl pointer hover:shadow-blue-300 cursor-pointer">
                       <figure>
                         {productForResult &&
                           productForResult.images &&

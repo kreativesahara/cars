@@ -10,6 +10,8 @@ header{
     position: sticky;
     top: 0;
     z-index: 10;
+    background-color: #3DC2EC;
+    box-shadow: 10px 10px 5px 1px lightblue;
 }
 .header-actions{
     padding: 0.5rem;
@@ -39,8 +41,7 @@ nav{
     display: flex;
     justify-content: space-between;
     align-items: center;
-    background-color:#3DC2EC;
-    box-shadow: 10px 10px 5px 1px lightblue;
+   
 }
 nav .menu{
     display: none;

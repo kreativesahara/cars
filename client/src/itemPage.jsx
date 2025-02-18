@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
 import Layout from './components/Layout';
+import Seo from './SEO/seo'
 import useAuth from "./hooks/useAuth";
 import { useProductContext } from './context/ProductProvider';
 import { useSellerContext } from './context/SellerProvider';
@@ -65,11 +66,12 @@ const Itempage = () => {
     
     return (
         <Layout>
-            <div className='  lg:flex py-6'>
+            <Seo/>
+            <div className='min-w-[200px] lg:flex py-6'>
                 <div className="lg:w-6/12  border-2 px-2 py-2">
                     <div className="h-min cursor-pointer">
                         <img
-                            className="md:px-2 w-max md:h-[500px] md:object-cover"
+                            className="md:px-2 min-w-[280px] md:h-[500px] md:object-cover"
                             src={product.images[0]}
                             alt={product.make}
                         />
