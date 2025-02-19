@@ -78,48 +78,51 @@ const LoginForm = () => {
     }, [persist]);
     return (
         <div className='flex flex-col gap-4 items-center' >
-            <div className='mt-8 bg-slate-300 py-8 min-w-[400px] text-center'>
-                <p ref={errRef} className={errMsg ? "errmsg" : "offscreen"} aria-live="assertive">{errMsg}</p>
-                <span>Sign In</span>
+
+            <div className=' md:rounded-lg shadow-md flex flex-col bg-slate-300 min-w-[400px] mt-8 py-14 items-center'>
+                <span className='py-2  font-bold text-2xl'> Need an Account?</span>
+                <Link className='min-w-[80%] bg-black py-2 rounded-md text-white text-center' to="/register">Sign Up</Link>
             </div>
-            <form onSubmit={handleSubmit} className='flex flex-col p-3 py-20 gap-6 w-[400px]  bg-slate-200'>
+
+            <form onSubmit={handleSubmit} className='flex flex-col p-3 pb-12 gap-6 w-[400px] md:border-2 md:rounded-lg md:shadow-2xl '>
+                <div className='  py-6 text-center'>
+                    <span className='text-xl font-bold tracking-widest'>Sign In</span>
+                    <p ref={errRef} className={errMsg ? "errmsg" : "offscreen"} aria-live="assertive">{errMsg}</p>
+                </div>
                 <label htmlFor="email">Email</label>
                 <input
                     type="text"
                     id="email"
                     ref={userRef}
-                    className='p'
+                    className='py-2 font-bold px-2 tracking-widest border-2'
                     placeholder='Email'
                     autoComplete="off"
                     onChange={handleChange}
                     name='email'
                     required
                 />
-
                 <label htmlFor="password">Password</label>
                 <input
                     type="password"
                     id="password"
                     name='password'
+                    className='py-2 font-bold px-2 racking-widest border-2'
                     onChange={handleChange}
                     required
                 />
-                <button className='bg-black text-white  p-2'>Sign In</button>
-                <button className='bg-black text-white  p-2'>Forgot Password ?</button>
-                <div className="persistCheck">
+                <div className="flex flex-row gap-3 my-auto mx-auto">
                     <input
                         type="checkbox"
                         id="persist"
+                        className='h-4 w-4 my-auto'
                         onChange={togglePersist}
                         checked={persist}
                     />
-                    <label htmlFor="persist">Trust This Device</label>
+                    <label className='text-md' htmlFor="persist">Trust This Device</label>
                 </div>
+                <button className='bg-black text-white  p-2 rounded-md'>Sign In</button>
+                <button className='bg-black text-white  p-2 rounded-md'>Forgot Password ?</button>
             </form>
-            <div className=' flex flex-col bg-slate-300 min-w-[400px] py-20 items-center'>
-                <span> Need an Account?</span>
-                <Link className='min-w-[80%] bg-black py-2 rounded-md text-white text-center' to="/register">Sign Up</Link>
-            </div>
         </div>
     )
 }

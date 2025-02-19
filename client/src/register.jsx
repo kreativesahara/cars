@@ -1,9 +1,11 @@
 import React from 'react'
 import RegisterUser from './components/forms/registerForm'
-
+import Layout from './components/Layout'
 function register() {
   return (
-    <RegisterUser/>
+    <Layout>
+      <RegisterUser />
+    </Layout>
   )
 }
 
