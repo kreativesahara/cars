@@ -5,6 +5,7 @@ import { Route, BrowserRouter as Router, Routes } from 'react-router-dom';
 import Home from './home.jsx';
 import Login from './login.jsx';
 import Register from './register.jsx';
+import ForgotPassword from './forgotPassword.jsx';
 import App from './App/App.jsx';
 import AddProduct from './components/forms/addProduct.jsx';
 import BecomeSeller from './components/forms/becomeSeller.jsx';
@@ -42,7 +43,10 @@ const AppRoutes = () => (
     {/* Public Routes */}
     <Route path="register" element={<Register />} />
     <Route path="login" element={<Login />} />
+    <Route path="forgot-password" element={<ForgotPassword />} />
     <Route path="unauthorized" element={<div>Unauthorized!</div>} />
+    <Route path="product" element={<Product />} />
+    <Route path="itempage/:productId" element={<ItemPage />} />      
 
     {/* Protected Routes */}
     <Route element={<PersistLogin />}>
@@ -51,8 +55,7 @@ const AppRoutes = () => (
       <Route path="pricing" element={<Pricing />} />
       {/* <Route path="subscription" element={<SubscriptionPage />} /> */}
       <Route path="support" element={<Support />} />
-      <Route path="product" element={<Product />} />
-      <Route path="itempage/:productId" element={<ItemPage />} />      
+      
 
       {/* Nested Routes for Authorization */}
       <Route

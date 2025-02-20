@@ -11,7 +11,7 @@ const LoginForm = () => {
     const userRef = useRef();
     const errRef = useRef();
     const [errMsg, setErrMsg] = useState('');
-    const from = location.state?.from?.pathname || "/product";
+    const from = location.state?.from?.pathname || "/";
 
     const [formData, setFormData] = useState({
         email: "",
@@ -53,7 +53,8 @@ const LoginForm = () => {
 
             setFormData({ email: "", password: "" });
             alert("User login successfully")
-            window.location.href = from
+            window.location.href = from, { replace: true }    
+
 
 
         } catch (error) {
@@ -62,7 +63,9 @@ const LoginForm = () => {
             } else if (error.response?.status === 400) {
                 setErrMsg('Missing Username or Password');
             } else if (error.response?.status === 401) {
-                setErrMsg('Unauthorized');
+                setErrMsg('Email Not Found');
+            } else if (error.response?.status === 406) {
+                setErrMsg('Invalid Password');
             } else {
                 setErrMsg('Login Failed');
             }
@@ -78,16 +81,17 @@ const LoginForm = () => {
     }, [persist]);
     return (
         <div className='flex flex-col gap-4 items-center' >
-
-            <div className=' md:rounded-lg shadow-md flex flex-col bg-slate-300 min-w-[400px] mt-8 py-14 items-center'>
+            <div className=' md:rounded-lg shadow-md flex flex-col bg-slate-300 min-w-[400px] mt-8 pb-14 items-center'>
                 <span className='py-2  font-bold text-2xl'> Need an Account?</span>
                 <Link className='min-w-[80%] bg-black py-2 rounded-md text-white text-center' to="/register">Sign Up</Link>
             </div>
 
-            <form onSubmit={handleSubmit} className='flex flex-col p-3 pb-12 gap-6 w-[400px] md:border-2 md:rounded-lg md:shadow-2xl '>
+            <form onSubmit={handleSubmit} className='flex flex-col p-3 pb-12 gap-4 w-[400px] md:border-2 md:rounded-lg md:shadow-2xl '>
                 <div className='  py-6 text-center'>
                     <span className='text-xl font-bold tracking-widest'>Sign In</span>
-                    <p ref={errRef} className={errMsg ? "errmsg" : "offscreen"} aria-live="assertive">{errMsg}</p>
+                    {errMsg ? <div ref={errRef} aria-live="assertive" className=' errmsg"  bg-red-500 py-4 my-4 mx-auto text-white text-md  font-medium tracking-wider rounded-md'>
+                     {errMsg}
+                    </div> :null }
                 </div>
                 <label htmlFor="email">Email</label>
                 <input
@@ -99,7 +103,7 @@ const LoginForm = () => {
                     autoComplete="off"
                     onChange={handleChange}
                     name='email'
-                    required
+                    // required
                 />
                 <label htmlFor="password">Password</label>
                 <input
@@ -108,7 +112,7 @@ const LoginForm = () => {
                     name='password'
                     className='py-2 font-bold px-2 racking-widest border-2'
                     onChange={handleChange}
-                    required
+                    // required
                 />
                 <div className="flex flex-row gap-3 my-auto mx-auto">
                     <input
@@ -121,7 +125,7 @@ const LoginForm = () => {
                     <label className='text-md' htmlFor="persist">Trust This Device</label>
                 </div>
                 <button className='bg-black text-white  p-2 rounded-md'>Sign In</button>
-                <button className='bg-black text-white  p-2 rounded-md'>Forgot Password ?</button>
+                <Link to= "/forgot-password" className='bg-black text-white text-center  p-2 rounded-md'>Forgot Password ?</Link>
             </form>
         </div>
     )

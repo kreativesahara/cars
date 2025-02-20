@@ -56,7 +56,10 @@ const handleLogin = async (req: Request, res: Response) => {
 
     const foundUser = await db.select().from(user).where(eq(user.email, email)).limit(1);
     //console.log('foundUser:', foundUser);
-    if (!foundUser) return res.sendStatus(401); //Unauthorized
+    if (foundUser.length === 0) {
+        console.log('User not found');
+        return res.sendStatus(401);
+    }  //Unauthorized
     // evaluate password
     const isMatch = await bcrypt.compare(password, foundUser[0].password ?? '');
     if (isMatch) {
@@ -119,7 +122,8 @@ const handleLogin = async (req: Request, res: Response) => {
         });
         console.log('foundUser', foundUser);
     } else {
-        res.sendStatus(401);
+        console.log('Invalid password');
+        res.sendStatus(406);
     }
 }
 export { registerUser, handleLogin };

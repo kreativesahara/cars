@@ -95,7 +95,7 @@ function App() {
                             <p className='text-sm text-neutral-600'>Price : {vehicle.price}</p>
 
                           </div>
-                          <div className="py-4 flex flex-col " >g
+                          <div className="py-4 flex flex-col " >
                             <Link to={`/app/${vehicle.id}`} className="bg-black  text-white px-8 rounded-sm py-1.5 mb-2 text-center">Edit</Link>
                             <button onClick={() => handleDelete(vehicle.id)}
                               className="bg-black text-white px-6 rounded-sm py-1.5">Delete</button>

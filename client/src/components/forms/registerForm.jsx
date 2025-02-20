@@ -1,91 +1,276 @@
-import React from 'react'
-import axios from '../../api/axios';
-import { Link } from 'react-router-dom';
-import { useNavigate, useLocation } from 'react-router-dom';
-import { useState } from 'react';
+import { useRef, useState, useEffect } from "react";
+import axios from "../../api/axios";
+import { Link, useLocation, useNavigate } from "react-router-dom";
+import { faCheck, faTimes, faInfoCircle } from "@fortawesome/free-solid-svg-icons";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 
-const uploadUserDetails = () => {
-    const navigate = useNavigate();
+const MAIL_REGEX = /^(?=[a-z0-9@.]+$)(?=.*@)(?=.*\.)[a-z0-9]+(?:\.[a-z0-9]+)*@[a-z0-9]+(?:\.[a-z0-9]+)*\.[a-z]{2,}$/;
+const PWD_REGEX = /^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[!@#$%]).{8,24}$/;
+
+const UploadUserDetails = () => {
     const location = useLocation();
+    const navigate = useNavigate();
     const from = location.state?.from?.pathname || "/login";
+
+    const userRef = useRef();
+    const errRef = useRef();
+
+    const [errMsg, setErrMsg] = useState("");
+    const [success, setSuccess] = useState(false);
+
+    const [validMail, setValidMail] = useState(false);
+    const [userFocus, setUserFocus] = useState(false);
+
+    const [validPwd, setValidPwd] = useState(false);
+    const [pwdFocus, setPwdFocus] = useState(false);
+
+    const [validMatch, setValidMatch] = useState(false);
+    const [matchFocus, setMatchFocus] = useState(false);
 
     const [formData, setFormData] = useState({
         firstname: "",
         lastname: "",
         email: "",
-        password: ""
-    })
+        password: "",
+        matchPassword: ""
+    });
+
+    useEffect(() => {
+        // Focus on the first name input on mount
+        userRef.current.focus();
+    }, []);
+
+    useEffect(() => {
+        setValidMail(MAIL_REGEX.test(formData.email));
+    }, [formData.email]);
+
+    useEffect(() => {
+        setValidPwd(PWD_REGEX.test(formData.password));
+        setValidMatch(formData.password === formData.matchPassword);
+    }, [formData.password, formData.matchPassword]);
+
+    useEffect(() => {
+        setErrMsg("");
+    }, [formData]);
 
     const handleChange = (e) => {
         setFormData((prev) => ({
-            ...prev, [e.target.name]: e.target.value
-        }))
-    }
+            ...prev,
+            [e.target.name]: e.target.value
+        }));
+    };
+
     const handleSubmit = async (e) => {
         e.preventDefault();
-        try {
-            await axios.post('auth/', formData,
-                {
-                    headers: { 'Content-Type': 'application/json' },
-                    withCredentials: true
-                },
-            );
-            console.log(formData)
-            alert("User registered successfully")
-            navigate(from, { replace: true })
-
-        } catch (error) {
-            console.log(error)
+        const v1 = MAIL_REGEX.test(formData.email);
+        const v2 = PWD_REGEX.test(formData.password);
+        if (!v1 || !v2) {
+            setErrMsg("Invalid Entry");
+            return;
         }
-    }
+        try {
+            await axios.post("auth/", formData, {
+                headers: { "Content-Type": "application/json" },
+                withCredentials: true
+            });
+            setSuccess(true);
+            alert("User registered successfully");
+            // Clear the form fields
+            setFormData({
+                firstname: "",
+                lastname: "",
+                email: "",
+                password: "",
+                matchPassword: ""
+            });
+            // Redirect to the login page (or other route)
+            navigate(from, { replace: true });
+        } catch (error) {
+            if (!error?.response) {
+                setErrMsg("No Server Response");
+            } else if (error.response?.status === 409) {
+                setErrMsg("Email Address Taken");
+            } else {
+                setErrMsg("Registration Failed");
+            }
+            errRef.current.focus();
+        }
+    };
 
     return (
         <>
-            <div className='flex flex-col gap-4 pt-8 items-center' >
-                <form onSubmit={handleSubmit} className='flex flex-col p-3 pb-20 pt-12 gap-6 w-[400px] md:border-2 md:rounded-lg md:shadow-2xl '>
-                    <div className='text-2xl font-bold text-center tracking-widest '>Register Account</div>
-                    <label>First Name</label>
-                    <input 
-                        type="text" 
-                        name='firstname' 
-                        className='py-2 font-bold px-2 tracking-widest border-2'
-                        placeholder='Firstname' 
-                        onChange={handleChange} 
-                        required
-                    />
-                    <label>Last Name</label>
-                    <input 
-                        type="text" 
-                        name='lastname' 
-                        placeholder='Lastname' 
-                        className='py-2 font-bold px-2 tracking-widest border-2'
-                        onChange={handleChange} 
-                        required
-                    />
-                    <label>Email</label>
-                    <input 
-                        type="text" 
-                        name='email' 
-                        placeholder='Email' 
-                        className='py-2 font-bold px-2 tracking-widest border-2'
-                        required
-                        onChange={handleChange} 
-                    />
-                    <label>Password</label>
-                    <input 
-                        type="text" 
-                        name='password' 
-                        placeholder='Password'
-                        className='py-2 font-bold px-2 tracking-widest border-2'
-                        required
-                        onChange={handleChange} 
-                    />
-                    <button type='submit' className='bg-black rounded-md text-white p-2'>Submit Registration </button>
-                    <Link to='/login' className='bg-black text-center rounded-md text-white  p-2'>I have an account</Link>
-                </form>
-            </div>
-        </>
-    )
-}
+            {success ? (
+                <section className="auth text-center py-6">
+                    <h1 className="text-2xl font-bold">Success!</h1>
+                    <p>
+                        <Link to="/login" className="text-blue-500 underline">
+                            Sign In
+                        </Link>
+                    </p>
+                </section>
+            ) : (
+                <div className="flex flex-col pt-8 items-center">
+                    <form
+                        onSubmit={handleSubmit}
+                        className="flex flex-col p-3 pb-20 pt-2 gap-4 w-[400px] md:border-2 md:rounded-lg md:shadow-2xl"
+                    >
+                        <div className="py-6 text-center">
+                            <span className="text-xl font-bold tracking-widest">Register Now</span>
+                            {errMsg && (
+                                <div
+                                    ref={errRef}
+                                    aria-live="assertive"
+                                    className="bg-red-500 py-4 mt-2 mx-auto text-white text-md font-medium tracking-wider rounded-md"
+                                >
+                                    {errMsg}
+                                </div>
+                            )}
+                        </div>
 
-export default uploadUserDetails
+                        <label htmlFor="firstname">First Name</label>
+                        <input
+                            type="text"
+                            id="firstname"
+                            name="firstname"
+                            value={formData.firstname}
+                            onChange={handleChange}
+                            ref={userRef}
+                            autoComplete="off"
+                            className="py-2 font-bold px-2 tracking-widest border-2"
+                            placeholder="Firstname"
+                        />
+
+                        <label htmlFor="lastname">Last Name</label>
+                        <input
+                            type="text"
+                            id="lastname"
+                            name="lastname"
+                            value={formData.lastname}
+                            onChange={handleChange}
+                            autoComplete="off"
+                            placeholder="Lastname"
+                            className="py-2 font-bold px-2 tracking-widest border-2"
+                        />
+
+                        <label htmlFor="email" className="flex items-center gap-1">
+                            Email:
+                            {validMail ? (
+                                <FontAwesomeIcon icon={faCheck} className="text-green-500" />
+                            ) : (
+                                formData.email && (
+                                    <>
+                                        <FontAwesomeIcon icon={faTimes} className="text-red-500" />
+                                        <FontAwesomeIcon icon={faInfoCircle} className="text-blue-500" />
+                                    </>
+                                )
+                            )}
+                        </label>
+                        <input
+                            type="text"
+                            id="email"
+                            name="email"
+                            value={formData.email}
+                            onChange={handleChange}
+                            placeholder="Email"
+                            autoComplete="off"
+                            aria-invalid={validMail ? "false" : "true"}
+                            aria-describedby="emailnote"
+                            className="py-2 font-bold px-2 tracking-widest border-2"
+                            onFocus={() => setUserFocus(true)}
+                            onBlur={() => setUserFocus(false)}
+                        />
+                        <p
+                            id="emailnote"
+                            className={
+                                userFocus && formData.email && !validMail
+                                    ? "text-sm text-gray-600"
+                                    : "hidden"
+                            }
+                        >
+                            <FontAwesomeIcon icon={faInfoCircle} className="inline mr-1" /> Must begin with a letter.
+                            Letters, numbers, underscores, hyphens allowed.
+                        </p>
+
+                        <label htmlFor="password" className="flex items-center gap-1">
+                            Password:
+                            {validPwd ? (
+                                <FontAwesomeIcon icon={faCheck} className="text-green-500" />
+                            ) : (
+                                formData.password && (
+                                    <>
+                                        <FontAwesomeIcon icon={faTimes} className="text-red-500" />
+                                        <FontAwesomeIcon icon={faInfoCircle} className="text-blue-500" />
+                                    </>
+                                )
+                            )}
+                        </label>
+                        <input
+                            type="password"
+                            id="password"
+                            name="password"
+                            placeholder="Password"
+                            aria-invalid={validPwd ? "false" : "true"}
+                            aria-describedby="pwdnote"
+                            className="py-2 font-bold px-2 tracking-widest border-2"
+                            onChange={handleChange}
+                            value={formData.password}
+                            onFocus={() => setPwdFocus(true)}
+                            onBlur={() => setPwdFocus(false)}
+                        />
+                        <p
+                            id="pwdnote"
+                            className={pwdFocus && !validPwd ? "text-sm text-gray-600" : "hidden"}
+                        >
+                            <FontAwesomeIcon icon={faInfoCircle} className="inline mr-1" /> 8 to 24 characters.
+                            Must include uppercase and lowercase letters, a number and a special
+                            character. Allowed special characters: ! @ # $ %
+                        </p>
+
+                        <label htmlFor="matchPassword" className="flex items-center gap-1">
+                            Confirm Password:
+                            {validMatch && formData.matchPassword ? (
+                                <FontAwesomeIcon icon={faCheck} className="text-green-500" />
+                            ) : (
+                                formData.matchPassword && (
+                                    <>
+                                        <FontAwesomeIcon icon={faTimes} className="text-red-500" />
+                                        <FontAwesomeIcon icon={faInfoCircle} className="text-blue-500" />
+                                    </>
+                                )
+                            )}
+                        </label>
+                        <input
+                            type="password"
+                            id="matchPassword"
+                            name="matchPassword"
+                            placeholder="Confirm Password"
+                            className="py-2 font-bold px-2 tracking-widest border-2"
+                            onChange={handleChange}
+                            value={formData.matchPassword}
+                            onFocus={() => setMatchFocus(true)}
+                            onBlur={() => setMatchFocus(false)}
+                        />
+                        <p
+                            id="confirmnote"
+                            className={matchFocus && !validMatch ? "text-sm text-gray-600" : "hidden"}
+                        >
+                            <FontAwesomeIcon icon={faInfoCircle} className="inline mr-1" /> Must match the first password
+                            input field.
+                        </p>
+                        <button type="submit" className="bg-black rounded-md text-white p-2">
+                            Submit Registration
+                        </button>
+                        <Link
+                            to="/login"
+                            className="bg-black text-center rounded-md text-white p-2"
+                        >
+                            I have an account
+                        </Link>
+                    </form>
+                </div>
+            )}
+        </>
+    );
+};
+
+export default UploadUserDetails;

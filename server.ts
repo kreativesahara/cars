@@ -49,7 +49,7 @@ app.use('/filter', filterCarRoute)
 app.use("/test", requireAuth, testRoute)
 
 //API Routes
-app.use("/products",  productsRoute)
+app.use("/products", requireAuth, productsRoute)
 app.use("/testproduct", requireAuth, testProductRoute)
 app.use("/sellers", sellersRoute)
 
