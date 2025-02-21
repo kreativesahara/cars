@@ -20,7 +20,7 @@ const LoginForm = () => {
 
     useEffect(() => {
         userRef.current.focus();
-        const persisted = JSON.parse(localStorage.getItem("persist"));
+        const persisted = JSON.parse(localStorage.getItem("persist" ) || false);
         if (persisted) setPersist(persisted);
     }, []);
 

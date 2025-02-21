@@ -97,18 +97,18 @@ const UpdateProduct = () => {
 
     return (
         <Layout>
-            <div className="mt-8">
-                <div className="w-auto min-h-screen bg-gradient-to-br from-blue-50 to-purple-50 py-16 px-2">
+            <div className="mt-6 -mx-1 -mt-2">
+                <div className="w-auto min-h-screen bg-gradient-to-br from-blue-50 to-purple-50 py-8 px-2">
                     {product && seller && (
-                        <div className="md:w-[600px] mx-auto place-content-center">
+                        <div className="md:w-[600px] mx-auto">
                             <h1 className="text-4xl font-bold text-center mb-2 pb-6">Updating Vehicle</h1>
                             <form onSubmit={handleSubmit} className="w-full bg-white rounded-xl p-6 shadow-lg">
                                 <div>
-                                    <label className="block text-sm text-neutral-900 mb-1">Vehicle ID</label>
+                                    <label className="text-sm text-neutral-900 mb-1">Vehicle ID</label>
                                     <input
                                         name="id"
                                         type="number"
-                                        className="block w-full border border-neutral-300 rounded-md p-2 text-neutral-900"
+                                        className="w-full border border-neutral-300 rounded-md p-2 text-neutral-900"
                                         required
                                         value={product?.id}
                                         disabled

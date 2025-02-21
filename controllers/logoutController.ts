@@ -19,7 +19,7 @@ export const handleLogout = async (req:Request, res:Response) => {
     if (!foundUser) {
         res.clearCookie('authorization', { 
             httpOnly: true, 
-            sameSite: 'strict', 
+            sameSite: 'none', 
             secure: true });
         return res.sendStatus(204);
     }

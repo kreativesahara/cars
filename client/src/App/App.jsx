@@ -60,35 +60,35 @@ function App() {
   // Render content based on fetched bills
   return (
     <Layout>
-      <main className="mt-10 mx-8">
+      <main className="mt-10 md:mx-8 min-w-[380px]">
         <div>
-          <div className='w-full bg-white shadow rounded-lg p-6 flex flex-col gap-6'>
+          <div className='w-full bg-white shadow rounded-lg p-2 flex flex-col gap-4'>
             <div className=' font-semibold text-center'>
               <h3 className='text-2xl md:text-4xl font-title  text-neutral-950'>Your Dashboard</h3>
             </div>
-            <div className='p-4 bg-neutral-50 rounded-md flex flex-col gap-2'>
+            <div className='p-2 bg-neutral-50 rounded-md flex flex-col gap-2'>
               <h2 className='text-lg font-medium text-neutral-950'>User's Details</h2>
               <p className='text-sm text-neutral-600'>User's Name: {auth?.lastname + " " + auth?.firstname}</p>
               <p className='text-sm text-neutral-600'>Your Email: {auth?.email}</p>
             </div>
             <SubscriptionCard/>
-            <section className='flex flex-col gap-4'>
+            <section className='flex flex-col gap-4 '>
               {auth?.roles === 3 &&
                 <div className='md:p-4 bg-neutral-50 rounded-md  gap-4 '>
-                  <div className="flex justify-between items-center">
-                    <h2 className='md:text-lg font-medium text-neutral-950'>Uploaded Product</h2>
+                  <div className="flex justify-around md:justify-between items-center pt-3">
+                    <h2 className='md:text-lg font-medium text-neutral-950 '>Uploaded Product</h2>
                     <BtnUpload />
                   </div>
-                  <div>
+                  <div className="max-w-max " >
                     {!product ? <p className='text-sm text-neutral-600'>No Product Uploaded</p> :
                       (<ul >{product.map((vehicle) =>
-                        <li key={vehicle.id} className="md:flex p-2 rounded-md bg-slate-200 m-4 gap-4 ">
+                        <li  key={vehicle.id} className="md:flex p-2 rounded-md bg-slate-200 m-4 gap-4">
                           <img
                             src={vehicle.images[0]}
                             alt={`Missing Image for ${vehicle.id}`}
-                            className='font-serif text-xs md:w-[100px] md:h-[100px] h-[200px] rounded-md place-content-center j object-cover'
+                            className='font-serif text-xs md:w-[150px]  md:h-[120px] rounded-md place-content-center j object-cover'
                           />
-                          <div className="w-10/12 mx-auto pt-4">
+                          <div className=" mx-auto md:w-[100vw] pt-4">
                             <p className='text-sm text-neutral-950 font-medium'>Make : {vehicle.make}</p>
                             <p className='text-sm text-neutral-600'>Model : {vehicle.model}</p>
                             <p className='text-sm text-neutral-600'>Year : {vehicle.year}</p>

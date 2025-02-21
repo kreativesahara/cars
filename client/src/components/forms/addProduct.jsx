@@ -119,18 +119,18 @@ function addProduct() {
     }
   }
   return (
-    <Layout>
-      <div className="w-auto min-h-screen bg-gradient-to-br from-blue-50 to-purple-50 py-16 px-2">
-        <div className="md:w-[600px] mx-auto place-content-center">
+    <Layout> 
+      <div className='w-auto min-h-screen bg-gradient-to-br from-blue-50 to-purple-50 py-16 px-2'>   
+      <div className="md:w-[600px] mx-auto -mt-6">
           <h1 className="text-4xl font-bold text-center mb-2 pb-6">Upload Vehicle</h1>
-          <form onSubmit={handleSubmit} className="w-full bg-white rounded-xl p-6 shadow-lg">
+          <form onSubmit={handleSubmit} className="w-full bg-white rounded-xl p-4 md:p-6 shadow-lg">
             <div>
-              <label className="block text-sm text-neutral-900 mb-1">User ID</label>
+              <label className=" text-sm text-neutral-900 mb-1">User ID</label>
               <input
                 name="seller_id"
                 onChange={handleChange}
                 type="number"
-                className="block w-full border border-neutral-300 rounded-md p-2 text-neutral-900"
+                className="w-full border border-neutral-300 rounded-md p-2 text-neutral-900"
                 required
                 value={auth.id}
                 disabled
@@ -276,11 +276,11 @@ function addProduct() {
                 )}
               </div>
             </div>
-          
             <button type="submit" className="bg-black text-white rounded-md px-4 mt-4 py-2 text-sm w-full">Listing</button>
           </form>
         </div>
-      </div>
+      </div> 
+     
 
     </Layout>
   )

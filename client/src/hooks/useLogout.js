@@ -16,7 +16,7 @@ const useLogout = () => {
                 withCredentials: true
             });
             alert("You Are Logged Out")
-            window.location.href = from, { replace: true }    
+            window.location.href = from    
         } catch (err) {
             console.error(err);
         }
