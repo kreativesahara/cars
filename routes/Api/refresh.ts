@@ -6,6 +6,6 @@ import { verifyRoles } from "../../middleware/verifyRoles";
 const router = Router();
 
 router.route("/")
-    .get(verifyRoles(ROLES_LIST.Member, ROLES_LIST.Seller, ROLES_LIST.Modarator, ROLES_LIST.Admin),handleRefreshToken)
+    .post(verifyRoles(ROLES_LIST.Member, ROLES_LIST.Seller, ROLES_LIST.Modarator, ROLES_LIST.Admin),handleRefreshToken)
 
 export default router
