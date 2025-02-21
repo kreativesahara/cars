@@ -68,7 +68,7 @@ function App() {
             </div>
             <div className='p-4 bg-neutral-50 rounded-md flex flex-col gap-2'>
               <h2 className='text-lg font-medium text-neutral-950'>User's Details</h2>
-              <p className='text-sm text-neutral-600'>User's Name: {auth?.lastname || "User"}</p>
+              <p className='text-sm text-neutral-600'>User's Name: {auth?.lastname + " " + auth?.firstname}</p>
               <p className='text-sm text-neutral-600'>Your Email: {auth?.email}</p>
             </div>
             <SubscriptionCard/>

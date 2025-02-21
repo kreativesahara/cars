@@ -73,9 +73,9 @@ const UploadUserDetails = () => {
                 headers: { "Content-Type": "application/json" },
                 withCredentials: true
             });
+            //Very Important code for logical rendering of rwturned components
             setSuccess(true);
             alert("User registered successfully");
-            // Clear the form fields
             setFormData({
                 firstname: "",
                 lastname: "",
@@ -84,7 +84,8 @@ const UploadUserDetails = () => {
                 matchPassword: ""
             });
             // Redirect to the login page (or other route)
-            navigate(from, { replace: true });
+            window.location.href = from, { replace: true };
+            
         } catch (error) {
             if (!error?.response) {
                 setErrMsg("No Server Response");
@@ -208,14 +209,16 @@ const UploadUserDetails = () => {
                             type="password"
                             id="password"
                             name="password"
+                            value={formData.password}
+                            onFocus={() => setPwdFocus(true)}
+                            onBlur={() => setPwdFocus(false)}
+                            autoComplete="off"
                             placeholder="Password"
                             aria-invalid={validPwd ? "false" : "true"}
                             aria-describedby="pwdnote"
                             className="py-2 font-bold px-2 tracking-widest border-2"
                             onChange={handleChange}
-                            value={formData.password}
-                            onFocus={() => setPwdFocus(true)}
-                            onBlur={() => setPwdFocus(false)}
+
                         />
                         <p
                             id="pwdnote"

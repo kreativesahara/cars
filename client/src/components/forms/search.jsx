@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { useSearch } from '../../context/SearchProvider';
 import { useProductContext } from '../../context/ProductProvider';
-import axios from '../../api/axios';
+import { axiosPrivate } from '../../api/axios';
 import { Link } from 'react-router-dom';
 
 const Search = () => {
@@ -30,7 +30,7 @@ const Search = () => {
     console.log('params', params);
 
     try {
-      const { data } = await axios.get('/search', { params });
+      const { data } = await axiosPrivate.get('/search', { params });
       setSearchResults(data);
       console.log('Search result', searchResults)
     } catch (err) {

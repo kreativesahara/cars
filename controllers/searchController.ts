@@ -6,7 +6,7 @@ import { product } from '../db/schema/product';
 
 export const searchCarProduct = async (req: Request, res: Response) => {
     try {
-        const { make, model, location } = req.query;
+        const { make, model, location, condition} = req.query;
         console.log('Search query implementation:', make, model, location);
         const cars = await db.select()
             .from(product)
@@ -14,7 +14,9 @@ export const searchCarProduct = async (req: Request, res: Response) => {
                 or(
                     like(product.make, `%${make}%`),
                     like(product.model, `%${model}%`),
-                    like(product.location, `%${location}%`)
+                    like(product.location, `%${location}%`),
+                    like(product.condition, `%${condition}%`)
+
                 )
             );
         res.json(cars);

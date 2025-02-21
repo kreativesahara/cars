@@ -1,6 +1,3 @@
-import React from 'react';
-import axios from '../../api/axios';
-
 const FilterForm = ({ filters, setFilters, onFilterSubmit }) => {
     // Handle onChange event for all inputs/selects
     const handleFilterChange = (e) => {

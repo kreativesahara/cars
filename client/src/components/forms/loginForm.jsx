@@ -110,6 +110,7 @@ const LoginForm = () => {
                     type="password"
                     id="password"
                     name='password'
+                    autoComplete="off"
                     className='py-2 font-bold px-2 racking-widest border-2'
                     onChange={handleChange}
                     // required

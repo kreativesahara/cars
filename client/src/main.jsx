@@ -41,51 +41,40 @@ const ROLES = {
 const AppRoutes = () => (
   <Routes>
     {/* Public Routes */}
+    <Route path="unauthorized" element={<div>Unauthorized!</div>} />
+    <Route path="notfound" element={<div>Page Does Not Exit!</div>} />
     <Route path="register" element={<Register />} />
     <Route path="login" element={<Login />} />
     <Route path="forgot-password" element={<ForgotPassword />} />
-    <Route path="unauthorized" element={<div>Unauthorized!</div>} />
+
+    <Route path="home" element={< Home />} />
+    <Route path="pricing" element={<Pricing />} />
     <Route path="product" element={<Product />} />
-    <Route path="itempage/:productId" element={<ItemPage />} />      
+    <Route path="support" element={<Support />} />
 
     {/* Protected Routes */}
     <Route element={<PersistLogin />}>
       <Route path="/" element={< Home />} />
-      <Route path="home" element={< Home />} />
-      <Route path="pricing" element={<Pricing />} />
+      <Route path="itempage/:productId" element={<ItemPage />} />
       {/* <Route path="subscription" element={<SubscriptionPage />} /> */}
-      <Route path="support" element={<Support />} />
-      
 
       {/* Nested Routes for Authorization */}
-      <Route
-        element={<RequireAuth allowedRoles={[ROLES.Visitor, ROLES.Member, ROLES.Seller, ROLES.Modarator, ROLES.Admin]} />}
-      >
-             <Route path="dashboard" element={<App />} />
-      </Route> 
-      <Route
-        element={<RequireAuth allowedRoles={[ROLES.Visitor, ROLES.Member, ROLES.Seller, ROLES.Modarator, ROLES.Admin]} />}
-      >
+      <Route element={<RequireAuth allowedRoles={[ROLES.Visitor, ROLES.Member, ROLES.Seller, ROLES.Modarator, ROLES.Admin]} />}>
+        <Route path="dashboard" element={<App />} />
+      </Route>
+      <Route element={<RequireAuth allowedRoles={[ROLES.Visitor, ROLES.Member, ROLES.Seller, ROLES.Modarator, ROLES.Admin]} />}>
         <Route path="upload" element={<AddProduct />} />
-      </Route> 
-      <Route
-      element={<RequireAuth allowedRoles={[ROLES.Visitor, ROLES.Member, ROLES.Seller, ROLES.Modarator, ROLES.Admin]} />}
-      >
+      </Route>
+      <Route element={<RequireAuth allowedRoles={[ROLES.Visitor, ROLES.Member, ROLES.Seller, ROLES.Modarator, ROLES.Admin]} />}>
         <Route path="itempage/:productId" element={<ItemPage />} />
-    </Route> 
-      <Route 
-      element={<RequireAuth allowedRoles={[ROLES.Visitor, ROLES.Member, ROLES.Seller, ROLES.Modarator, ROLES.Admin]} />}
-      >
+      </Route>
+      <Route element={<RequireAuth allowedRoles={[ROLES.Visitor, ROLES.Member, ROLES.Seller, ROLES.Modarator, ROLES.Admin]} />}>
         <Route path="app/:productId" element={<UpdateProduct />} />
-    </Route>
-    <Route
-      element={<RequireAuth allowedRoles={[ROLES.Visitor, ROLES.Member, ROLES.Seller, ROLES.Modarator, ROLES.Admin]} />}
-    >
-      <Route path="upgrade" element={<BecomeSeller />} />
-    </Route>
-    <Route
-        element={<RequireAuth allowedRoles={[ROLES.Visitor, ROLES.Member, ROLES.Seller, ROLES.Modarator, ROLES.Admin]} />}
-      >
+      </Route>
+      <Route element={<RequireAuth allowedRoles={[ROLES.Visitor, ROLES.Member, ROLES.Seller, ROLES.Modarator, ROLES.Admin]} />}>
+        <Route path="upgrade" element={<BecomeSeller />} />
+      </Route>
+      <Route element={<RequireAuth allowedRoles={[ROLES.Visitor, ROLES.Member, ROLES.Seller, ROLES.Modarator, ROLES.Admin]} />}>
         <Route path="product" element={<Product />} />
       </Route>
     </Route>
@@ -97,11 +86,11 @@ ReactDOM.createRoot(document.getElementById('root')).render(
     <AuthProvider>
       <ProductProvider>
         <SearchProvider>
-        <SellerProvider>
-        <Router>
-          <AppRoutes />
-        </Router>
-        </SellerProvider >
+          <SellerProvider>
+            <Router>
+              <AppRoutes />
+            </Router>
+          </SellerProvider >
         </SearchProvider>
       </ProductProvider>
     </AuthProvider>

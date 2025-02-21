@@ -1,5 +1,5 @@
 import { createContext, useState, useContext, useEffect } from "react";
-import useAxiosPrivate from "../api/useAxiosPrivate";
+import {axiosPrivate }from "../api/axios";
 
 const ProductContext = createContext();
 
@@ -8,7 +8,7 @@ export const useProductContext = () => {
 };
 
 export const ProductProvider = ({ children }) => {
-    const axiosPrivate = useAxiosPrivate();
+  
     const [products, setProducts] = useState([]);
     const [filters, setFilters] = useState({
         make: '',
@@ -32,6 +32,7 @@ export const ProductProvider = ({ children }) => {
                     params: filters  // Pass filters as query parameters
                 });
                 setProducts(response.data);
+                console.log('products from provider checking for image : ', products)
             } catch (err) {
                 console.error(err);
             }
