@@ -15,7 +15,7 @@ const registerUser = async (req: Request, res: Response): Promise<Response> => {
 
     try {
         // Hash the password
-        const saltRounds: any = await bcrypt.genSalt();
+        const saltRounds = 10;
         const hashedPassword = await bcrypt.hash(password, saltRounds);
         // Insert the new user into the database
         const [newUser] = await db
@@ -77,20 +77,20 @@ const handleLogin = async (req: Request, res: Response) => {
                 }
             },
             process.env.ACCESS_TOKEN_SECRET as string,
-            { expiresIn: '2h' },
+            { expiresIn: '45s' },
 
         );
 
         const refreshToken = jwt.sign(
             {
                 "id": id,
-                //"firstname": firstname,
+                "firstname": firstname,
                 "lastname": lastname,
                 "email": email,
                 "roles": roles
             },
             process.env.REFRESH_TOKEN_SECRET as string,
-            { expiresIn: '12h' }
+            { expiresIn: '1h' }
         );
         //Save current user with their refresh token
         await db
@@ -101,15 +101,15 @@ const handleLogin = async (req: Request, res: Response) => {
         //Creates Secure Cookie with access token
         res.cookie('authorization', accessToken, {
             httpOnly: true,
-            // secure: true,
-            sameSite: 'strict',
+            secure: true,
+            sameSite: 'none',
             maxAge: 24 * 60 * 60 * 1000
         })
             ;
         res.cookie('refreshToken', refreshToken, {
             httpOnly: true,
-            //secure: true,
-            sameSite: 'strict',
+            secure: true,
+            sameSite: 'none',
             maxAge: 24 * 60 * 60 * 1000
         })
         // Send authorization roles and access token to user
@@ -118,7 +118,8 @@ const handleLogin = async (req: Request, res: Response) => {
             firstname,
             lastname,
             email,
-            roles, accessToken, refreshToken
+            roles, 
+            accessToken
         });
         console.log('foundUser', foundUser);
     } else {

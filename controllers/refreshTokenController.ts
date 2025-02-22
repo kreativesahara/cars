@@ -9,9 +9,9 @@ export const handleRefreshToken = async (req: Request, res: Response) => {
         // Extract the token from the Authorization cookie
         const authcookies = req.cookies;
         console.log('AuthCookies:', authcookies);
-        if (!authcookies?.authorization) {
-            console.error('missing authorization cookie');
-            return res.status(401).json({ error: 'Authorization token required' });
+        if (!authcookies?.refreshToken) {
+            console.error('missing refresh cookie');
+            return res.status(401).json({ error: 'Refresh token required' });
         }
 
 
@@ -22,7 +22,7 @@ export const handleRefreshToken = async (req: Request, res: Response) => {
             .from(user)
             .where(eq(user.refreshToken, refreshToken))
             .limit(1);
-
+        console.log('Found user:', foundUser);
         if (foundUser.length === 0) {
             console.error('Refresh token does not match any user:', refreshToken);
             return res.status(403).json({ message: 'User not found or token invalid.' });
@@ -67,16 +67,15 @@ export const handleRefreshToken = async (req: Request, res: Response) => {
                         },
                     },
                     process.env.ACCESS_TOKEN_SECRET as string,
-                    { expiresIn: '2h' }
+                    { expiresIn: '20s' }
                 );
-
                 
                 //Set access token as a cookie in the response
                 res.cookie('authorization', accessToken,
                     {
                         httpOnly: true,
-                        sameSite: 'strict',
-                        //secure: true, 
+                        sameSite: 'none',
+                        secure: true, 
                         maxAge: 24 * 60 * 60 * 1000
                     }
                 );

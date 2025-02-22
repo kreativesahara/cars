@@ -35,7 +35,6 @@ const useRefreshToken = () => {
             return null; // Indicate failure to refresh token
         }
     };
-
     return refresh;
 };
 
