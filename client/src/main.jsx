@@ -46,13 +46,15 @@ const AppRoutes = () => (
     <Route path="register" element={<Register />} />
     <Route path="login" element={<Login />} />
     <Route path="forgot-password" element={<ForgotPassword />} />
+    <Route path="/" element={< Home />} />
 
-    <Route path="home" element={< Home />} />
     
 
     {/* Protected Routes */}
-    <Route element={<PersistLogin />}>     
-      <Route path="/" element={< Home />} />
+    <Route element={<PersistLogin />}> 
+      <Route path="home" element={< Home />} />
+      <Route path="pricing" element={<Pricing />} />
+      <Route path="support" element={<Support />} />
       {/* Nested Routes for Authorization */}
       <Route element={<RequireAuth allowedRoles={[ROLES.Visitor, ROLES.Member, ROLES.Seller, ROLES.Modarator, ROLES.Admin]} />}>
         <Route path="dashboard" element={<App />} />
@@ -71,8 +73,6 @@ const AppRoutes = () => (
       </Route>
       <Route element={<RequireAuth allowedRoles={[ROLES.Visitor, ROLES.Member, ROLES.Seller, ROLES.Modarator, ROLES.Admin]} />}>
         <Route path="product" element={<Product />} />
-        <Route path="pricing" element={<Pricing />} />
-        <Route path="support" element={<Support />} />
       </Route>
     </Route>
   </Routes>

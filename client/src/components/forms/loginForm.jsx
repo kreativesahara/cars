@@ -11,7 +11,7 @@ const LoginForm = () => {
     const userRef = useRef();
     const errRef = useRef();
     const [errMsg, setErrMsg] = useState('');
-    const from = location.state?.from?.pathname || "/";
+    const from = location.state?.from?.pathname || "/home";
 
     const [formData, setFormData] = useState({
         email: "",
