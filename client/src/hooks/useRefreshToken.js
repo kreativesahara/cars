@@ -8,12 +8,11 @@ const useRefreshToken = () => {
         try {
             console.log('Starting token refresh process...from refreshController');
             // Make the refresh token request
-            const response = await axiosPrivate.post('/refresh',
-                { withCredentials: true }
-            );
+            const response = await axiosPrivate.get('/refresh' );
             // Destructure the response for better readability
             const { id, firstname, lastname, email, roles, accessToken } = response.data;
-            console.log(id);  
+            
+            console.log(accessToken);  
             // Update auth state with the new token and roles
             setAuth(prev => {
                 return {
@@ -26,6 +25,7 @@ const useRefreshToken = () => {
                     accessToken: accessToken,
                 };
             });
+            console.log('Token refreshed successfully');
         } catch (err) {
             console.error('Error in useRefreshToken:', err?.response?.data?.message || err.message);
             if (err?.response?.status === 401 || err?.response?.status === 403) {

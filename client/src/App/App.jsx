@@ -17,12 +17,12 @@ function App() {
   const { sellers } = useSellerContext();
   const [user, setUser] = useState(null);
   const [product, setProduct] = useState(null);
-  const SellerId = Number(auth?.id);
+  const SellerId = auth?.id;
   //const { sellers } = useSellerContext();
   //const [user, setUser] = useState(null);
 
 
-  console.log('User ID:', SellerId);
+  console.log('User ID:',auth);
   console.log('products context:', products);
 
   useEffect(() => {
@@ -72,7 +72,7 @@ function App() {
               <p className='text-sm text-neutral-600'>Your Email: {auth?.email}</p>
             </div>
             <SubscriptionCard/>
-            <section className='flex flex-col gap-4 '>
+            <section className=' productsListing flex flex-col gap-4 '>
               {auth?.roles === 3 &&
                 <div className='md:p-4 bg-neutral-50 rounded-md  gap-4 '>
                   <div className="flex justify-around md:justify-between items-center pt-3">

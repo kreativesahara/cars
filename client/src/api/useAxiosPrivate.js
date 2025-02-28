@@ -32,14 +32,12 @@ const useAxiosPrivate = () => {
                     prevRequest.sent = true;
                     try {
                         const newAccessToken = await refresh();
-                        // If a new token was successfully obtained, update the header and retry
                         if (newAccessToken) {
                             prevRequest.headers["authorization"] = `Bearer ${newAccessToken}`;
                             return axiosPrivate(prevRequest);
                         }
                     } catch (refreshError) {
                         console.error("Token refresh failed:", refreshError);
-                        // Optionally, trigger a logout or redirect to login here
                         return Promise.reject(refreshError);
                     }
                 }
@@ -52,8 +50,6 @@ const useAxiosPrivate = () => {
             axiosPrivate.interceptors.response.eject(responseIntercept);
         };
     }, [auth, refresh]);
-
     return axiosPrivate;
 };
-
 export default useAxiosPrivate;

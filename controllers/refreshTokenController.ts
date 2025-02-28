@@ -8,12 +8,11 @@ export const handleRefreshToken = async (req: Request, res: Response) => {
     try {
         // Extract the token from the Authorization cookie
         const authcookies = req.cookies;
-        console.log('AuthCookies:', authcookies);
+        console.log('AuthCookie from handle Refresh:', authcookies);
         if (!authcookies?.refreshToken) {
             console.error('missing refresh cookie');
             return res.status(401).json({ error: 'Refresh token required' });
         }
-
 
         const refreshToken = authcookies.refreshToken;
 
@@ -27,7 +26,6 @@ export const handleRefreshToken = async (req: Request, res: Response) => {
             console.error('Refresh token does not match any user:', refreshToken);
             return res.status(403).json({ message: 'User not found or token invalid.' });
         }
-
         // Verify the refresh token
         jwt.verify(
             refreshToken,
@@ -39,47 +37,46 @@ export const handleRefreshToken = async (req: Request, res: Response) => {
                     return res.status(403).json({ message: 'Token invalid or expired.' });
                 }
                 console.log('Decoded token:', decoded);
-
                 // Validate the decoded token matches the user
-                const userId = foundUser[0].id;
-                const userFname = foundUser[0].firstname;
-                const userLname = foundUser[0].lastname;
                 const userEmail = foundUser[0].email;
-                const userRoles = foundUser[0].roles;
 
                 if (userEmail !== decoded.email) {
                     console.error('Token email mismatch:', { tokenEmail: decoded.email, dbEmail: userEmail });
                     return res.status(403).json({ message: 'Token email mismatch.' });
-                } else if (userRoles !== decoded.roles) {
-                    console.error('Token roles mismatch:', { tokenRoles: decoded.roles, dbRoles: userRoles });
-                    return res.status(403).json({ message: 'Token roles mismatch.' });
                 }
 
                 // Generate new access token
                 const accessToken = jwt.sign(
                     {
                         UserInfo: {
-                            id: userId,
-                            firstname: userFname,
-                            lastname: userLname,
+                            id: foundUser[0].id,
+                            firstname: foundUser[0].firstname,
+                            lastname: foundUser[0].lastname,
                             email: userEmail,
-                            roles: userRoles,
+                            roles: foundUser[0].roles,
                         },
                     },
                     process.env.ACCESS_TOKEN_SECRET as string,
-                    { expiresIn: '20s' }
+                    { expiresIn: '15m' }
                 );
                 
                 //Set access token as a cookie in the response
                 res.cookie('authorization', accessToken,
-                    {
+                    {   
                         httpOnly: true,
                         sameSite: 'none',
                         secure: true, 
                         maxAge: 24 * 60 * 60 * 1000
                     }
                 );
-                return res.status(200).json({ id: userId, firstname: userFname, lastname: userLname, email: userEmail, roles: userRoles, accessToken });
+                return res.status(200).json({
+                    id: foundUser[0].id,
+                    firstname: foundUser[0].firstname,
+                    lastname: foundUser[0].lastname,
+                    email: userEmail,
+                    roles: foundUser[0].roles,
+                    accessToken, 
+                    });
             }
         );
     } catch (error) {

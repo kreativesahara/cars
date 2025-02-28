@@ -6,10 +6,5 @@ router.route("/")
     .post(registerUser)
 router.route("/login")
     .post(handleLogin)
-    .get()
-router.route("/:id")
-    .get()
-    .put()
-    .delete();
 export default router;
 

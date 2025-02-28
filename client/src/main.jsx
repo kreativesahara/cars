@@ -48,21 +48,16 @@ const AppRoutes = () => (
     <Route path="forgot-password" element={<ForgotPassword />} />
 
     <Route path="home" element={< Home />} />
-    <Route path="pricing" element={<Pricing />} />
-    <Route path="product" element={<Product />} />
-    <Route path="support" element={<Support />} />
+    
 
     {/* Protected Routes */}
-    <Route element={<PersistLogin />}>
+    <Route element={<PersistLogin />}>     
       <Route path="/" element={< Home />} />
-      <Route path="itempage/:productId" element={<ItemPage />} />
-      {/* <Route path="subscription" element={<SubscriptionPage />} /> */}
-
       {/* Nested Routes for Authorization */}
       <Route element={<RequireAuth allowedRoles={[ROLES.Visitor, ROLES.Member, ROLES.Seller, ROLES.Modarator, ROLES.Admin]} />}>
         <Route path="dashboard" element={<App />} />
       </Route>
-      <Route element={<RequireAuth allowedRoles={[ROLES.Visitor, ROLES.Member, ROLES.Seller, ROLES.Modarator, ROLES.Admin]} />}>
+      <Route element={<RequireAuth allowedRoles={[ ROLES.Seller, ROLES.Modarator, ROLES.Admin]} />}>
         <Route path="upload" element={<AddProduct />} />
       </Route>
       <Route element={<RequireAuth allowedRoles={[ROLES.Visitor, ROLES.Member, ROLES.Seller, ROLES.Modarator, ROLES.Admin]} />}>
@@ -76,6 +71,8 @@ const AppRoutes = () => (
       </Route>
       <Route element={<RequireAuth allowedRoles={[ROLES.Visitor, ROLES.Member, ROLES.Seller, ROLES.Modarator, ROLES.Admin]} />}>
         <Route path="product" element={<Product />} />
+        <Route path="pricing" element={<Pricing />} />
+        <Route path="support" element={<Support />} />
       </Route>
     </Route>
   </Routes>

@@ -12,9 +12,7 @@ const useLogout = () => {
     const logout = async () => {
         setAuth({});
         try {
-            await axiosPrivate('/logout', {
-                withCredentials: true
-            });
+            await axiosPrivate('/logout');
             alert("You Are Logged Out")
             window.location.href = from    
         } catch (err) {

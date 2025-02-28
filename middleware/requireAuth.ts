@@ -5,6 +5,9 @@ import jwt from 'jsonwebtoken';
 declare module 'express-serve-static-core' {
     interface Request {
         auth?: {
+            id: string;
+            firstname: string;
+            lastname: string;
             user: string;
             roles: string[];
         };
@@ -14,14 +17,19 @@ declare module 'express-serve-static-core' {
 // Middleware for verifying JWT and attaching user data to the request
 export const requireAuth = (req: Request, res: Response, next: NextFunction) => {
     try {
-        // Extract the token from the Authorization cookie
-        const authcookies = req.cookies['authorization'] || req.cookies.authorization as string;
-        console.log('AuthCookies from Require Auth:', authcookies);
-        if (!authcookies) {
-            console.error('Authorization header missing or invalid');
+        // Extract token from Authorization header or cookie
+        const authHeader = req.headers.authorization;
+        const token = authHeader?.startsWith('Bearer ')
+            ? authHeader.split(' ')[1]
+            : req.cookies['authorization'];
+
+        console.log('Token from Require Auth:', token);
+
+        if (!token) {
+            console.error('Authorization token missing');
             return res.status(401).json({ error: 'Authorization token required' });
         }
-        const token = authcookies;
+
         jwt.verify(
             token,
             process.env.ACCESS_TOKEN_SECRET as string,
@@ -31,23 +39,20 @@ export const requireAuth = (req: Request, res: Response, next: NextFunction) => 
                     return res.status(403).json({ error: 'Invalid or expired token' });
                 }
 
-                // Check if the decoded token contains the required fields
                 if (!decoded.UserInfo || !decoded.UserInfo.email || !decoded.UserInfo.roles) {
                     console.error('Invalid token payload');
                     return res.status(403).json({ error: 'Invalid token payload' });
                 }
 
-                // Attach user information to the request object
                 req.auth = {
+                    id: decoded.UserInfo.id,
+                    firstname: decoded.UserInfo.firstname,
+                    lastname: decoded.UserInfo.lastname,
                     user: decoded.UserInfo.email,
                     roles: decoded.UserInfo.roles,
                 };
 
-                console.log('User authenticated:', {
-                    user: req.auth.user,
-                    roles: req.auth.roles,
-                });
-
+                console.log('User authenticated:', req.auth);
                 next();
             }
         );

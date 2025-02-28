@@ -77,7 +77,7 @@ const handleLogin = async (req: Request, res: Response) => {
                 }
             },
             process.env.ACCESS_TOKEN_SECRET as string,
-            { expiresIn: '45s' },
+            { expiresIn: '15m' },
 
         );
 
@@ -99,13 +99,7 @@ const handleLogin = async (req: Request, res: Response) => {
             .where(eq(user.email, email));
 
         //Creates Secure Cookie with access token
-        res.cookie('authorization', accessToken, {
-            httpOnly: true,
-            secure: true,
-            sameSite: 'none',
-            maxAge: 24 * 60 * 60 * 1000
-        })
-            ;
+        res.header('authorization', accessToken);
         res.cookie('refreshToken', refreshToken, {
             httpOnly: true,
             secure: true,
@@ -120,10 +114,10 @@ const handleLogin = async (req: Request, res: Response) => {
             email,
             roles, 
             accessToken
-        });
-        console.log('foundUser', foundUser);
+        })
+        console.log('foundUser', foundUser)
     } else {
-        console.log('Invalid password');
+        console.log('Invalid password')
         res.sendStatus(406);
     }
 }

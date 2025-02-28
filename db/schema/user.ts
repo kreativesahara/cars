@@ -10,6 +10,8 @@ export const user = mysqlTable('users', {
     //subscription: int('subscription_type'),
     password: varchar('password', { length: 255 }),
     refreshToken: varchar('refresh_token', { length: 255 }),
-    //created_at: datetime('created_at'),
-    //updated_at: datetime('updated_at')
+    // created_at: datetime('created_at'),
+    // updated_at: datetime('updated_at')
+    // createdAt: timestamp('created_at').defaultNow(),
+    // updatedAt: timestamp('updated_at').defaultNow().onUpdateNow()
 });
