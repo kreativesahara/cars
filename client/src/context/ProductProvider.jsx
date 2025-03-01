@@ -7,7 +7,8 @@ export const useProductContext = () => {
     return useContext(ProductContext);
 };
 
-export const ProductProvider = ({ children }) => {  
+export const ProductProvider = ({ children }) => {
+  
     const [products, setProducts] = useState([]);
     const [filters, setFilters] = useState({
         make: '',
@@ -27,7 +28,7 @@ export const ProductProvider = ({ children }) => {
     useEffect(() => {
         const getProducts = async () => {
             try {
-                const response = await axiosPrivate.get('/products', {
+                const response = await axiosPrivate.get('/publicproducts', {
                     params: filters  // Pass filters as query parameters
                 });
                 setProducts(response.data);

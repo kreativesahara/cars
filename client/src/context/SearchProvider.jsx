@@ -3,6 +3,14 @@ import React, { createContext, useContext, useState } from 'react';
 // Create the context
 const SearchContext = createContext();
 
+export const useSearch = () => {
+    const context = useContext(SearchContext);
+    if (!context) {
+        throw new Error('useSearch must be used within a SearchProvider');
+    }
+    return context;
+};
+
 // Create the provider component
 export const SearchProvider = ({ children }) => {
     const [make, setMake] = useState('');
@@ -39,10 +47,4 @@ export const SearchProvider = ({ children }) => {
 };
 
 // Custom hook for consuming the context
-export const useSearch = () => {
-    const context = useContext(SearchContext);
-    if (!context) {
-        throw new Error('useSearch must be used within a SearchProvider');
-    }
-    return context;
-};
+
