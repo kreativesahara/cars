@@ -9,7 +9,7 @@ const ProductListing = ({ products }) => {
                            <figure>
                                 {product?.images?.length >= 0 ? (
                                     <img
-                                        // src={product?.images[0]}
+                                        src={product?.images[0]}
                                         alt={`${product.make} ${product.model} in ${product.location}`}
                                         loading="lazy" width="440" height="300"
                                         className=" bg-slate-500 rounded shadow-lg object-cover items-center justify-center " />

@@ -6,6 +6,7 @@ import BtnUpload from "../components/button/btnUpload";
 import { useProductContext } from "../context/ProductProvider";
 import { useSellerContext } from "../context/SellerProvider";
 import BtnBeSeller from "../components/button/btnBeSeller";
+import BtnBeMember from "../components/button/btnBeMember";
 import { axiosPrivate } from "../api/axios";
 import SubscriptionCard from  "../components/subscriptionCard"
 
@@ -112,6 +113,14 @@ function App() {
                     <h2 className='md:text-lg font-medium text-neutral-950'>Get Started</h2>
                     <BtnBeSeller />
                   </div>
+                </div>}
+              {(auth?.roles === 1) && <div className='md:p-4 bg-neutral-50 rounded-md flex flex-col gap-4'>
+                <div className="flex justify-between items-center">
+                  <h2 className='md:text-lg font-medium text-neutral-950'>
+                    Become a Pro Member 
+                  </h2>
+                  <BtnBeMember />
+                </div>
                 </div>}
             </section>
           </div>
