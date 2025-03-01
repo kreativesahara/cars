@@ -1,12 +1,13 @@
 import React from 'react'
 import axios from '../../api/axios'
 import useAuth from '../../hooks/useAuth'
-import { Link, useNavigate, useLocation } from 'react-router-dom'
+import { Link, useLocation } from 'react-router-dom'
 import { useRef, useState, useEffect } from 'react'
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faEye, faEyeSlash } from '@fortawesome/free-solid-svg-icons';
 
 const LoginForm = () => {
     const { setAuth, persist, setPersist } = useAuth();
-    const navigate = useNavigate();
     const location = useLocation();
     const userRef = useRef();
     const errRef = useRef();
@@ -17,6 +18,8 @@ const LoginForm = () => {
         email: "",
         password: ""
     })
+
+    const [showPassword, setShowPassword] = useState(false);
 
     useEffect(() => {
         userRef.current.focus();
@@ -106,15 +109,23 @@ const LoginForm = () => {
                     // required
                 />
                 <label htmlFor="password">Password</label>
-                <input
-                    type="password"
-                    id="password"
-                    name='password'
-                    autoComplete="off"
-                    className='py-2 font-bold px-2 racking-widest border-2'
-                    onChange={handleChange}
-                    // required
-                />
+                <div className='relative'>
+                    <input
+                        type={showPassword ? "text" : "password"}
+                        id="password"
+                        name='password'
+                        autoComplete="off"
+                        className='py-2 font-bold px-2 tracking-widest border-2 w-full'
+                        onChange={handleChange}
+                    />
+                    <button
+                        type='button'
+                        className='absolute right-3 top-1/2 transform -translate-y-1/2'
+                        onClick={() => setShowPassword(prev => !prev)}
+                    >
+                        <FontAwesomeIcon icon={showPassword ? faEyeSlash : faEye} />
+                    </button>
+                </div>
                 <div className="flex flex-row gap-3 my-auto mx-auto">
                     <input
                         type="checkbox"

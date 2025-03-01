@@ -1,7 +1,7 @@
 import { useRef, useState, useEffect } from "react";
 import axios from "../../api/axios";
 import { Link, useLocation, useNavigate } from "react-router-dom";
-import { faCheck, faTimes, faInfoCircle } from "@fortawesome/free-solid-svg-icons";
+import { faCheck, faTimes, faInfoCircle, faEye, faEyeSlash } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 
 const MAIL_REGEX = /^(?=[a-z0-9@.]+$)(?=.*@)(?=.*\.)[a-z0-9]+(?:\.[a-z0-9]+)*@[a-z0-9]+(?:\.[a-z0-9]+)*\.[a-z]{2,}$/;
@@ -34,6 +34,9 @@ const UploadUserDetails = () => {
         password: "",
         matchPassword: ""
     });
+
+    const [showPassword, setShowPassword] = useState(false);
+
 
     useEffect(() => {
         // Focus on the first name input on mount
@@ -85,7 +88,7 @@ const UploadUserDetails = () => {
             });
             // Redirect to the login page (or other route)
             window.location.href = from, { replace: true };
-            
+
         } catch (error) {
             if (!error?.response) {
                 setErrMsg("No Server Response");
@@ -167,7 +170,7 @@ const UploadUserDetails = () => {
                             )}
                         </label>
                         <input
-                            type="text"
+                            type="email"
                             id="email"
                             name="email"
                             value={formData.email}
@@ -206,7 +209,7 @@ const UploadUserDetails = () => {
                             )}
                         </label>
                         <input
-                            type="password"
+                            type="text"
                             id="password"
                             name="password"
                             value={formData.password}
@@ -242,17 +245,26 @@ const UploadUserDetails = () => {
                                 )
                             )}
                         </label>
-                        <input
-                            type="password"
-                            id="matchPassword"
-                            name="matchPassword"
-                            placeholder="Confirm Password"
-                            className="py-2 font-bold px-2 tracking-widest border-2"
-                            onChange={handleChange}
-                            value={formData.matchPassword}
-                            onFocus={() => setMatchFocus(true)}
-                            onBlur={() => setMatchFocus(false)}
-                        />
+                        <div className="relative">
+                            <input
+                                type={showPassword ? "text" : "password"}
+                                id="matchPassword"
+                                name="matchPassword"
+                                placeholder="Confirm Password"
+                                className="w-full py-2 font-bold px-2 tracking-widest border-2"
+                                onChange={handleChange}
+                                value={formData.matchPassword}
+                                onFocus={() => setMatchFocus(true)}
+                                onBlur={() => setMatchFocus(false)}
+                            />
+                            <button
+                                type='button'
+                                className='absolute right-3 top-1/2 transform -translate-y-1/2'
+                                onClick={() => setShowPassword(prev => !prev)}
+                            >
+                                <FontAwesomeIcon icon={showPassword ? faEyeSlash : faEye} />
+                            </button>
+                        </div>
                         <p
                             id="confirmnote"
                             className={matchFocus && !validMatch ? "text-sm text-gray-600" : "hidden"}
