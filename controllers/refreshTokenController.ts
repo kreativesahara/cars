@@ -57,18 +57,11 @@ export const handleRefreshToken = async (req: Request, res: Response) => {
                         },
                     },
                     process.env.ACCESS_TOKEN_SECRET as string,
-                    { expiresIn: '15m' }
+                    { expiresIn: '30s' }
                 );
                 
                 //Set access token as a cookie in the response
-                res.cookie('authorization', accessToken,
-                    {   
-                        httpOnly: true,
-                        sameSite: 'none',
-                        secure: true, 
-                        maxAge: 24 * 60 * 60 * 1000
-                    }
-                );
+                res.header('authorization', accessToken);
                 return res.status(200).json({
                     id: foundUser[0].id,
                     firstname: foundUser[0].firstname,

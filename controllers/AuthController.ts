@@ -77,7 +77,7 @@ const handleLogin = async (req: Request, res: Response) => {
                 }
             },
             process.env.ACCESS_TOKEN_SECRET as string,
-            { expiresIn: '15m' },
+            { expiresIn: '30s' },
 
         );
 
