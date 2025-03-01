@@ -10,6 +10,7 @@ import testRoute from './routes/test'
 import authRoute from './routes/Api/auth';
 import usersRoute from './routes/Api/user';
 import productsRoute from './routes/Api/product';
+import publicProductsRoute from './routes/Api/publicProduct'
 import sellersRoute from './routes/Api/seller'
 import testProductRoute from './routes/Api/testProduct'
 
@@ -34,26 +35,25 @@ app.use(cookieParser())
 app.use(cors(corsOptions));
 app.use(morgan('dev'))
 
-
-// Serve static files from the uploads directory
-app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
-app.get('/', (req: express.Request, res: express.Response ) => {
+app.get('/', (req: express.Request, res: express.Response) => {
     res.status(404).send('THIS IS SERVER!');
 })
-
+// Serve static files from the uploads directory
+app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
 app.use('/users',usersRoute )
 app.use("/auth", authRoute)
+app.use('/refresh', refreshRoute)
 app.use('/search', searchCarsRoute)
 app.use('/filter', filterCarRoute)
+app.use("/sellers", sellersRoute)
+app.use("/publicproducts", publicProductsRoute)
+
 //Test Case
 app.use("/test", requireAuth, testRoute)
+app.use("/testproduct", requireAuth, testProductRoute)
 
 //API Routes
 app.use("/products", requireAuth, productsRoute)
-app.use("/testproduct", requireAuth, testProductRoute)
-app.use("/sellers", sellersRoute)
-
-app.use('/refresh', refreshRoute)
 app.use('/logout', requireAuth, logoutRoute)
 
 // Start the server
