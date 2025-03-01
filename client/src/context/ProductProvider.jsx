@@ -7,8 +7,7 @@ export const useProductContext = () => {
     return useContext(ProductContext);
 };
 
-export const ProductProvider = ({ children }) => {
-  
+export const ProductProvider = ({ children }) => {  
     const [products, setProducts] = useState([]);
     const [filters, setFilters] = useState({
         make: '',
