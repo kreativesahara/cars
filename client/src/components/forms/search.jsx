@@ -107,27 +107,20 @@ const Search = () => {
           <ul className="grid grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-6 w-[85%] mx-auto">
             {searchResults.map((result) => {
               const productForResult = products.find((p) => p.id === Number(result.id));
+              console.log('productForResult', productForResult);
               return (
                 <li key={result.id}>
                   <Link to={`/itempage/${result.id}`}>
                     <div className="border min-w-[150px] max-w-[300px] shadow-lg rounded-xl pointer hover:shadow-blue-300 cursor-pointer">
                       <figure>
-                        {productForResult &&
-                          productForResult.images &&
-                          productForResult.images.length > 0 ? (
                           <img
-                            src={productForResult.images[0]?.image_url || productForResult.images[0]}
+                            src={productForResult.images[0]?.image_url || productForResult?.images[0]}
                             alt={`${result.make} ${result.model}`}
                             loading="lazy"
                             width="300"
                             height="300"
                             className="w-100 bg-slate-500 rounded shadow-lg"
                           />
-                        ) : (
-                          <div className="w-100 bg-slate-500 rounded shadow-lg opacity-75">
-                            No Image Available
-                          </div>
-                        )}
                       </figure>
                       <div className="p-2">
                         <div className="flex justify-between border-b-2 py-1.5">
