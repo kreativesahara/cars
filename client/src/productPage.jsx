@@ -21,6 +21,7 @@ const ProductPage = () => {
         fuelType: '',
         transmission: '',
         mileageRange: '',
+        images: [],
         location: '',
         condition: '',
         driveSystem: '',
@@ -32,8 +33,8 @@ const ProductPage = () => {
     const handleFilterSubmit = async (cleanedFilters) => {
         try {
             const response = await axiosPrivate.get('/filter', { params: cleanedFilters });
-            console.log("Filtered Vehicles:", response.data);
             setProducts(response.data);
+            console.log("Filtered Vehicles from FilterRoutes:", response.data);
         } catch (error) {
             console.error("Error fetching filtered vehicles:", error);
         }

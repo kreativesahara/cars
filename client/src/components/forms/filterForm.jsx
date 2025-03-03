@@ -53,9 +53,17 @@ const FilterForm = ({ filters, setFilters, onFilterSubmit }) => {
     };
 
     return (
-        <form onSubmit={handleSubmit} className="min-w-[400px] md:w-[600px] mt-6  rounded-xl p-6 shadow-2xl">
+        <form onSubmit={handleSubmit} className="min-w-[400px] md:w-[400px] mt-6  rounded-xl p-6 shadow-2xl">
             <h2 className="text-xl font-semibold mb-4">Filter Vehicles</h2>
-
+            <button
+                type="submit"
+                className="bg-black text-white rounded-md px-4 mb-4 py-2 text-sm w-full"
+                disabled={Object.values(filters).every(
+                    (value) => value === '' || (Array.isArray(value) && value.length === 0)
+                )}
+            >
+                Apply Filters
+            </button>
             {[
                 {
                     label: "Vehicle Make",
@@ -181,19 +189,7 @@ const FilterForm = ({ filters, setFilters, onFilterSubmit }) => {
                     value={filters.priceMax}
                     className="block w-full border border-neutral-300 rounded-md p-2 text-neutral-900"
                 />
-            </div>
-
-         
-            <button
-                type="submit"
-                className="bg-black text-white rounded-md px-4 mt-4 py-2 text-sm w-full"
-                disabled={Object.values(filters).every(
-                    (value) => value === '' || (Array.isArray(value) && value.length === 0)
-                )}
-            >
-                Apply Filters
-            </button>
-
+            </div>       
             <button
                 type="button"
                 onClick={handleClearFilters}

@@ -1,5 +1,8 @@
 import { Link } from "react-router-dom";
 const ProductListing = ({ products }) => {
+    const obj = (products[0].images)
+    console.log('ProductListing Images:', obj)
+
     return (
         <ul className="grid grid-cols-2  min-w-[400px] md:grid-cols-2 lg:grid-cols-3 gap-4 mx-auto">
             {products.map((product) => (
@@ -14,7 +17,7 @@ const ProductListing = ({ products }) => {
                                         loading="lazy" width="440" height="300"
                                         className=" bg-slate-500 rounded shadow-lg object-cover items-center justify-center " />
                                 ) : (
-                                    <div className="w-100 bg-slate-500 rounded shadow-lg flex items-center justify-center h-[300px]">
+                                    <div className="w-100 bg-slate-500 rounded shadow-lg flex items-center justify-center h-[200px]">
                                         No Image Available
                                     </div>
                                 )}

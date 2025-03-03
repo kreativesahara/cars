@@ -1,14 +1,10 @@
-import { createContext, useState, useContext, useEffect } from "react";
+import { createContext, useState, useContext, useMemo } from "react";
 import {axiosPrivate }from "../api/axios";
-
 const ProductContext = createContext();
-
 export const useProductContext = () => {
     return useContext(ProductContext);
 };
-
 export const ProductProvider = ({ children }) => {
-  
     const [products, setProducts] = useState([]);
     const [filters, setFilters] = useState({
         make: '',
@@ -20,29 +16,27 @@ export const ProductProvider = ({ children }) => {
         fuelType: '',
         transmission: '',
         mileageRange: '',
+        images: [],
         location: '',
         condition: '',
         features: []
     });
-
-    useEffect(() => {
+    useMemo(() => {
         const getProducts = async () => {
             try {
                 const response = await axiosPrivate.get('/publicproducts', {
-                    params: filters  // Pass filters as query parameters
+                    params: filters 
                 });
                 setProducts(response.data);
-                console.log('products from provider checking for image : ', products)
+                console.log('products from public products Route: ', response.data);
             } catch (err) {
                 console.error(err);
             }
         };
         getProducts();
-
         const controller = new AbortController();
         return () => controller.abort();
-    }, [axiosPrivate, filters]);  // Refetch whenever filters change
-
+    }, [axiosPrivate, filters]); 
     return (
         <ProductContext.Provider value={{ products, setProducts, filters, setFilters }}>
             {children}

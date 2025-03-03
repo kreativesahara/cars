@@ -32,7 +32,8 @@ const Search = () => {
     try {
       const { data } = await axiosPrivate.get('/search', { params });
       setSearchResults(data);
-      console.log('Search result', searchResults)
+      console.log('Search result', data)
+
     } catch (err) {
       setError('Failed to fetch search results.');
     } finally {
@@ -61,29 +62,29 @@ const Search = () => {
         <hr className='border-1 w-[80%] my-4 mx-auto' />
         <form
           onSubmit={handleSearch}
-          className="flex flex-col lg:flex-row flex-wrap md:justify-center pt-4 gap-4 opacity-100"
+          className="flex flex-col md:grid grid-cols-3 md:w-full lg:flex-row flex-wrap md:justify-center pt-4 gap-4 opacity-100"
         >
           {renderSelect("make", make, (e) => setMake(e.target.value), ["Toyota", "Nissan"], "Select Make")}
           {renderSelect("model", model, (e) => setModel(e.target.value), ["Corolla", "X5"], "Select Model")}
           {renderSelect("year", year, (e) => setYear(e.target.value), ["2023", "2022"], "Select Year")}
 
-          <div className="flex items-center gap-2">
+          <div className="flex  flex-row items-center gap-2">
             <input
               type="text"
               name="priceMin"
               placeholder="Min Price"
               value={priceMin}
               onChange={(e) => setPriceMin(e.target.value)}
-              className="w-full lg:w-24 border border-gray-300 rounded-lg px-4 py-2 text-gray-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+              className="w-full  border border-gray-300 rounded-lg px-4 py-2 text-gray-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
             />
-            <span className="text-gray-500">-</span>
+            <span className="text-white font-black text-4xl my-auto">-</span>
             <input
               type="text"
               name="priceMax"
               placeholder="Max Price"
               value={priceMax}
               onChange={(e) => setPriceMax(e.target.value)}
-              className="w-full lg:w-24 border border-gray-300 rounded-lg px-4 py-2 text-gray-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+              className="w-full border border-gray-300 rounded-lg px-4 py-2 text-gray-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
             />
           </div>
 
@@ -92,9 +93,9 @@ const Search = () => {
         
           <button
             type="submit"
-            className="w-[100%] lg:w-auto bg-[#3DC2EC] text-white font-bold px-6 py-2 rounded-lg hover:bg-black border-double mt-2 border-4 border-white lg:px-[200px]  transition duration-300"
+            className="w-[100%] lg:w-auto bg-[#2ff3b2] text-black tracking-widest text-2xl font-bold px-6 py-2 rounded-lg hover:bg-black hover:text-white border-double mt-2 border-4 border-white lg:px-[200px]  transition duration-1000 md:col-span-3 md:row-start-3"
           >
-            Search
+            SEARCH
           </button>
         </form>
       </div>
@@ -103,13 +104,13 @@ const Search = () => {
 
       {
         Array.isArray(searchResults) && searchResults.length > 0 && (
-          <ul className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6 w-[85%] mx-auto">
+          <ul className="grid grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-6 w-[85%] mx-auto">
             {searchResults.map((result) => {
               const productForResult = products.find((p) => p.id === Number(result.id));
               return (
                 <li key={result.id}>
                   <Link to={`/itempage/${result.id}`}>
-                    <div className="border min-w-[150px] shadow-lg rounded-xl pointer hover:shadow-blue-300 cursor-pointer">
+                    <div className="border min-w-[150px] max-w-[300px] shadow-lg rounded-xl pointer hover:shadow-blue-300 cursor-pointer">
                       <figure>
                         {productForResult &&
                           productForResult.images &&
@@ -118,7 +119,7 @@ const Search = () => {
                             src={productForResult.images[0]}
                             alt={`${result.make} ${result.model}`}
                             loading="lazy"
-                            width="440"
+                            width="300"
                             height="300"
                             className="w-100 bg-slate-500 rounded shadow-lg"
                           />
