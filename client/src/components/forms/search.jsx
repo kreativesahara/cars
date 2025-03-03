@@ -116,7 +116,7 @@ const Search = () => {
                           productForResult.images &&
                           productForResult.images.length > 0 ? (
                           <img
-                            src={productForResult.images[0]}
+                            src={productForResult.images[0]?.image_url || productForResult.images[0]}
                             alt={`${result.make} ${result.model}`}
                             loading="lazy"
                             width="300"
