@@ -72,7 +72,7 @@ const Itempage = () => {
                     <div className="h-min cursor-pointer">
                         <img
                             className="md:px-2 min-w-[280px] md:h-[500px] md:object-cover"
-                            src={product.images[0]}
+                            src={product.images[0]?.image_url || product.images[0]}
                             alt={product.make}
                         />
                     </div>
@@ -81,7 +81,7 @@ const Itempage = () => {
                             <img
                                 key={index}
                                 className="border-2 rounded hover:border-blue-600 object-cover"
-                                src={img}
+                                src={img.image_url || img}
                                 alt={`Thumbnail ${index + 1}`}
                             />
                         ))}
