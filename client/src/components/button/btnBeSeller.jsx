@@ -1,18 +1,15 @@
-import { useLocation } from 'react-router-dom'
+import { useNavigate } from 'react-router-dom'
 
 function btnBeSeller() {
-    const location = useLocation();    
-    const from = location.state?.from?.pathname || "/home";
-   
+    const navigate = useNavigate()
     const UpgradeUser = async () => {
-
-        window.location.href = from, { replace: true }  
+        navigate('/upgrade', { replace: true })
     }
-  return (
-      <button className='bg-gray-950 text-white rounded-md  px-3 md:px-4 py-2 text-sm font-medium hover:bg-gray-800 transition duration-300' onClick={UpgradeUser}>
-          Become a Seller
-      </button>
-  )
+    return (
+        <button className='bg-gray-950 text-white rounded-md  px-3 md:px-4 py-2 text-sm font-medium hover:bg-gray-800 transition duration-300' onClick={UpgradeUser}>
+            Become a Seller
+        </button>
+    )
 }
 
 export default btnBeSeller
