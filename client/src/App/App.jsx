@@ -107,14 +107,14 @@ function App() {
                       </ul>)}
                   </div>
                 </div>}
-              {(auth?.roles === 1 || auth?.roles === 2) &&
+              {( auth?.roles === 1 || auth?.roles === 2 ) &&
                 <div className='md:p-4 bg-neutral-50 rounded-md flex flex-col gap-4'>
                   <div className="flex justify-between items-center">
                     <h2 className='md:text-lg font-medium text-neutral-950'>Get Started</h2>
                     <BtnBeSeller />
                   </div>
                 </div>}
-              {(auth?.roles === 1) && <div className='md:p-4 bg-neutral-50 rounded-md flex flex-col gap-4'>
+              {( auth?.roles === 1 || auth?.roles === 2 ) && <div className='md:p-4 bg-neutral-50 rounded-md flex flex-col gap-4'>
                 <div className="flex justify-between items-center">
                   <h2 className='md:text-lg font-medium text-neutral-950'>
                     Become a Pro Member 
