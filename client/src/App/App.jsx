@@ -4,7 +4,6 @@ import Layout from "../components/Layout";
 import useAuth from "../hooks/useAuth";
 import BtnUpload from "../components/button/btnUpload";
 import { useProductContext } from "../context/ProductProvider";
-import { useSellerContext } from "../context/SellerProvider";
 import BtnBeSeller from "../components/button/btnBeSeller";
 import BtnBeMember from "../components/button/btnBeMember";
 import { axiosPrivate } from "../api/axios";
@@ -15,14 +14,9 @@ function App() {
   const { auth } = useAuth();
   const navigate = useNavigate()
   const { products } = useProductContext();
-  const { sellers } = useSellerContext();
-  const [user, setUser] = useState(null);
   const [product, setProduct] = useState(null);
   const SellerId = auth?.id;
-  //const { sellers } = useSellerContext();
-  //const [user, setUser] = useState(null);
-
-
+ 
   console.log('User ID:',auth);
   console.log('products context:', products);
 
