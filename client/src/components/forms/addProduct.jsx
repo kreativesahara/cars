@@ -1,10 +1,11 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
+import Select from 'react-select';
 import useAxiosPrivate from '../../api/useAxiosPrivate';
 import imageCompression from 'browser-image-compression';
 import useAuth from '../../hooks/useAuth';
-import Layout from "../../components/Layout"
+import Layout from "../../components/Layout";
 
-function addProduct() {
+function AddProduct() {
   const axiosPrivate = useAxiosPrivate();
   const { auth } = useAuth();
   const [values, setValues] = useState({
@@ -26,18 +27,77 @@ function addProduct() {
   const [images, setImages] = useState([]);
   const [preview, setPreview] = useState([]);
 
+  // State for react-select components
+  const [makeSelectValue, setMakeSelectValue] = useState(null);
+  const [modelSelectValue, setModelSelectValue] = useState(null);
+  const [makeOptions, setMakeOptions] = useState([]);
+  const [modelOptions, setModelOptions] = useState([]);
+
+  // Fetch makes and models from the API on component mount
+  useEffect(() => {
+    async function fetchVehicleData() {
+      try {
+        const response = await fetch(
+          'https://public.opendatasoft.com/api/explore/v2.1/catalog/datasets/all-vehicles-model/records?limit=100'
+        );
+        const data = await response.json();
+        const results = data.results || [];
+        // Extract unique makes and models from the API response
+        const uniqueMakes = Array.from(new Set(results.map(item => item.make)));
+        const uniqueModels = Array.from(new Set(results.map(item => item.model)));
+
+        // Define a custom object for missing makes and models
+        const additionalItems = {
+          makes: ['Chevrolet', 'Mercedes', 'Audi'],    // Custom makes that might be missing
+          models: ['Accord LX', 'Mustang GT', 'A4', 'Premio', 'C200']       // Custom models that might be missing
+        };
+
+        // Merge API data with additional custom items
+        const mergedMakes = Array.from(new Set([...uniqueMakes, ...additionalItems.makes]));
+        const mergedModels = Array.from(new Set([...uniqueModels, ...additionalItems.models]));
+
+        setMakeOptions(mergedMakes);
+        setModelOptions(mergedModels);
+      } catch (error) {
+        console.error("Error fetching vehicle data:", error);
+      }
+    }
+    fetchVehicleData();
+  }, []);
+
+
+  // Prepare react-select options in the required format
+  const makeSelectOptions = makeOptions.map(make => ({ value: make, label: make }));
+  const modelSelectOptions = modelOptions.map(model => ({ value: model, label: model }));
+
+  // Handlers for react-select changes
+  const handleMakeSelectChange = (selectedOption) => {
+    setMakeSelectValue(selectedOption);
+    setValues(prev => ({
+      ...prev,
+      make: selectedOption ? selectedOption.value : ''
+    }));
+  };
+
+  const handleModelSelectChange = (selectedOption) => {
+    setModelSelectValue(selectedOption);
+    setValues(prev => ({
+      ...prev,
+      model: selectedOption ? selectedOption.value : ''
+    }));
+  };
+
   const handleChange = (e) => {
     e.preventDefault();
     const { name, value } = e.target;
     if (name === "mileage" || name === "price") {
-      // Remove any non-numeric characters except for digits
       const rawValue = value.replace(/\D/g, "");
-      setValues((prev) => ({
+      setValues(prev => ({
         ...prev,
-        [name]: rawValue, // Store raw numeric value in state
+        [name]: rawValue,
       }));
     } else {
-      setValues((prev) => ({
+      setValues(prev => ({
         ...prev,
         [name]: value,
       }));
@@ -47,24 +107,22 @@ function addProduct() {
   const handleImageChange = async (e) => {
     const files = Array.from(e.target.files);
     const previewUrls = [];
-
     for (const file of files) {
       const options = {
-        maxSizeMB: 1,          // Maximum size in MB
-        maxWidthOrHeight: 400, // Max width or height
+        maxSizeMB: 1,
+        maxWidthOrHeight: 400,
         useWebWorker: true,
       };
       try {
         const compressedFile = await imageCompression(file, options);
-        setImages((prev) => [...prev, compressedFile]);
+        setImages(prev => [...prev, compressedFile]);
         previewUrls.push(URL.createObjectURL(compressedFile));
       } catch (error) {
         console.error('Error while compressing image:', error);
-        setImages((prev) => [...prev, file]); // Use original image if compression fails
+        setImages(prev => [...prev, file]);
         previewUrls.push(URL.createObjectURL(file));
       }
     }
-
     setPreview(previewUrls);
   };
 
@@ -75,27 +133,21 @@ function addProduct() {
       alert('Please select images to upload.');
       return;
     }
-    // Create FormData object
+    // Create FormData and append all form values and images
     const form = new FormData();
-    Object.keys(values).forEach((key) => form.append(key, values[key]));
-    images.forEach((image) => {
-      form.append('images', image);
-    });
-
-    // Logs form data to inspect what's being sent
+    Object.keys(values).forEach(key => form.append(key, values[key]));
+    images.forEach(image => form.append('images', image));
     for (let pair of form.entries()) {
       console.log(pair[0], pair[1]);
     }
     try {
-      // Send data without manually setting Content-Type header
       const response = await axiosPrivate.post('products', form, {
         headers: { 'Content-Type': 'multipart/form-data' },
         withCredentials: true,
       });
-
       console.log("Response from product controller:", response.data);
       alert("Car details uploaded successfully");
-      // Reset form fields
+      // Reset form fields and react-select states
       setValues({
         make: '',
         model: '',
@@ -109,23 +161,26 @@ function addProduct() {
         condition: '',
         location: '',
         price: '',
+        seller_id: auth.id
       });
       setImages([]);
       setPreview([]);
-
+      setMakeSelectValue(null);
+      setModelSelectValue(null);
     } catch (error) {
       console.error("Error uploading car details:", error.response?.data || error.message);
       alert("Failed to upload car details. Please try again.");
     }
-  }
+  };
+
   return (
-    <Layout> 
-      <div className='w-auto min-h-screen bg-gradient-to-br from-blue-50 to-purple-50 py-16 px-2'>   
-      <div className="md:w-[600px] mx-auto -mt-6">
+    <Layout>
+      <div className='w-auto min-h-screen bg-gradient-to-br from-blue-50 to-purple-50 py-16 px-2'>
+        <div className="md:w-[600px] mx-auto -mt-6">
           <h1 className="text-4xl font-bold text-center mb-2 pb-6">Upload Vehicle</h1>
           <form onSubmit={handleSubmit} className="w-full bg-white rounded-xl p-4 md:p-6 shadow-lg">
             <div>
-              <label className=" text-sm text-neutral-900 mb-1">User ID</label>
+              <label className="text-sm text-neutral-900 mb-1">User ID</label>
               <input
                 name="seller_id"
                 onChange={handleChange}
@@ -137,17 +192,33 @@ function addProduct() {
               />
             </div>
 
+            {/* Vehicle Make using react-select */}
+            <div>
+              <label htmlFor="make" className="block text-sm text-neutral-900 mb-1">Vehicle Make</label>
+              <Select
+                name="make"
+                value={makeSelectValue}
+                onChange={handleMakeSelectChange}
+                options={makeSelectOptions}
+                placeholder="Select or search vehicle make"
+                isClearable
+              />
+            </div>
+
+            {/* Vehicle Model using react-select */}
+            <div className="mt-4">
+              <label htmlFor="model" className="block text-sm text-neutral-900 mb-1">Vehicle Model</label>
+              <Select
+                name="model"
+                value={modelSelectValue}
+                onChange={handleModelSelectChange}
+                options={modelSelectOptions}
+                placeholder="Select or search vehicle model"
+                isClearable
+              />
+            </div>
+
             {[
-              {
-                label: "Vehicle Make",
-                name: "make",
-                options: ["Toyota", "Nissan", "Honda", "Ford", "BMW"],
-              },
-              {
-                label: "Vehicle Model",
-                name: "model",
-                options: ["Corolla", "Civic", "Ranger", "X5", "Altima"],
-              },
               {
                 label: "Fuel Type",
                 name: "fuel_type",
@@ -161,15 +232,15 @@ function addProduct() {
               {
                 label: "Car Condition",
                 name: "condition",
-                options: ["New", "Used", "Reconditioned","Certified Pre-Owned"],
+                options: ["New", "Used", "Reconditioned", "Certified Pre-Owned"],
               },
               {
                 label: "Driving System",
                 name: "driveSystem",
                 options: ["2WD", "4WD", "AWD"],
               },
-            ].map((field) => (
-              <div key={field.name}>
+            ].map(field => (
+              <div key={field.name} className="mt-4">
                 <label htmlFor={field.name} className="block text-sm text-neutral-900 mb-1">{field.label}</label>
                 <select
                   name={field.name}
@@ -179,7 +250,7 @@ function addProduct() {
                   className="block w-full border border-neutral-300 rounded-md p-2 text-neutral-900"
                 >
                   <option value="">Select {field.label}</option>
-                  {field.options.map((option) => (
+                  {field.options.map(option => (
                     <option key={option} value={option}>{option}</option>
                   ))}
                 </select>
@@ -208,9 +279,8 @@ function addProduct() {
                 placeholder: "Enter Location",
                 value: values.location,
               },
-              
-            ].map((field) => (
-              <div key={field.name}>
+            ].map(field => (
+              <div key={field.name} className="mt-4">
                 <label htmlFor={field.name} className="block text-sm text-neutral-900 mb-1">{field.label}</label>
                 <input
                   name={field.name}
@@ -223,67 +293,80 @@ function addProduct() {
                 />
               </div>
             ))}
-            <label className="block text-sm text-neutral-900 mb-1">Mileage</label>
-            <input
-              name="mileage"
-              onChange={handleChange}
-              type="text"
-              placeholder="Enter Mileage in KM"
-              required
-              value={values.mileage ? Number(values.mileage).toLocaleString() : ""}
-              className="block w-full border border-neutral-300 rounded-md p-2 text-neutral-900"
-            />
-            <label className="block text-sm text-neutral-900 mb-1">Price</label>
-            <input
-              name="price"
-              onChange={handleChange}
-              type="text"
-              placeholder="Enter Price"
-              required
-              value={values.price ? Number(values.price).toLocaleString() : ""}
-              className="block w-full border border-neutral-300 rounded-md p-2 text-neutral-900"
-            />
 
-            <label htmlFor="features" className="block text-sm text-neutral-900 mb-1">Features Description</label>
-            <textarea
-              name="features"
-              onChange={handleChange}
-              className="block w-full border border-neutral-300 rounded-md p-2 text-neutral-900"
-              placeholder="Describe the features of the Vehicle"
-              required
-              value={values.features}
-            />
-            <label className="block text-sm text-neutral-900 mb-1">Upload Images</label>
-            <div className="relative group h-64 w-full mb-4 border-2 border-dashed border-gray-300 rounded-lg hover:border-blue-500 transition-colors duration-300 flex items-center justify-center overflow-hidden">
+            <div className="mt-4">
+              <label className="block text-sm text-neutral-900 mb-1">Mileage</label>
               <input
-                type="file"
-                accept="image/*"
-                multiple
-                onChange={handleImageChange}
-                className="absolute inset-0 w-full h-full opacity-0 cursor-pointer z-10"
+                name="mileage"
+                onChange={handleChange}
+                type="text"
+                placeholder="Enter Mileage in KM"
                 required
+                value={values.mileage ? Number(values.mileage).toLocaleString() : ""}
+                className="block w-full border border-neutral-300 rounded-md p-2 text-neutral-900"
               />
-              <div className="flex flex-col items-center justify-center transform group-hover:scale-95 transition-transform duration-300">
-                <span className="material-symbols-outlined text-5xl text-gray-400 group-hover:text-blue-500 mb-2">add_photo_alternate</span>                
-                <p className="text-sm text-gray-500">Drag and drop your image here</p>
-                <p className="text-xs text-gray-400 mt-1">or click to browse</p>
-                {preview.length > 0 && (
-                  <div className="flex w-auto gap-3 mt-4">
-                    {preview.map((src, index) => (
-                      <img key={index} src={src} alt={`Preview ${index + 1}`} className="h-[80px] w-[80px] rounded-md object-cover" />
-                    ))}
-                  </div>
-                )}
+            </div>
+            <div className="mt-4">
+              <label className="block text-sm text-neutral-900 mb-1">Price</label>
+              <input
+                name="price"
+                onChange={handleChange}
+                type="text"
+                placeholder="Enter Price"
+                required
+                value={values.price ? Number(values.price).toLocaleString() : ""}
+                className="block w-full border border-neutral-300 rounded-md p-2 text-neutral-900"
+              />
+            </div>
+
+            <div className="mt-4">
+              <label htmlFor="features" className="block text-sm text-neutral-900 mb-1">Features Description</label>
+              <textarea
+                name="features"
+                onChange={handleChange}
+                className="block w-full border border-neutral-300 rounded-md p-2 text-neutral-900"
+                placeholder="Describe the features of the Vehicle"
+                required
+                value={values.features}
+              />
+            </div>
+
+            <div className="mt-4">
+              <label className="block text-sm text-neutral-900 mb-1">Upload Images</label>
+              <div className="relative group h-64 w-full mb-4 border-2 border-dashed border-gray-300 rounded-lg hover:border-blue-500 transition-colors duration-300 flex items-center justify-center overflow-hidden">
+                <input
+                  type="file"
+                  accept="image/*"
+                  multiple
+                  onChange={handleImageChange}
+                  className="absolute inset-0 w-full h-full opacity-0 cursor-pointer z-10"
+                  required
+                />
+                <div className="flex flex-col items-center justify-center transform group-hover:scale-95 transition-transform duration-300">
+                  <span className="material-symbols-outlined text-5xl text-gray-400 group-hover:text-blue-500 mb-2">
+                    add_photo_alternate
+                  </span>
+                  <p className="text-sm text-gray-500">Drag and drop your image here</p>
+                  <p className="text-xs text-gray-400 mt-1">or click to browse</p>
+                  {preview.length > 0 && (
+                    <div className="flex w-auto gap-3 mt-4">
+                      {preview.map((src, index) => (
+                        <img key={index} src={src} alt={`Preview ${index + 1}`} className="h-[80px] w-[80px] rounded-md object-cover" />
+                      ))}
+                    </div>
+                  )}
+                </div>
               </div>
             </div>
-            <button type="submit" className="bg-black text-white rounded-md px-4 mt-4 py-2 text-sm w-full">Listing</button>
+
+            <button type="submit" className="bg-black text-white rounded-md px-4 mt-4 py-2 text-sm w-full">
+              Listing
+            </button>
           </form>
         </div>
-      </div> 
-     
-
+      </div>
     </Layout>
-  )
+  );
 }
 
-export default addProduct
+export default AddProduct;
