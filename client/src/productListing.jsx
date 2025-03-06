@@ -6,7 +6,7 @@ const ProductListing = ({ products }) => {
     }
 
     return (
-        <ul className="h-[150vh] grid grid-cols-2 min-w-[400px] md:grid-cols-2 lg:grid-cols-3 gap-4 mx-auto">
+        <ul className="grid grid-cols-2 min-w-[400px] md:grid-cols-2 lg:grid-cols-3 gap-4 mx-auto">
             {products.map((product) => (
                 <li key={product.id}>
                     <Link to={`/itempage/${product.id}`}>
@@ -14,7 +14,7 @@ const ProductListing = ({ products }) => {
                             <figure>
                                 {product?.images?.length > 0 ? (
                                     <img
-                                        src={product.images[0]?.image_url || product.images[0]}
+                                        src={ product.images[0]?.image_url || product.images[0] }
                                         alt={`${product.make} ${product.model} in ${product.location} `}
                                         loading="lazy"
                                         width="440"

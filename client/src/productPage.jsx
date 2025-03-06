@@ -16,7 +16,7 @@ const ProductPage = () => {
     });
 
     const [currentPage, setCurrentPage] = useState(1);
-    const itemsPerPage = 15;
+    const itemsPerPage = 9;
 
     const handleFilterSubmit = async (cleanedFilters) => {
         try {
@@ -38,7 +38,7 @@ const ProductPage = () => {
             <Seo />
             <div className="flex flex-col md:flex-row gap-10">
                 <FilterForm filters={filters} setFilters={setFilters} onFilterSubmit={handleFilterSubmit} />
-                <div className="mt-8 min-w-[300px]">
+                <div className="mt-8 min-w-[300px] ">
                     {!products.length ? (
                         <p>No product to display</p>
                     ) : (
