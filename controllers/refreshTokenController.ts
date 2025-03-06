@@ -57,7 +57,7 @@ export const handleRefreshToken = async (req: Request, res: Response) => {
                         },
                     },
                     process.env.ACCESS_TOKEN_SECRET as string,
-                    { expiresIn: '30s' }
+                    { expiresIn: '15m' }
                 );
                 
                 //Set access token as a cookie in the response
