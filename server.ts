@@ -9,6 +9,7 @@ import testRoute from './routes/test'
 
 import authRoute from './routes/Api/auth';
 import reqResetRoute from './routes/Api/reqReset';
+import resetPasswordRoute from './routes/Api/resetPassword';
 import usersRoute from './routes/Api/user';
 import productsRoute from './routes/Api/product';
 import publicProductsRoute from './routes/Api/publicProduct'
@@ -16,7 +17,7 @@ import sellersRoute from './routes/Api/seller'
 import testProductRoute from './routes/Api/testProduct'
 
 import searchCarsRoute from './routes/Api/searchCars'
-import  filterCarRoute from './routes/Api/filterCars';
+import filterCarRoute from './routes/Api/filterCars';
 import refreshRoute from './routes/Api/refresh'
 import logoutRoute from './routes/Api/logout'
 
@@ -44,6 +45,7 @@ app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
 app.use('/users',usersRoute )
 app.use("/auth", authRoute)
 app.use('/forgot-password', reqResetRoute)
+app.use('/reset-password', resetPasswordRoute)
 app.use('/refresh', refreshRoute)
 app.use('/search', searchCarsRoute)
 app.use('/filter', filterCarRoute)
