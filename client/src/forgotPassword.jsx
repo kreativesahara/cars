@@ -1,6 +1,10 @@
 import Layout from "./components/Layout"
 import { Link } from "react-router-dom"
+import { axiosPrivate } from "./api/axios"
+import { useState } from "react"
 function forgotPassword() {
+    const [formData,setFormData] =useState({
+        email:""})
     const handleChange = (e) => {
         setFormData((prev) => ({
             ...prev, [e.target.name]: e.target.value
@@ -10,14 +14,8 @@ function forgotPassword() {
     const handleSubmit = async (e) => {
             e.preventDefault();
             try {
-                await axios.post('forgot-password', formData,
-                    {
-                        headers: { 'Content-Type': 'application/json' },
-                        withCredentials: true
-                    },
-                );
-                console.log(formData)
-                window.location.href = from,{ replace: true }    
+                await axiosPrivate.post('forgot-password', formData);
+                console.log(formData)   
             } catch (error) {
                 console.log(error)
             }
