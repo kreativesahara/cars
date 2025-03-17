@@ -85,7 +85,6 @@ const UploadUserDetails = () => {
             });
             // Redirect to the login page (or other route)
             window.location.href = from, { replace: true };
-
         } catch (error) {
             if (!error?.response) {
                 setErrMsg("No Server Response");

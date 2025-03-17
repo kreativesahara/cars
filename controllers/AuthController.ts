@@ -25,9 +25,9 @@ const registerUser = async (req: Request, res: Response): Promise<Response> => {
                 lastname,
                 email,
                 password: hashedPassword,
-                roles: ROLES_LIST.Visitor
+                roles: ROLES_LIST.Visitor,
             })
-        //console.log('User registered successfully:', newUser); 
+        console.log('User registered successfully:', newUser); 
         // Exclude the password from the response
         return res.status(201).json({
             message: 'User registered successfully.',
@@ -53,7 +53,6 @@ const registerUser = async (req: Request, res: Response): Promise<Response> => {
 const handleLogin = async (req: Request, res: Response) => {
     const { email, password } = req.body;
     if (!email || !password) return res.status(400).json({ 'message': 'Email and password are required.' });
-
     const foundUser = await db.select().from(user).where(eq(user.email, email)).limit(1);
     //console.log('foundUser:', foundUser);
     if (foundUser.length === 0) {
@@ -78,7 +77,6 @@ const handleLogin = async (req: Request, res: Response) => {
             },
             process.env.ACCESS_TOKEN_SECRET as string,
             { expiresIn: '15m' },
-
         );
 
         const refreshToken = jwt.sign(
@@ -97,7 +95,6 @@ const handleLogin = async (req: Request, res: Response) => {
             .update(user)
             .set({ refreshToken: refreshToken })
             .where(eq(user.email, email));
-
         //Creates Secure Cookie with access token
         res.header('authorization', accessToken);
         res.cookie('refreshToken', refreshToken, {
