@@ -8,6 +8,7 @@ import cors from 'cors';
 import testRoute from './routes/test'
 
 import authRoute from './routes/Api/auth';
+import reqResetRoute from './routes/Api/reqReset';
 import usersRoute from './routes/Api/user';
 import productsRoute from './routes/Api/product';
 import publicProductsRoute from './routes/Api/publicProduct'
@@ -42,6 +43,7 @@ app.get('/', (req: express.Request, res: express.Response) => {
 app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
 app.use('/users',usersRoute )
 app.use("/auth", authRoute)
+app.use('/forgot-password', reqResetRoute)
 app.use('/refresh', refreshRoute)
 app.use('/search', searchCarsRoute)
 app.use('/filter', filterCarRoute)
