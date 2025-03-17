@@ -1,5 +1,5 @@
 import { useRef, useState, useEffect } from "react";
-import axios from "../../api/axios";
+import { axiosPrivate } from "../../api/axios";
 import { Link, useLocation, useNavigate } from "react-router-dom";
 import { faCheck, faTimes, faInfoCircle, faEye, faEyeSlash } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
@@ -72,10 +72,7 @@ const UploadUserDetails = () => {
             return;
         }
         try {
-            await axios.post("auth/", formData, {
-                headers: { "Content-Type": "application/json" },
-                withCredentials: true
-            });
+            await axiosPrivate.post("auth", formData);
             //Very Important code for logical rendering of rwturned components
             setSuccess(true);
             alert("User registered successfully");
