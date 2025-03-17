@@ -1,9 +1,9 @@
 import Layout from "./components/Layout"
 import { Link } from "react-router-dom"
-import { axiosPrivate } from "./api/axios"
+import axios from "./api/axios"
 import { useState } from "react"
 function forgotPassword() {
-    const [formData,setFormData] =useState({
+    const [ formData, setFormData] = useState({
         email:""})
     const handleChange = (e) => {
         setFormData((prev) => ({
@@ -13,11 +13,15 @@ function forgotPassword() {
 
     const handleSubmit = async (e) => {
             e.preventDefault();
+            console.log(formData) 
+
             try {
-                await axiosPrivate.post('forgot-password', formData);
-                console.log(formData)   
+                await axios.post('forgot-password', formData);
+                setFormData('')
+                 
             } catch (error) {
-                console.log(error)
+                console.log(error);
+                setFormData('')
             }
         }
 
@@ -38,7 +42,7 @@ function forgotPassword() {
                         className='py-2 font-bold px-2 tracking-widest border-2 border-orange-400 rounded-md'
                         placeholder='Enter Your Email'
                         onChange={handleChange}
-                        //required
+                        // required
                          />
                     <button className='bg-black text-white text-center my-4 p-2 rounded-md' type="submit">Continue</button>
                     <Link to='/home' className="text-center font-bold hover:text-green-700">Go to website Homepage </Link>
