@@ -5,7 +5,8 @@ import { Route, BrowserRouter as Router, Routes } from 'react-router-dom';
 import Home from './home.jsx';
 import Login from './login.jsx';
 import Register from './register.jsx';
-import ForgotPassword from './forgotPassword.jsx';
+import ForgotPassword from './components/forms/forgotPassword.jsx';
+import ResetPassword from './components/forms/resetPassword.jsx';
 import App from './App/App.jsx';
 import AddProduct from './components/forms/addProduct.jsx';
 import BecomeSeller from './components/forms/becomeSeller.jsx';
@@ -46,9 +47,8 @@ const AppRoutes = () => (
     <Route path="register" element={<Register />} />
     <Route path="login" element={<Login />} />
     <Route path="forgot-password" element={<ForgotPassword />} />
-    <Route path="/" element={< Home />} />
-
-    
+    <Route path="reset-password" element={<ResetPassword />} />
+    <Route path="/" element={< Home />} />    
 
     {/* Protected Routes */}
     <Route element={<PersistLogin />}> 
