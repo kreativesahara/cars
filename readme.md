@@ -1,29 +1,26 @@
-#  TODO
+#  TODO/onGoing
 
-## Just installed multer 
-## I should implement the code 
-## i should start working on the authentication
-## Seo for react applications
+## Just installed nodemailer for forget password feature.
+## i should start working on the sellers subscription.
+## Seo for react using helmet applications
 ## Integrate system with GA
 ## I should implement authorization middlewares
-## Role Verification constraints
+## isSubscribed Verification constraints
 ## image upload on client
 
 # HOUSE CLEANING
 
 ## Clean the controllers
-## Handle Login since we are finished with User Registration
+## Handle refresh tokens expiries.
 ## Handle Authorization of users depending with their subscription tiers.
 
 # Business scope
 
 ## Car Conditions, Accidents, Service Records, Financial Option
-
-## asks for more photos and also video calls.
-
-## could you buy a car through whatsApp, what would it take you to take that leap of faith.
+## Buy a car through whatsApp -botpress whatsapp integration required.
 
 # Marketing 
+
 ## https://www.freecodecamp.org/news/how-to-make-seo-friendly-react-apps/
 # (AI) will be selling cars by 2025
 ## https://www.alphabet.com/en-gb/artificial-intelligence-ai-will-be-selling-cars-2025
