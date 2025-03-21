@@ -51,8 +51,6 @@ const UpdateProduct = () => {
         }
         fetchVehicleData();
     }, []);
-
-    // Load product details and initialize form values
     useEffect(() => {
         setProduct(null);
         setSeller(null);
@@ -71,8 +69,6 @@ const UpdateProduct = () => {
             setIsLoading(false);
         }
     }, [productId, products]);
-
-    // Load seller details once product is available
     useEffect(() => {
         if (product) {
             const foundSeller = sellers.find((s) => s.userId === Number(product.seller_id));
@@ -84,8 +80,6 @@ const UpdateProduct = () => {
             setIsLoading(false);
         }
     }, [product, sellers]);
-
-    // Handle standard input changes
     const handleChange = (e) => {
         e.preventDefault();
         const { name, value } = e.target;
@@ -102,8 +96,6 @@ const UpdateProduct = () => {
             }));
         }
     };
-
-    // Handlers for react-select changes
     const handleMakeSelectChange = (selectedOption) => {
         setMakeSelectValue(selectedOption);
         setValues(prev => ({
@@ -152,11 +144,8 @@ const UpdateProduct = () => {
             </Layout>
         );
     }
-
-    // Prepare react-select options in the required format
     const makeSelectOptions = makeOptions.map(make => ({ value: make, label: make }));
     const modelSelectOptions = modelOptions.map(model => ({ value: model, label: model }));
-
     return (
         <Layout>
             <div className="mt-6 -mx-1 -mt-2">
@@ -189,8 +178,6 @@ const UpdateProduct = () => {
                                         isClearable
                                     />
                                 </div>
-
-                                {/* Vehicle Model using react-select */}
                                 <div className="mt-4">
                                     <label htmlFor="model" className="block text-sm text-neutral-900 mb-1">Vehicle Model</label>
                                     <Select
@@ -202,12 +189,11 @@ const UpdateProduct = () => {
                                         isClearable
                                     />
                                 </div>
-
                                 {[
                                     {
                                         label: "Fuel Type",
                                         name: "fuel_type",
-                                        options: ["Petroli", "Diesel", "Hybrid", "Electric"],
+                                        options: ["Petrol", "Diesel", "Hybrid", "Electric"],
                                     },
                                     {
                                         label: "Transmission",
@@ -241,7 +227,6 @@ const UpdateProduct = () => {
                                         </select>
                                     </div>
                                 ))}
-
                                 {[
                                     {
                                         label: "Year of Manufacture",
@@ -275,7 +260,6 @@ const UpdateProduct = () => {
                                         />
                                     </div>
                                 ))}
-
                                 <div className="mt-4">
                                     <label className="block text-sm text-neutral-900 mb-1">Mileage</label>
                                     <input
