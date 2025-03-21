@@ -6,16 +6,15 @@ import { useSellerContext } from '../../context/SellerProvider';
 import useAxiosPrivate from '../../api/useAxiosPrivate';
 
 const UpdateProduct = () => {
-    const axiosPrivate = useAxiosPrivate();
+    const { productId } = useParams();
     const { products } = useProductContext();
     const { sellers } = useSellerContext();
-    const { productId } = useParams();
-
     const [product, setProduct] = useState(null);
     const [seller, setSeller] = useState(null);
     const [isLoading, setIsLoading] = useState(true);
     const [error, setError] = useState(null);
     const [values, setValues] = useState({});
+    const axiosPrivate = useAxiosPrivate();
 
     useEffect(() => {
         setProduct(null);
