@@ -17,7 +17,6 @@ import Product from './productPage.jsx';
 import Support from './support.jsx';
 import UpdateProduct from './updateProduct.jsx';
 
-
 import { AuthProvider } from './context/AuthProvider.jsx';
 import { ProductProvider } from './context/ProductProvider.jsx';
 import { SearchProvider } from './context/SearchProvider.jsx';
@@ -25,10 +24,8 @@ import { SellerProvider } from './context/SellerProvider.jsx';
 import PersistLogin from './controllers/PersistLogin';
 import RequireAuth from './controllers/RequireAuth';
 
-
 import 'material-symbols';
 import './index.css';
-
 
 // Roles constant
 const ROLES = {

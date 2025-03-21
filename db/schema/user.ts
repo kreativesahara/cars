@@ -11,7 +11,7 @@ export const user = mysqlTable('users', {
     refreshToken: varchar('refresh_token', { length: 500 }),
     resetToken: varchar('reset_token', { length: 500 }).unique(),
     resetTokenExpiry: timestamp('reset_token_expiry'),
-    subscription: int('subscription_type').default(0), // 0: Free, 1: Basic, 2: Premium
+    //subscription: int('subscription_type').default(0), // 0: Free, 1: Basic, 2: Premium
     createdAt: timestamp('created_at').defaultNow(),
     expiresAt: timestamp('expires_at').defaultNow().onUpdateNow(), // Track last updates
 });

@@ -12,7 +12,6 @@ const registerUser = async (req: Request, res: Response): Promise<Response> => {
     if (!firstname || !lastname || !email || !password) {
         return res.status(400).json({ message: 'Firstname, lastname, email, and password are required.' });
     }
-
     try {
         // Hash the password
         const saltRounds = 10;

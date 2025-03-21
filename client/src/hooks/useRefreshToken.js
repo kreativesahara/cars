@@ -1,4 +1,4 @@
-import  {axiosPrivate} from '../api/axios';
+import  {axiosPrivate}from '../api/axios';
 import useAuth from './useAuth';
 
 const useRefreshToken = () => {
@@ -30,9 +30,9 @@ const useRefreshToken = () => {
             console.error('Error in useRefreshToken:', err?.response?.data?.message || err.message);
             if (err?.response?.status === 401 || err?.response?.status === 403) {
                 console.warn('Token refresh failed; logging out...');
-                setAuth(null); // Clear auth state if the refresh fails
+                setAuth(null); 
             }
-            return null; // Indicate failure to refresh token
+            return null; 
         }
     };
     return refresh;

@@ -15,7 +15,6 @@ export const handleRefreshToken = async (req: Request, res: Response) => {
         }
 
         const refreshToken = authcookies.refreshToken;
-
         // Fetch user with matching refresh token
         const foundUser = await db.select()
             .from(user)
