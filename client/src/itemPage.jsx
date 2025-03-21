@@ -77,7 +77,7 @@ const Itempage = () => {
                             alt={product.make}
                         />
                     </div>
-                    <div className="grid grid-cols-5 py-2 px-1 rounded-b gap-2 cursor-pointer">
+                    <div className={`grid grid-cols-${Math.min(product.images.length, 6)} py-2 px-1 rounded-b gap-2 cursor-pointer`}>
                         {product.images.map((img, index) => (
                             <img
                                 key={index}

@@ -137,8 +137,8 @@ function AddProduct() {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    if (images.length < 3) {
-      alert("You must upload at least 3 images.");
+    if (images.length < 5) {
+      alert("You must upload at least 5 images.");
       return;
     }
     if (!images.length) {
