@@ -2,20 +2,21 @@ import React from 'react';
 import ReactDOM from 'react-dom/client';
 import { Route, BrowserRouter as Router, Routes } from 'react-router-dom';
 
+import App from './App/App.jsx';
 import Home from './home.jsx';
 import Login from './login.jsx';
 import Register from './register.jsx';
 import ForgotPassword from './components/forms/forgotPassword.jsx';
 import ResetPassword from './components/forms/resetPassword.jsx';
-import App from './App/App.jsx';
 import AddProduct from './components/forms/addProduct.jsx';
 import BecomeSeller from './components/forms/becomeSeller.jsx';
+import UpdateProduct from './components/forms/updateProduct.jsx';
+
 import ItemPage from './itemPage.jsx';
 import Pricing from './pricing.jsx';
 // import SubscriptionPage from './subscriptionPage.jsx';
 import Product from './productPage.jsx';
 import Support from './support.jsx';
-import UpdateProduct from './updateProduct.jsx';
 
 import { AuthProvider } from './context/AuthProvider.jsx';
 import { ProductProvider } from './context/ProductProvider.jsx';

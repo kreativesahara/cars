@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
-import { useParams, Link } from 'react-router-dom';
-import Layout from '../Layout';
+import { useParams } from 'react-router-dom';
+import Layout from '../../components/Layout';
+import Select from 'react-select'; // Import react-select for searchable dropdowns
 import { useProductContext } from '../../context/ProductProvider';
 import { useSellerContext } from '../../context/SellerProvider';
 import useAxiosPrivate from '../../api/useAxiosPrivate';
@@ -16,6 +17,42 @@ const UpdateProduct = () => {
     const [values, setValues] = useState({});
     const axiosPrivate = useAxiosPrivate();
 
+    // States for react-select and API-loaded options
+    const [makeOptions, setMakeOptions] = useState([]);
+    const [modelOptions, setModelOptions] = useState([]);
+    const [makeSelectValue, setMakeSelectValue] = useState(null);
+    const [modelSelectValue, setModelSelectValue] = useState(null);
+
+    // Fetch vehicle makes and models from the external API on mount
+    useEffect(() => {
+        async function fetchVehicleData() {
+            try {
+                const response = await fetch(
+                    'https://public.opendatasoft.com/api/explore/v2.1/catalog/datasets/all-vehicles-model/records?limit=100'
+                );
+                const data = await response.json();
+                const results = data.results || [];
+                // Extract unique makes and models
+                const uniqueMakes = Array.from(new Set(results.map(item => item.make)));
+                const uniqueModels = Array.from(new Set(results.map(item => item.model)));
+                // Additional custom items to include
+                const additionalItems = {
+                    makes: ['Chevrolet', 'Mercedes', 'Audi'],
+                    models: ['Accord LX', 'Mustang GT', 'A4', 'Premio', 'C200']
+                };
+                const mergedMakes = Array.from(new Set([...uniqueMakes, ...additionalItems.makes]));
+                const mergedModels = Array.from(new Set([...uniqueModels, ...additionalItems.models]));
+
+                setMakeOptions(mergedMakes);
+                setModelOptions(mergedModels);
+            } catch (error) {
+                console.error("Error fetching vehicle data:", error);
+            }
+        }
+        fetchVehicleData();
+    }, []);
+
+    // Load product details and initialize form values
     useEffect(() => {
         setProduct(null);
         setSeller(null);
@@ -25,13 +62,17 @@ const UpdateProduct = () => {
         const foundProduct = products.find((p) => p.id === Number(productId));
         if (foundProduct) {
             setProduct(foundProduct);
-            setValues({ ...foundProduct });  // Initialize form values with product data
+            setValues({ ...foundProduct });
+            // Initialize react-select fields if product data exists
+            setMakeSelectValue(foundProduct.make ? { value: foundProduct.make, label: foundProduct.make } : null);
+            setModelSelectValue(foundProduct.model ? { value: foundProduct.model, label: foundProduct.model } : null);
         } else {
             setError(new Error('Product not found'));
             setIsLoading(false);
         }
     }, [productId, products]);
 
+    // Load seller details once product is available
     useEffect(() => {
         if (product) {
             const foundSeller = sellers.find((s) => s.userId === Number(product.seller_id));
@@ -44,15 +85,15 @@ const UpdateProduct = () => {
         }
     }, [product, sellers]);
 
+    // Handle standard input changes
     const handleChange = (e) => {
         e.preventDefault();
         const { name, value } = e.target;
         if (name === "mileage" || name === "price") {
-            // Remove any non-numeric characters except for digits
             const rawValue = value.replace(/\D/g, "");
             setValues((prev) => ({
                 ...prev,
-                [name]: rawValue, // Store raw numeric value in state
+                [name]: rawValue,
             }));
         } else {
             setValues((prev) => ({
@@ -60,6 +101,23 @@ const UpdateProduct = () => {
                 [name]: value,
             }));
         }
+    };
+
+    // Handlers for react-select changes
+    const handleMakeSelectChange = (selectedOption) => {
+        setMakeSelectValue(selectedOption);
+        setValues(prev => ({
+            ...prev,
+            make: selectedOption ? selectedOption.value : ''
+        }));
+    };
+
+    const handleModelSelectChange = (selectedOption) => {
+        setModelSelectValue(selectedOption);
+        setValues(prev => ({
+            ...prev,
+            model: selectedOption ? selectedOption.value : ''
+        }));
     };
 
     const handleSubmit = async (e) => {
@@ -95,6 +153,10 @@ const UpdateProduct = () => {
         );
     }
 
+    // Prepare react-select options in the required format
+    const makeSelectOptions = makeOptions.map(make => ({ value: make, label: make }));
+    const modelSelectOptions = modelOptions.map(model => ({ value: model, label: model }));
+
     return (
         <Layout>
             <div className="mt-6 -mx-1 -mt-2">
@@ -115,21 +177,37 @@ const UpdateProduct = () => {
                                     />
                                 </div>
 
+                                {/* Vehicle Make using react-select */}
+                                <div className="mt-4">
+                                    <label htmlFor="make" className="block text-sm text-neutral-900 mb-1">Vehicle Make</label>
+                                    <Select
+                                        name="make"
+                                        value={makeSelectValue}
+                                        onChange={handleMakeSelectChange}
+                                        options={makeSelectOptions}
+                                        placeholder="Select or search vehicle make"
+                                        isClearable
+                                    />
+                                </div>
+
+                                {/* Vehicle Model using react-select */}
+                                <div className="mt-4">
+                                    <label htmlFor="model" className="block text-sm text-neutral-900 mb-1">Vehicle Model</label>
+                                    <Select
+                                        name="model"
+                                        value={modelSelectValue}
+                                        onChange={handleModelSelectChange}
+                                        options={modelSelectOptions}
+                                        placeholder="Select or search vehicle model"
+                                        isClearable
+                                    />
+                                </div>
+
                                 {[
-                                    {
-                                        label: "Vehicle Make",
-                                        name: "make",
-                                        options: ["Toyota", "Nissan", "Honda", "Ford", "BMW"],
-                                    },
-                                    {
-                                        label: "Vehicle Model",
-                                        name: "model",
-                                        options: ["Corolla", "Civic", "Ranger", "X5", "Altima"],
-                                    },
                                     {
                                         label: "Fuel Type",
                                         name: "fuel_type",
-                                        options: ["Petrol", "Diesel", "Hybrid", "Electric"],
+                                        options: ["Petroli", "Diesel", "Hybrid", "Electric"],
                                     },
                                     {
                                         label: "Transmission",
@@ -147,7 +225,7 @@ const UpdateProduct = () => {
                                         options: ["2WD", "4WD", "AWD"],
                                     },
                                 ].map((field) => (
-                                    <div key={field.name}>
+                                    <div key={field.name} className="mt-4">
                                         <label htmlFor={field.name} className="block text-sm text-neutral-900 mb-1">{field.label}</label>
                                         <select
                                             name={field.name}
@@ -184,7 +262,7 @@ const UpdateProduct = () => {
                                         placeholder: "Enter Location",
                                     },
                                 ].map((field) => (
-                                    <div key={field.name}>
+                                    <div key={field.name} className="mt-4">
                                         <label htmlFor={field.name} className="block text-sm text-neutral-900 mb-1">{field.label}</label>
                                         <input
                                             name={field.name}
@@ -197,27 +275,34 @@ const UpdateProduct = () => {
                                         />
                                     </div>
                                 ))}
-                                <label className="block text-sm text-neutral-900 mb-1">Mileage</label>
-                                <input
-                                    name="mileage"
-                                    onChange={handleChange}
-                                    type="text"
-                                    placeholder="Enter Mileage in KM"
-                                    required
-                                    value={values.mileage ? Number(values.mileage).toLocaleString() : ""}
-                                    className="block w-full border border-neutral-300 rounded-md p-2 text-neutral-900"
-                                />
-                                <label className="block text-sm text-neutral-900 mb-1">Price</label>
-                                <input
-                                    name="price"
-                                    onChange={handleChange}
-                                    type="text"
-                                    placeholder="Enter Price"
-                                    required
-                                    value={values.price? Number(values.price).toLocaleString() : ""}
-                                    className="block w-full border border-neutral-300 rounded-md p-2 text-neutral-900"
-                                />
-                                <button type="submit" className="bg-black text-white rounded-md px-4 mt-4 py-2 text-sm w-full">{`Edit Vehicle ID (${product.id})`}</button>
+
+                                <div className="mt-4">
+                                    <label className="block text-sm text-neutral-900 mb-1">Mileage</label>
+                                    <input
+                                        name="mileage"
+                                        onChange={handleChange}
+                                        type="text"
+                                        placeholder="Enter Mileage in KM"
+                                        required
+                                        value={values.mileage ? Number(values.mileage).toLocaleString() : ""}
+                                        className="block w-full border border-neutral-300 rounded-md p-2 text-neutral-900"
+                                    />
+                                </div>
+                                <div className="mt-4">
+                                    <label className="block text-sm text-neutral-900 mb-1">Price</label>
+                                    <input
+                                        name="price"
+                                        onChange={handleChange}
+                                        type="text"
+                                        placeholder="Enter Price"
+                                        required
+                                        value={values.price ? Number(values.price).toLocaleString() : ""}
+                                        className="block w-full border border-neutral-300 rounded-md p-2 text-neutral-900"
+                                    />
+                                </div>
+                                <button type="submit" className="bg-black text-white rounded-md px-4 mt-4 py-2 text-sm w-full">
+                                    {`Edit Vehicle ID (${product.id})`}
+                                </button>
                             </form>
                         </div>
                     )}
