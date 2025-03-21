@@ -8,7 +8,7 @@ declare module 'express-serve-static-core' {
             id: string;
             firstname: string;
             lastname: string;
-            user: string;
+            email: string;
             roles: string[];
         };
     }
@@ -48,7 +48,7 @@ export const requireAuth = (req: Request, res: Response, next: NextFunction) => 
                     id: decoded.UserInfo.id,
                     firstname: decoded.UserInfo.firstname,
                     lastname: decoded.UserInfo.lastname,
-                    user: decoded.UserInfo.email,
+                    email: decoded.UserInfo.email,
                     roles: decoded.UserInfo.roles,
                 };
 
