@@ -68,19 +68,20 @@ const Itempage = () => {
         <Layout>
             <Seo/>
             <div className='min-w-[200px] lg:flex py-6'>
-                <div className="lg:w-6/12  border-2 px-2 py-2">
-                    <div className="h-min cursor-pointer">
+
+                <div className="lg:w-6/12  border-2 px-2 py-2 ">
+                    <div className="h-min cursor-pointer place-self-center">
                         <img
-                            className="md:px-2 min-w-[280px] md:h-[500px] md:object-cover"
+                            className="md:px-2 x min-w-[280px] md:h-[500px] md:object-cover"
                             src={product.images[0]?.image_url || product.images[0]}
                             alt={product.make}
                         />
                     </div>
-                    <div className="grid grid-cols-4 py-2 px-1 rounded-b gap-2 cursor-pointer">
+                    <div className="grid grid-cols-5 py-2 px-1 rounded-b gap-2 cursor-pointer">
                         {product.images.map((img, index) => (
                             <img
                                 key={index}
-                                className="border-2 rounded hover:border-blue-600 object-cover"
+                                className="border-2 rounded hover:border-blue-600 object-cover w-[150px] md:h-[125px]"
                                 src={img.image_url || img}
                                 alt={`Thumbnail ${index + 1}`}
                             />
