@@ -6,7 +6,7 @@ const router = Router();
 const { getAllSellers, createSeller, getSeller, updateSeller, deleteSeller } = require("../../controllers/sellersController");
 
 router.route("/")
-    .post(verifyRoles(ROLES_LIST.Visitor, ROLES_LIST.Member, ROLES_LIST.Seller, ROLES_LIST.Modarator, ROLES_LIST.Admin), createSeller)
+    .post(createSeller)
     .get(getAllSellers)
 
 router.route("/:id")

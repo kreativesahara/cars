@@ -48,7 +48,7 @@ app.use('/forgot-password', reqResetRoute)
 app.use('/reset-password', resetPasswordRoute)
 app.use('/refresh', refreshRoute)
 app.use('/search', searchCarsRoute)
-app.use('/filter', filterCarRoute)
+app.use('/filter', requireAuth, filterCarRoute)
 app.use("/sellers", sellersRoute)
 app.use("/publicproducts", publicProductsRoute)
 
