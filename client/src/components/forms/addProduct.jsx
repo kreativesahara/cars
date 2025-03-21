@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import { useLocation } from 'react-router-dom'
 import Select from 'react-select';
 import useAxiosPrivate from '../../api/useAxiosPrivate';
 import imageCompression from 'browser-image-compression';
@@ -7,6 +8,8 @@ import Layout from "../../components/Layout";
 
 function AddProduct() {
   const axiosPrivate = useAxiosPrivate();
+  const location = useLocation();
+  
   const { auth } = useAuth();
   const [values, setValues] = useState({
     make: '',
@@ -32,6 +35,8 @@ function AddProduct() {
   const [modelSelectValue, setModelSelectValue] = useState(null);
   const [makeOptions, setMakeOptions] = useState([]);
   const [modelOptions, setModelOptions] = useState([]);
+  const from = location.state?.from?.pathname || "/product";
+
 
   // Fetch makes and models from the API on component mount
   useEffect(() => {
@@ -48,8 +53,8 @@ function AddProduct() {
 
         // Define a custom object for missing makes and models
         const additionalItems = {
-          makes: ['Chevrolet', 'Mercedes', 'Audi'],    // Custom makes that might be missing
-          models: ['Accord LX', 'Mustang GT', 'A4', 'Premio', 'C200']       // Custom models that might be missing
+          makes: ['Chevrolet', 'Mercedes', 'Audi'], // Custom makes that might be missing
+          models: ['Accord LX', 'Mustang GT', 'A4', 'Premio', 'C200'] // Custom models that might be missing
         };
 
         // Merge API data with additional custom items
@@ -64,7 +69,6 @@ function AddProduct() {
     }
     fetchVehicleData();
   }, []);
-
 
   // Prepare react-select options in the required format
   const makeSelectOptions = makeOptions.map(make => ({ value: make, label: make }));
@@ -106,6 +110,11 @@ function AddProduct() {
 
   const handleImageChange = async (e) => {
     const files = Array.from(e.target.files);
+    // Prevent adding more than 5images
+    if (images.length + files.length > 5) {
+      alert("You can upload a maximum of 5 images.");
+      return;
+    }
     const previewUrls = [];
     for (const file of files) {
       const options = {
@@ -128,7 +137,10 @@ function AddProduct() {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-
+    if (images.length < 3) {
+      alert("You must upload at least 3 images.");
+      return;
+    }
     if (!images.length) {
       alert('Please select images to upload.');
       return;
@@ -167,6 +179,7 @@ function AddProduct() {
       setPreview([]);
       setMakeSelectValue(null);
       setModelSelectValue(null);
+      window.location.href = from, { replace: true }  
     } catch (error) {
       console.error("Error uploading car details:", error.response?.data || error.message);
       alert("Failed to upload car details. Please try again.");
@@ -339,6 +352,7 @@ function AddProduct() {
                   accept="image/*"
                   multiple
                   onChange={handleImageChange}
+                  disabled={images.length >= 6}
                   className="absolute inset-0 w-full h-full opacity-0 cursor-pointer z-10"
                   required
                 />
