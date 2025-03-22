@@ -68,7 +68,6 @@ const Itempage = () => {
         <Layout>
             <Seo/>
             <div className='min-w-[200px] lg:flex py-6'>
-
                 <div className="lg:w-6/12  border-2 px-2 py-2 ">
                     <div className="h-min cursor-pointer place-self-center">
                         <img
@@ -172,7 +171,8 @@ const Itempage = () => {
                                 <img className='p-2 hover:border-2 hover:border-blue-600 rounded object-cover' src='https://images.unsplash.com/photo-1494790108377-be9c29b29330?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=720&q=60' alt='' />
                             </li>
                         </ul>
-                    </div> */}
+                    </div> */
+                    ''}
                 </div>
             </div>
         </Layout>
