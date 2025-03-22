@@ -74,32 +74,37 @@ function App() {
                     <h2 className='md:text-lg font-medium text-neutral-950 '>Uploaded Product</h2>
                     <BtnUpload />
                   </div>
-                  <div className="max-w-max " >
-                    {!product ? <p className='text-sm text-neutral-600'>No Product Uploaded</p> :
-                      (<ul >{product.map((vehicle) =>
-                        <li  key={vehicle.id} className="md:flex p-2 rounded-md bg-slate-200 m-4 gap-4">
-                          <img
-                            src={vehicle.images[0]}
-                            alt={`Missing Image for ${vehicle.id}`}
-                            className='font-serif text-xs md:w-[150px]  md:h-[120px] rounded-md place-content-center j object-cover'
-                          />
-                          <div className=" mx-auto md:w-[100vw] pt-4">
-                            <p className='text-sm text-neutral-950 font-medium'>Make : {vehicle.make}</p>
-                            <p className='text-sm text-neutral-600'>Model : {vehicle.model}</p>
-                            <p className='text-sm text-neutral-600'>Year : {vehicle.year}</p>
-                            <p className='text-sm text-neutral-600'>Price : {vehicle.price}</p>
+                 
+                    <div className="max-w-max " >
+                      {!product ? <p className='text-sm text-neutral-600'>No Product Uploaded</p> :
+                        (<ul >{product.map((vehicle) =>                          
+                          <li key={vehicle.id}>
+                            <Link  className="md:flex p-2 rounded-md bg-slate-200 m-4 gap-4" to={`/itempage/${vehicle.id}`}>
+                            <img
+                              src={vehicle.images[0]}
+                              alt={`Missing Image for ${vehicle.id}`}
+                              className='font-serif text-xs md:w-[150px]  md:h-[120px] rounded-md place-content-center j object-cover'
+                            />
+                            <div className=" mx-auto md:w-[100vw] pt-4">
+                              <p className='text-sm text-neutral-950 font-medium'>Make : {vehicle.make}</p>
+                              <p className='text-sm text-neutral-600'>Model : {vehicle.model}</p>
+                              <p className='text-sm text-neutral-600'>Year : {vehicle.year}</p>
+                              <p className='text-sm text-neutral-600'>Price : {vehicle.price}</p>
 
-                          </div>
-                          <div className="py-4 flex flex-col " >
-                            <Link to={`/app/${vehicle.id}`} className="bg-black  text-white px-8 rounded-sm py-1.5 mb-2 text-center">Edit</Link>
-                            <button onClick={() => handleDelete(vehicle.id)}
-                              className="bg-black text-white px-6 rounded-sm py-1.5">Delete</button>
-                          </div>
-                        </li>
-                      
-                      )}
-                      </ul>)}
-                  </div>
+                            </div>
+                            <div className="py-4 flex flex-col " >
+                              <Link to={`/app/${vehicle.id}`} className="bg-black  text-white px-8 rounded-sm py-1.5 mb-2 text-center">Edit</Link>
+                              <button onClick={() => handleDelete(vehicle.id)}
+                                className="bg-black text-white px-6 rounded-sm py-1.5">Delete</button>
+                            </div>
+                            </Link>
+                          </li>
+
+                        )}
+                          
+                        </ul>)}
+                    </div>
+                                 
                 </div>}
               {( auth?.roles === 1 || auth?.roles === 2 ) &&
                 <div className='md:p-4 bg-neutral-50 rounded-md flex flex-col gap-4'>
