@@ -111,8 +111,8 @@ function AddProduct() {
   const handleImageChange = async (e) => {
     const files = Array.from(e.target.files);
     // Prevent adding more than 5images
-    if (images.length + files.length > 5) {
-      alert("You can upload a maximum of 5 images.");
+    if (images.length + files.length > 6) {
+      alert("You can upload a maximum of 6 images.");
       return;
     }
     const previewUrls = [];
