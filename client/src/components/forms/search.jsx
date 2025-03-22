@@ -106,11 +106,11 @@ const Search = () => {
         </form>
       </div>
 
-      {isLoading && <p>Loading...</p>}
+      {isLoading && <p className=' w-[85%] mx-auto text-center pt-8 text-2xl'>Loading...</p>}
       {error && <p className="text-red-500">{error}</p>}
 
       {Array.isArray(searchResults) && searchResults.length > 0 && (
-        <ul className="grid grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-6 w-[85%] mx-auto">
+        <ul className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6 w-[85%] mx-auto">
           {searchResults.map((result) => {
             const productForResult = products.find((p) => p.id === Number(result.id));
             console.log('productForResult', productForResult);
@@ -123,9 +123,7 @@ const Search = () => {
                         src={productForResult?.images?.[0]?.image_url || productForResult?.images?.[0]}
                         alt={`${result.make} ${result.model}`}
                         loading="lazy"
-                        width="300"
-                        height="300"
-                        className="w-100 bg-slate-500 rounded shadow-lg"
+                        className=" bg-slate-500 rounded shadow-lg"
                       />
                     </figure>
                     <div className="p-2">
