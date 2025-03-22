@@ -85,7 +85,9 @@ const Itempage = () => {
                                 alt={`Thumbnail ${index + 1}`}
                             />
                         ))}
-                    </div>
+                    </Carousel>
+                    {/* Product details (below carousel) */}usel>
+                    {/* Product details (below carousel) */}
                     <div className=' p-3'>
                         <div className='flex justify-between '>
                             <span className='flex-col px-2'>
