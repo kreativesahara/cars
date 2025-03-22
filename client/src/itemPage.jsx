@@ -1,16 +1,12 @@
 import React, { useEffect, useState } from 'react';
-import { useParams } from 'react-router-dom';
-import Layout from './components/Layout';
+import "react-responsive-carousel/lib/styles/carousel.min.css";
 import Seo from './SEO/seo';
 import useAuth from "./hooks/useAuth";
+import Layout from './components/Layout';
+import { useParams } from 'react-router-dom';
 import { useProductContext } from './context/ProductProvider';
 import { useSellerContext } from './context/SellerProvider';
-
-// Carousel imports
 import { Carousel } from 'react-responsive-carousel';
-import "react-responsive-carousel/lib/styles/carousel.min.css";
-
-// Font Awesome
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faArrowRight, faArrowLeft } from '@fortawesome/free-solid-svg-icons';
 
@@ -79,7 +75,7 @@ const Itempage = () => {
                         showThumbs={true}
                         infiniteLoop={true}
                         useKeyboardArrows={true}
-                        autoPlay={false}
+                        autoPlay={true}
                         interval={3000}
                         renderArrowPrev={(onClickHandler, hasPrev, labelPrev) =>
                             hasPrev && (
@@ -117,7 +113,6 @@ const Itempage = () => {
                             </div>
                         ))}
                     </Carousel>
-                    {/* Product details (below carousel) */}
                     <div className='p-3'>
                         <div className='flex justify-between '>
                             <span className='flex-col px-2'>
