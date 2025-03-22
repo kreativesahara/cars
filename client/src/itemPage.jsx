@@ -1,10 +1,18 @@
 import React, { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
 import Layout from './components/Layout';
-import Seo from './SEO/seo'
+import Seo from './SEO/seo';
 import useAuth from "./hooks/useAuth";
 import { useProductContext } from './context/ProductProvider';
 import { useSellerContext } from './context/SellerProvider';
+
+// Carousel imports
+import { Carousel } from 'react-responsive-carousel';
+import "react-responsive-carousel/lib/styles/carousel.min.css";
+
+// Font Awesome
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faArrowRight, faArrowLeft } from '@fortawesome/free-solid-svg-icons';
 
 const Itempage = () => {
     const { productId } = useParams();
@@ -17,13 +25,11 @@ const Itempage = () => {
     const [error, setError] = useState(null);
 
     useEffect(() => {
-        // Reset state when productId changes
         setProduct(null);
         setSeller(null);
         setError(null);
         setIsLoading(true);
 
-        // Find the product based on productId
         const foundProduct = products.find((p) => p.id === Number(productId));
         if (foundProduct) {
             setProduct(foundProduct);
@@ -35,7 +41,6 @@ const Itempage = () => {
 
     useEffect(() => {
         if (product) {
-            // Find the seller based on product.seller_id
             const foundSeller = sellers.find((s) => s.userId === Number(product.seller_id));
             if (foundSeller) {
                 setSeller(foundSeller);
@@ -63,32 +68,57 @@ const Itempage = () => {
             </Layout>
         );
     }
-    
+
     return (
         <Layout>
-            <Seo/>
-            <div className='min-w-[200px] lg:flex py-6'>
-                <div className="lg:w-6/12  border-2 px-2 py-2 ">
-                    <div className="h-min cursor-pointer place-self-center">
-                        <img
-                            className="md:px-2 x min-w-[280px] md:h-[500px] md:object-cover"
-                            src={product.images[0]?.image_url || product.images[0]}
-                            alt={product.make}
-                        />
-                    </div>
-                    <div className='grid grid-cols-5 py-2 px-1 rounded-b gap-2 cursor-pointer'>
+            <Seo />
+            <div className='min-w-[200px] lg:flex mx-auto max-w-[2000px] pt-8 md:px-10 md:pt-20 '>
+                <div className="lg:w-5/12 border-2 px-2  py-2 ">
+                    <Carousel
+                        showStatus={false}
+                        showThumbs={true}
+                        infiniteLoop={true}
+                        useKeyboardArrows={true}
+                        autoPlay={false}
+                        interval={3000}
+                        renderArrowPrev={(onClickHandler, hasPrev, labelPrev) =>
+                            hasPrev && (
+                                <button
+                                    type="button"
+                                    onClick={onClickHandler}
+                                    title={labelPrev}
+                                    className="absolute z-10 left-2 top-1/2 transform -translate-y-1/2 bg-black bg-opacity-40 rounded-full p-2 text-white hover:bg-opacity-60"
+                                >
+                                    <FontAwesomeIcon icon={faArrowLeft} size="lg" />
+                                </button>
+                            )
+                        }
+                        renderArrowNext={(onClickHandler, hasNext, labelNext) =>
+                            hasNext && (
+                                <button
+                                    type="button"
+                                    onClick={onClickHandler}
+                                    title={labelNext}
+                                    className="absolute z-10 right-2 top-1/2 transform -translate-y-1/2 bg-black bg-opacity-40 rounded-full p-2 text-white hover:bg-opacity-60"
+                                >
+                                    <FontAwesomeIcon icon={faArrowRight} size="lg" />
+                                </button>
+                            )
+                        }
+                    >
                         {product.images.map((img, index) => (
-                            <img
-                                key={index}
-                                className="border-2 rounded hover:border-blue-600 object-cover w-[150px] md:h-[125px]"
-                                src={img.image_url || img}
-                                alt={`Thumbnail ${index + 1}`}
-                            />
+                            <div key={index}>
+                                <img
+                                    key={index}
+                                    className="border-2 rounded hover:border-blue-800 object-cover "
+                                    src={img.image_url || img}
+                                    alt={`Slide ${index + 1}`}
+                                />
+                            </div>
                         ))}
                     </Carousel>
-                    {/* Product details (below carousel) */}usel>
                     {/* Product details (below carousel) */}
-                    <div className=' p-3'>
+                    <div className='p-3'>
                         <div className='flex justify-between '>
                             <span className='flex-col px-2'>
                                 <h3 className='font-bold uppercase md:text-2xl'>{product.make}</h3>
@@ -154,7 +184,7 @@ const Itempage = () => {
                         </div>
                     </div>
                     {auth?.roles === 2 || auth?.roles === 3 && (<a href={`tel:${seller.contact}`} className='hover:bg-[#3DC2EC] transition-colors duration-100 bg-black p-2 rounded-md text-center text-white w-100 py-2 tracking-widest font-black'>Call Seller</a>)}
-                    {auth?.roles === 1 && (<a href='tel:254706823590' className='hover:bg-[#3DC2EC] transition-colors duration-100 bg-black p-2 rounded-md text-center text-white w-100 py-2 tracking-widest font-black'>Call Seller</a>)}                    
+                    {auth?.roles === 1 && (<a href='tel:254706823590' className='hover:bg-[#3DC2EC] transition-colors duration-100 bg-black p-2 rounded-md text-center text-white w-100 py-2 tracking-widest font-black'>Call Seller</a>)}
                     {/* <button className='bg-green-500 hover:bg-green-800 text-white w-100 py-2 tracking-wider font-bold'>Message Seller</button> */}
                     {/* <div className='border shadow-lg p-2'>
                         <h3 className='p-3 uppercase -tracking-widertext-sm font-bold'>Related Products</h3>
@@ -174,7 +204,7 @@ const Itempage = () => {
                             </li>
                         </ul>
                     </div> */
-                    ''}
+                    }
                 </div>
             </div>
         </Layout>
@@ -182,3 +212,5 @@ const Itempage = () => {
 };
 
 export default Itempage;
+
+
