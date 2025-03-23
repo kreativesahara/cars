@@ -14,6 +14,7 @@ const seo = () => {
                   name="keywords"
                   content="vehicles, cars, marketplace, filter, used cars, new cars, auto"
               />
+              <link rel="canonical" href="https://example.com/vehicles" />
           </Helmet>
     </div>
   )

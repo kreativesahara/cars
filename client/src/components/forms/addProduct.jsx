@@ -10,7 +10,7 @@ function AddProduct() {
   const axiosPrivate = useAxiosPrivate();
   const location = useLocation();
   const { auth } = useAuth();
-  const from = location.state?.from?.pathname || "/product";
+  const from = location.state?.from?.pathname || "/dashboard";
 
   const [values, setValues] = useState({
     make: '',
@@ -406,7 +406,7 @@ function AddProduct() {
                 />
                 <label
                   htmlFor="image-upload"
-                  className="bg-primary-100 text-primary-700 px-4 py-2 rounded-lg font-medium cursor-pointer hover:bg-primary-200 transition-all duration-300"
+                  className="bg-black text-white px-4 py-2 rounded-lg font-medium cursor-pointer animate-bounce duration-100"
                 >
                   Select Images
                 </label>

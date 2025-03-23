@@ -76,7 +76,7 @@ const Itempage = () => {
                         infiniteLoop={true}
                         useKeyboardArrows={true}
                         autoPlay={true}
-                        interval={3000}
+                        interval={3500}
                         renderArrowPrev={(onClickHandler, hasPrev, labelPrev) =>
                             hasPrev && (
                                 <button
