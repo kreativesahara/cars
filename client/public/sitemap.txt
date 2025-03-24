@@ -1,0 +1,10 @@
+https://yourdomain.com/
+https://yourdomain.com/cars
+https://yourdomain.com/sellers
+https://yourdomain.com/about
+https://yourdomain.com/contact
+
+# Example car listing pages (replace with actual slugs)
+https://yourdomain.com/cars/toyota-corolla-2020
+https://yourdomain.com/cars/honda-civic-2018
+https://yourdomain.com/cars/nissan-xtrail-2019
