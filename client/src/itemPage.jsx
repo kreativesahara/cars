@@ -67,7 +67,12 @@ const Itempage = () => {
 
     return (
         <Layout>
-            <Seo />
+            <Seo
+                title={`Buy ${product.make} ${product.model} - Vehicle Marketplace`}
+                description={`Explore the details of the ${product.make} ${product.model} ${product.year} including specs, pricing, and more.`}
+                keywords={`buy ${product.make} ${product.model}, ${product.make} ${product.model} for sale, vehicle marketplace`}
+                canonical={`https://example.com/vehicles/${product.id}`}
+            />
             <div className='min-w-[200px] lg:flex mx-auto max-w-[2000px] pt-8 md:px-10 md:pt-20 '>
                 <div className="lg:w-5/12 border-2 px-2  py-2 ">
                     <Carousel
