@@ -5,6 +5,7 @@ export const product = mysqlTable('cars', {
     id: int('id').primaryKey().autoincrement(),
     make: varchar('make', { length: 255 }).notNull(),
     model: varchar('model', { length: 255 }).notNull(),
+    slug: varchar('slug', { length: 255 }).notNull().unique(),
     year: int('yom').notNull(),
     engine_capacity: varchar('engine_capacity', { length: 20 }).notNull(),
     fuel_type: varchar('fuel_type', { length: 50 }).notNull(),
