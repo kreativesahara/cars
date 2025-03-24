@@ -20,13 +20,15 @@ const Itempage = () => {
     const [isLoading, setIsLoading] = useState(true);
     const [error, setError] = useState(null);
 
+    console.log(productId)
+
     useEffect(() => {
         setProduct(null);
         setSeller(null);
         setError(null);
         setIsLoading(true);
 
-        const foundProduct = products.find((p) => p.id === Number(productId));
+        const foundProduct = products.find((p) => p.slug === String(productId));
         if (foundProduct) {
             setProduct(foundProduct);
         } else {
@@ -70,8 +72,7 @@ const Itempage = () => {
             <Seo
                 title={`Buy ${product.make} ${product.model} - Vehicle Marketplace`}
                 description={`Explore the details of the ${product.make} ${product.model} ${product.year} including specs, pricing, and more.`}
-                keywords={`buy ${product.make} ${product.model}, ${product.make} ${product.model} for sale, vehicle marketplace`}
-                canonical={`https://example.com/vehicles/${product.id}`}
+                canonical={`https://example.com/itempage/${product.slug}`}
             />
             <div className='min-w-[200px] lg:flex mx-auto max-w-[2000px] pt-8 md:px-10 md:pt-20 '>
                 <div className="lg:w-5/12 border-2 px-2  py-2 ">
@@ -111,6 +112,9 @@ const Itempage = () => {
                             <div key={index}>
                                 <img
                                     key={index}
+                                    width="400"
+                                    height="300"
+                                    loading='lazy'
                                     className="border-2 rounded hover:border-blue-800 object-cover "
                                     src={img.image_url || img}
                                     alt={`Slide ${index + 1}`}
@@ -121,7 +125,7 @@ const Itempage = () => {
                     <div className='p-3'>
                         <div className='flex justify-between '>
                             <span className='flex-col px-2'>
-                                <h3 className='font-bold uppercase md:text-2xl'>{product.make}</h3>
+                                <h2 className='font-bold uppercase md:text-2xl'>{product.make}</h2>
                                 <p className='tracking-widest md:text-lg'>{product.model}</p>
                             </span>
                             <strong className='font-bold tracking-widest md:text-2xl '>KSH {product?.price ? Number(product.price).toLocaleString() : ""}</strong>
@@ -161,9 +165,9 @@ const Itempage = () => {
                         </ul>
                     </div>
                     <div>
-                        <h3 className='px-4 py-2 font-bold text-xl'>
+                        <h2 className='px-4 py-2 font-bold text-xl'>
                             Features
-                        </h3>
+                        </h2>
                         <hr />
                         <p className=' px-4 text-justify'>
                             {product.features}
@@ -176,7 +180,12 @@ const Itempage = () => {
                         <h3 className='text-sm font-bold uppercase p-2'>Seller Details</h3>
                         <hr />
                         <div className='flex p-2 pt-8'>
-                            <img className='w-20 h-20 rounded-full object-cover' src='https://images.unsplash.com/photo-1494790108377-be9c29b29330?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=720&q=60' alt='' />
+                            <img
+                                className='w-20 h-20 rounded-full object-cover'
+                                width="80"
+                                height="80"
+                                loading='lazy'
+                                src='https://images.unsplash.com/photo-1494790108377-be9c29b29330?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=720&q=60' alt='' />
                             <span className='ml-4 my-auto'>
                                 <p className='uppercase font-semibold'>{seller.username}</p>
                                 <p className='font-semibold'>Seller Type : <span className='font-bold text-emerald-600'>{seller.accountType}</span></p>

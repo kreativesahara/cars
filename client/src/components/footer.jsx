@@ -5,7 +5,12 @@ function footer() {
             <div className="pb-8 flex  md:justify-between flex-col md:flex-row gap-4 md:place-content-center">
                 <div className="footer-brand md:w-1/3 max-w-[480px] mx-auto">
                     <a href="/home" className="text-2xl font-bold">
-                        <img src={Logo} className="w-[100px] h-[75px]" alt="Diksx cars" />
+                        <img 
+                            src={Logo} 
+                            width="400"
+                            height="300"
+                            className="w-[100px] h-[75px]" 
+                            alt="Diksx cars" />
                     </a>
                     <p className="text-justify md:font-bold text-xl py-4 ">
                         The Vehicle Marketplace to find your next Ride.

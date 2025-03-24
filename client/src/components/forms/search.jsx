@@ -116,7 +116,7 @@ const Search = () => {
             console.log('productForResult', productForResult);
             return (
               <li key={result.id}>
-                <Link to={`/itempage/${result.id}`}>
+                <Link to={`/itempage/${result.slug}`}>
                   <div className="border min-w-[150px] max-w-[300px] shadow-lg rounded-xl pointer hover:shadow-blue-300 cursor-pointer">
                     <figure>
                       <img

@@ -12,7 +12,6 @@ const FilterForm = ({ filters, setFilters, onFilterSubmit }) => {
     });
 
     const axiosPrivate = useAxiosPrivate();
-
     useEffect(() => {
         const fetchUniqueValues = async () => {
             try {
@@ -36,7 +35,6 @@ const FilterForm = ({ filters, setFilters, onFilterSubmit }) => {
                 console.error("Error fetching car data:", error);
             }
         };
-
         fetchUniqueValues();
     }, []);
 
@@ -87,8 +85,7 @@ const FilterForm = ({ filters, setFilters, onFilterSubmit }) => {
 
     return (
         <form onSubmit={handleSubmit} className="min-w-[400px] md:w-[400px] mt-6 rounded-xl p-6 shadow-2xl">
-            <h2 className="text-xl font-semibold mb-4">Filter Vehicles</h2>
-
+            <h1 className="text-xl font-semibold mb-4">Filter Available Vehicles By:</h1>
             <button
                 type="submit"
                 className="bg-black text-white rounded-md px-4 mb-4 py-2 text-sm w-full"

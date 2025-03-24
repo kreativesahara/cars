@@ -79,7 +79,7 @@ function App() {
                       {!product ? <p className='text-sm text-neutral-600'>No Product Uploaded</p> :
                         (<ul >{product.map((vehicle) =>                          
                           <li key={vehicle.id}>
-                            <Link  className="md:flex p-2 rounded-md bg-slate-200 m-4 gap-4" to={`/itempage/${vehicle.id}`}>
+                            <Link  className="md:flex p-2 rounded-md bg-slate-200 m-4 gap-4" to={`/itempage/${vehicle.slug}`}>
                             <img
                               src={vehicle.images[0]}
                               alt={`Missing Image for ${vehicle.id}`}
