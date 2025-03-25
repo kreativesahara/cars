@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { useParams } from 'react-router-dom';
+import { useParams, useLocation } from 'react-router-dom';
 import Layout from '../../components/Layout';
 import Select from 'react-select'; // Import react-select for searchable dropdowns
 import { useProductContext } from '../../context/ProductProvider';
@@ -8,6 +8,7 @@ import useAxiosPrivate from '../../api/useAxiosPrivate';
 
 const UpdateProduct = () => {
     const { productId } = useParams();
+    const location = useLocation();    
     const { products } = useProductContext();
     const { sellers } = useSellerContext();
     const [product, setProduct] = useState(null);
@@ -16,6 +17,7 @@ const UpdateProduct = () => {
     const [error, setError] = useState(null);
     const [values, setValues] = useState({});
     const axiosPrivate = useAxiosPrivate();
+    const from = location.state?.from?.pathname || "/dashboard";
 
     // States for react-select and API-loaded options
     const [makeOptions, setMakeOptions] = useState([]);
@@ -121,6 +123,7 @@ const UpdateProduct = () => {
             });
             console.log("Product updated successfully:", response.data);
             alert("Product updated successfully");
+            window.location.href = from
         } catch (error) {
             console.error("Error updating product:", error.response?.data || error.message);
             alert("Failed to update product. Please try again.");
@@ -284,7 +287,9 @@ const UpdateProduct = () => {
                                         className="block w-full border border-neutral-300 rounded-md p-2 text-neutral-900"
                                     />
                                 </div>
-                                <button type="submit" className="bg-black text-white rounded-md px-4 mt-4 py-2 text-sm w-full">
+                                <button 
+                                    type="submit" 
+                                    className="bg-black text-white rounded-md px-4 mt-4 py-2 text-sm w-full">
                                     {`Edit Vehicle ID (${product.id})`}
                                 </button>
                             </form>
