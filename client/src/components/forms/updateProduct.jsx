@@ -17,6 +17,7 @@ const UpdateProduct = () => {
     const [error, setError] = useState(null);
     const [values, setValues] = useState({});
     const axiosPrivate = useAxiosPrivate();
+    const VEHICLES_API_URL = import.meta.env.VITE_VEHICLES_API_URL; 
     const from = location.state?.from?.pathname || "/dashboard";
 
     // States for react-select and API-loaded options
@@ -29,9 +30,7 @@ const UpdateProduct = () => {
     useEffect(() => {
         async function fetchVehicleData() {
             try {
-                const response = await fetch(
-                    'https://public.opendatasoft.com/api/explore/v2.1/catalog/datasets/all-vehicles-model/records?limit=100'
-                );
+                const response = await fetch(VEHICLES_API_URL);
                 const data = await response.json();
                 const results = data.results || [];
                 // Extract unique makes and models

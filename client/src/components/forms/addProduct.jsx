@@ -10,6 +10,7 @@ function AddProduct() {
   const axiosPrivate = useAxiosPrivate();
   const location = useLocation();
   const { auth } = useAuth();
+  const VEHICLES_API_URL = import.meta.env.VITE_VEHICLES_API_URL; 
   const from = location.state?.from?.pathname || "/dashboard";
 
   const [values, setValues] = useState({
@@ -41,9 +42,7 @@ function AddProduct() {
   useEffect(() => {
     async function fetchVehicleData() {
       try {
-        const response = await fetch(
-          'https://public.opendatasoft.com/api/explore/v2.1/catalog/datasets/all-vehicles-model/records?limit=100'
-        );
+        const response = await fetch(VEHICLES_API_URL);
         const data = await response.json();
         const results = data.results || [];
         const uniqueMakes = Array.from(new Set(results.map(item => item.make)));

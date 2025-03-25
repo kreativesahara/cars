@@ -15,7 +15,7 @@ const FilterForm = ({ filters, setFilters, onFilterSubmit }) => {
     useEffect(() => {
         const fetchUniqueValues = async () => {
             try {
-                const response = await axiosPrivate.get('/products'); // Changed to GET for fetching product data
+                const response = await axiosPrivate.get('products'); // Changed to GET for fetching product data
                 const cars = response.data; // Extracting data correctly
 
                 if (Array.isArray(cars)) {

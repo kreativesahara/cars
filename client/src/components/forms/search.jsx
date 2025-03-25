@@ -37,7 +37,7 @@ const Search = () => {
     console.log('params', params);
 
     try {
-      const { data } = await axiosPrivate.get('/search', { params });
+      const { data } = await axiosPrivate.get('search', { params });
       setSearchResults(data);
       console.log('Search result', data);
     } catch (err) {

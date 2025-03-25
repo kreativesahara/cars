@@ -37,7 +37,7 @@ const LoginForm = () => {
         console.log(JSON.stringify(from))
         console.log(formData)
         try {
-            const response = await axios.post('/auth/login', formData,
+            const response = await axios.post('auth/login', formData,
                 {
                     headers: {
                         'Content-Type': 'application/json',
