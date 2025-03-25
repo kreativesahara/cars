@@ -3,6 +3,7 @@ import "react-responsive-carousel/lib/styles/carousel.min.css";
 import Seo from './SEO/seo';
 import useAuth from "./hooks/useAuth";
 import Layout from './components/Layout';
+import defaultProfile from './assets/admin.jpg'
 import { useParams } from 'react-router-dom';
 import { useProductContext } from './context/ProductProvider';
 import { useSellerContext } from './context/SellerProvider';
@@ -48,6 +49,8 @@ const Itempage = () => {
             setIsLoading(false);
         }
     }, [product, sellers]);
+
+    console.log(seller)
 
     if (isLoading) {
         return (
@@ -185,7 +188,9 @@ const Itempage = () => {
                                 width="80"
                                 height="80"
                                 loading='lazy'
-                                src='https://images.unsplash.com/photo-1494790108377-be9c29b29330?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=720&q=60' alt='' />
+                                src={auth?.roles === 2 || auth?.roles === 3 && (`${seller.image_url}`) || `${defaultProfile}`} alt=''
+                               
+                             />
                             <span className='ml-4 my-auto'>
                                 <p className='uppercase font-semibold'>{seller.username}</p>
                                 <p className='font-semibold'>Seller Type : <span className='font-bold text-emerald-600'>{seller.accountType}</span></p>
