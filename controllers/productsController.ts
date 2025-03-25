@@ -2,27 +2,24 @@ import { Request, Response } from 'express';
 import db from '../db/dbConfig';
 import { product } from '../db/schema/product';
 import { carImages } from '../db/schema/carImages';
+import { seller } from '../db/schema/seller';
 import multer from 'multer';
 import { eq, inArray } from 'drizzle-orm';
 import path from 'path';
 import fs from 'fs';
-import { seller } from '../db/schema/seller';
-import slugify from "slugify";
+import slugify from 'slugify';
 
-// Configure multer for image uploads
+
 const storage = multer.diskStorage({
     destination: (req: any, file: any, cb: any) => {
         const uploadPath = 'uploads/';
-        // Create uploads directory if it doesn't exist
         if (!fs.existsSync(uploadPath)) {
             fs.mkdirSync(uploadPath);
         }
         cb(null, uploadPath);
     },
     filename: (req: any, file: any, cb: any) => {
-        // Extract the extension
         let fileExtension = path.extname(file.originalname);
-        // Fallback to MIME type if no extension is found
         if (!fileExtension) {
             switch (file.mimetype) {
                 case 'image/jpeg':
@@ -38,28 +35,32 @@ const storage = multer.diskStorage({
                     return cb(new Error('File does not have a valid extension or recognized MIME type'));
             }
         }
-        // Generate a unique filename using timestamp and original name with extension
         const uniqueSuffix = `${Date.now()}-${Math.round(Math.random() * 1E9)}`;
         cb(null, uniqueSuffix + fileExtension);
     }
 });
-// File filter to accept only images
+
 const fileFilter = (req: any, file: any, cb: any) => {
     const allowedTypes = ['image/jpeg', 'image/png', 'image/gif', 'image/jpg'];
     if (allowedTypes.includes(file.mimetype)) {
-        cb(null, true); // Accept the file
+        cb(null, true); 
     } else {
-        cb(new Error('Only images are allowed'), false); // Reject the file
+        cb(new Error('Only images are allowed'), false); 
     }
 };
-// Initialize Multer with disk storage
+
 const upload: any = multer({
     storage,
-    limits: { fileSize: 5 * 1024 * 1024 }, // Limit file size to 5MB
+    limits: { fileSize: 3 * 1024 * 1024 }, 
     fileFilter,
 });
 
-// // Get all products
+const generateSlug = (make: string, model: string, year: number) => {
+    return `${make}-${model}-${year}-${Math.random().toString(36).substring(2, 8)}`
+        .toLowerCase()
+        .replace(/\s+/g, '-');
+};
+
 export const getAllProducts = async (req: Request, res: Response): Promise<Response> => {
     try {
         const cars = await db.select().from(product);
@@ -82,50 +83,32 @@ export const getAllProducts = async (req: Request, res: Response): Promise<Respo
     }
 };
 
-
 export const getProduct = async (req: Request, res: Response): Promise<Response> => {
     try {
         const { slug } = req.params;
-        console.log('Slug:', slug);
-
         if (!slug) {
             return res.status(400).json({ message: 'Product slug is required.' });
         }
-
-        // Retrieve car details from the carDetail table
         const singleProduct = await db.select().from(product).where(eq(product.slug, slug)).limit(1);
-
         if (!singleProduct.length) {
             return res.status(204).json({ message: 'No product found.' });
         }
-
         const viewProduct = singleProduct[0];
-        console.log('ViewProduct:', viewProduct);
-        // Retrieve associated images from the carImages table
         const images = await db
             .select()
             .from(carImages)
             .where(eq(carImages.car_id, viewProduct.id));
         const imageUrls = images.map(img => img.image_url);
-        console.log('Imagesurl:', imageUrls);
-
         const productSeller = await db
             .select()
             .from(seller)
-            .where(eq(seller.userId, viewProduct.seller_id))
-        console.log('product seller', productSeller[0])
-        // Merge car details with its images and return
-        return res.json({ ...viewProduct, images: imageUrls, productSeller});
+            .where(eq(seller.userId, viewProduct.seller_id));
+
+        return res.json({ ...viewProduct, images: imageUrls, productSeller });
     } catch (error) {
         console.error('Error fetching product:', error);
         return res.status(500).json({ message: 'Internal server error.' });
     }
-};
-
-const generateSlug = (make: string, model: string, year: number) => {
-    return `${make}-${model}-${year}-${Math.random().toString(36).substring(2, 8)}`
-        .toLowerCase()
-        .replace(/\s+/g, '-');
 };
 
 export const createProduct = async (req: Request, res: Response): Promise<any> => {
@@ -135,16 +118,19 @@ export const createProduct = async (req: Request, res: Response): Promise<any> =
             return res.status(500).json({ message: 'Image upload error.' });
         }
 
-        const { make, model, year, engine_capacity, fuel_type, transmission, driveSystem, mileage, features, condition, location, price, seller_id } = req.body;
+        const {
+            make, model, year, engine_capacity, fuel_type, transmission,
+            driveSystem, mileage, features, condition, location, price, seller_id
+        } = req.body;
         const images: any = req.files;
 
-        if (!make || !model || !year || !engine_capacity || !fuel_type || !transmission || !driveSystem || !mileage || !features || !condition || !location || !price || !seller_id) {
+        if (!make || !model || !year || !engine_capacity || !fuel_type ||
+            !transmission || !driveSystem || !mileage || !features || !condition ||
+            !location || !price || !seller_id) {
             return res.status(400).json({ message: 'All fields are required.' });
         }
 
         const slug = generateSlug(make, model, year);
-        console.log(slug)
-
         try {
             const [carDetails] = await db.insert(product).values({
                 make,
@@ -160,24 +146,34 @@ export const createProduct = async (req: Request, res: Response): Promise<any> =
                 condition,
                 location,
                 price,
-                    seller_id
-                })
-                .$returningId(); // Ensure it returns the ID
+                seller_id
+            }).$returningId();
 
             if (!carDetails || !carDetails.id) {
-                console.error('Failed to retrieve car_id after inserting car details.');
-                return res.status(500).json({ message: 'Car details insertion failed.' });
+                console.error('Failed to retrieve car_id after inserting product details.');
+                return res.status(500).json({ message: 'Product insertion failed.' });
             }
 
             const car_id = carDetails.id;
-            const imageUrls = images.map((img: any) => `${req.protocol}://${req.get('host')}/${img.path}`.replace(/\\/g, '/'));
-            const newcarImages = imageUrls.map((url: string) => ({ car_id, image_url: url }));
-            await db.insert(carImages).values(newcarImages);
+            const newDir = path.join('uploads', 'cars', `${car_id}`);
+            if (!fs.existsSync(newDir)) {
+                fs.mkdirSync(newDir, { recursive: true });
+            }
+
+            const imageUrls = images.map((img: any) => {
+                const oldPath = img.path;
+                const newPath = path.join(newDir, path.basename(img.path));
+                fs.renameSync(oldPath, newPath);
+                return `${req.protocol}://${req.get('host')}/${newPath}`.replace(/\\/g, '/');
+            });
+
+            const newCarImages = imageUrls.map((url: string) => ({ car_id, image_url: url }));
+            await db.insert(carImages).values(newCarImages);
 
             return res.status(201).json({
                 message: 'Product created successfully.',
                 carDetails,
-                images: newcarImages,
+                images: newCarImages,
             });
         } catch (error) {
             console.error('Error inserting data:', error);
@@ -186,27 +182,24 @@ export const createProduct = async (req: Request, res: Response): Promise<any> =
     });
 };
 
-// Update product
 export const updateUpload = async (req: Request, res: Response): Promise<Response> => {
     const productId = req.body.id;
-    console.log("ProductId:", productId);
-
-    const { make, model, year, engine_capacity, fuel_type, transmission, driveSystem, mileage, features, condition, location, price, seller_id } = req.body;
+    const {
+        make, model, year, engine_capacity, fuel_type, transmission,
+        driveSystem, mileage, features, condition, location, price, seller_id
+    } = req.body;
 
     if (!productId) {
         return res.status(400).json({ message: "Product ID is required." });
     }
 
     try {
-        console.log(`Fetching Product with ID: ${productId}`);
         const existingProduct = await db.select().from(product).where(eq(product.id, productId)).limit(1);
-
         if (!existingProduct || existingProduct.length === 0) {
-            return res.status(404).json({ message: `No Product found with ID ${productId}.` });
+            return res.status(404).json({ message: `No product found with ID ${productId}.` });
         }
 
         let updatedFields: any = {};
-
         if (make) updatedFields.make = make;
         if (model) updatedFields.model = model;
         if (year) updatedFields.year = year;
@@ -221,45 +214,47 @@ export const updateUpload = async (req: Request, res: Response): Promise<Respons
         if (price) updatedFields.price = price;
         if (seller_id) updatedFields.seller_id = seller_id;
 
-        // Generate a new slug if `make` or `model` is changed
+        // Generate a new slug if make or model is updated
         if (make || model) {
             const newMake = make || existingProduct[0].make;
             const newModel = model || existingProduct[0].model;
-            updatedFields.slug = slugify(`${make}-${model}-${year}-${Math.random().toString(36).substring(2, 8)}`
+            updatedFields.slug = slugify(`${newMake}-${newModel}-${year}-${Math.random().toString(36).substring(2, 8)}`)
                 .toLowerCase()
-                .replace(/\s+/g, '-'));
+                .replace(/\s+/g, '-');
         }
 
-        console.log(`Updating Product with ID: ${productId}`);
         await db.update(product).set(updatedFields).where(eq(product.id, productId));
 
         return res.status(200).json({ message: "Product updated successfully", updatedFields });
     } catch (error) {
-        console.error(`Error updating Product with ID ${productId}:`, error);
+        console.error(`Error updating product with ID ${productId}:`, error);
         return res.status(500).json({ message: "Internal server error." });
     }
 };
 
 // Delete product
 export const deleteUpload = async (req: Request, res: Response): Promise<Response> => {
-    const productId = Number(req.params.id); // Get from URL params
-
+    const productId = Number(req.params.id);
     if (!productId) {
         return res.status(400).json({ message: 'Product ID is required.' });
     }
 
     try {
-        console.log(`Deleting Product with ID: ${productId}`);
         const vehicle = await db.select().from(product).where(eq(product.id, productId));
-
         if (vehicle.length === 0) {
-            return res.status(404).json({ message: `No Product found with ID ${productId}.` });
+            return res.status(404).json({ message: `No product found with ID ${productId}.` });
+        }
+
+        // Optionally, you might also want to delete the associated images from storage
+        const carImageDir = path.join('uploads', 'cars', `${productId}`);
+        if (fs.existsSync(carImageDir)) {
+            fs.rmSync(carImageDir, { recursive: true, force: true });
         }
 
         await db.delete(product).where(eq(product.id, productId));
         return res.status(200).json({ message: `Product with ID ${productId} has been deleted.` });
     } catch (error) {
-        console.error(`Error deleting Product with ID ${productId}:`, error);
+        console.error(`Error deleting product with ID ${productId}:`, error);
         return res.status(500).json({ message: 'Internal server error.' });
     }
 };
