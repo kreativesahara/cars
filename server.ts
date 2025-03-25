@@ -42,6 +42,7 @@ app.get('/', (req: express.Request, res: express.Response) => {
 })
 // Serve static files from the uploads directory
 app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
+app.use('/seller_profile', express.static(path.join(__dirname, 'seller_profile')));
 app.use('/users',usersRoute )
 app.use("/auth", authRoute)
 app.use('/forgot-password', reqResetRoute)
