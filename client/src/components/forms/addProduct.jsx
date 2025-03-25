@@ -202,7 +202,7 @@ function AddProduct() {
               </button>
             </div>
 
-            <div className="grid grid-cols-2 gap-6">
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
               {/* Left Column: Vehicle Details */}
               <div className="space-y-4">
                 <div>
@@ -362,7 +362,7 @@ function AddProduct() {
                   <input
                     name="location"
                     type="text"
-                    placeholder="e.g. New York, NY"
+                    placeholder="e.g. Kajiado North, Ngong"
                     onChange={handleChange}
                     value={values.location}
                     className="w-full bg-white border border-gray-300 rounded-lg px-4 py-3 focus:outline-none"
@@ -370,7 +370,7 @@ function AddProduct() {
                   />
                 </div>
                 <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-1">Price ($)</label>
+                  <label className="block text-sm font-medium text-gray-700 mb-1">Price (KSHs)</label>
                   <input
                     name="price"
                     type="text"

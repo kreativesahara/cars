@@ -9,7 +9,7 @@ const Seo = ({ title, description, canonical }) => {
         content={description || "Browse through a wide range of vehicles. Find your next ride with detailed specs, competitive pricing, and a user-friendly experience."}
       />
       <title>{title || 'Vehicle Marketplace | Find Your Next Ride'}</title>
-      <link rel="canonical" href={canonical || "https://example.com/vehicles"} />
+      <link rel="canonical" href={canonical || "https://example.com/vehicles"}/>
     </Helmet>
   );
 }
