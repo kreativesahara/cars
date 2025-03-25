@@ -3,168 +3,154 @@ import { eq } from 'drizzle-orm';
 import { seller } from '../db/schema/seller';
 import { user } from '../db/schema/user';
 import db from '../db/dbConfig';
+import multer from 'multer';
+import fs from 'fs';
+import path from 'path';
 
-// Fetch all users
-const getAllSellers = async (req: Request, res: Response): Promise<Response> => {
+const uploadPath = 'seller_profile/';
+if (!fs.existsSync(uploadPath)) {
+    fs.mkdirSync(uploadPath, { recursive: true });
+}
+
+const storage = multer.diskStorage({
+    destination: (req, file, cb) => {
+        cb(null, uploadPath);
+    },
+    filename: (req, file, cb) => {
+        const fileExtension = path.extname(file.originalname) || '.jpg';
+        const uniqueSuffix = `${Date.now()}-${Math.round(Math.random() * 1E9)}`;
+        cb(null, uniqueSuffix + fileExtension);
+    }
+});
+
+const fileFilter = (req: any, file: any, cb: any) => {
+    const allowedTypes = ['image/jpeg', 'image/png', 'image/gif', 'image/jpg'];
+    allowedTypes.includes(file.mimetype) ? cb(null, true) : cb(new Error('Only images are allowed'), false);
+};
+
+const upload = multer({ storage, limits: { fileSize: 1 * 1024 * 1024 }, fileFilter });
+
+const getAllSellers = async (req: Request, res: Response) => {
     try {
-        console.log('Fetching all sellers');
         const result = await db.select().from(seller);
-
-        if (!result || result.length === 0) {
-            return res.status(204).json({ message: 'No Seller found or Created.' });
-        }
-
-        return res.status(200).json(result);
+        return result.length ? res.status(200).json(result) : res.status(204).json({ message: 'No sellers found.' });
     } catch (error) {
-        console.error('Error fetching sellers data:', error);
         return res.status(500).json({ message: 'Internal server error.' });
     }
 };
 
-// Fetch a single user by ID
-const getSeller = async (req: Request, res: Response): Promise<Response> => {
-    const sellerId: any = req.params.id;
-
-    if (!sellerId) {
-        return res.status(400).json({ message: 'An ID is required to fetch Seller data.' });
-    }
+const getSeller = async (req: Request, res: Response) => {
+    const sellerId = req.params.id;
+    if (!sellerId) return res.status(400).json({ message: 'Seller ID required.' });
 
     try {
-        console.log(`Fetching Data with Created ID: ${sellerId}`);
-        const foundSeller = await db
-            .select()
-            .from(seller)
-            .where(eq(seller.userId, sellerId));
-        if (!foundSeller) {
-            return res.status(404).json({ message: `No Seller found with this ID: ${sellerId}.` });
-        }
-
-        return res.status(200).json(foundSeller);
+        const foundSeller = await db.select().from(seller).where(eq(seller.userId, Number(sellerId)));
+        return foundSeller.length ? res.status(200).json(foundSeller[0]) : res.status(404).json({ message: 'Seller not found.' });
     } catch (error) {
-        console.error(`Error fetching Data with ID ${sellerId}:`, error);
         return res.status(500).json({ message: 'Internal server error.' });
     }
 };
 
-// Create a new user
+
 const createSeller = async (req: Request, res: Response): Promise<any> => {
-    const { username, accountType, contact, place ,hasFinancing, acceptsTradeIn } = req.body;
-    const setId = req.body.userId;
+    // Process a single file from field 'image'
+    upload.single('image')(req, res, async (err: any) => {
+        if (err) {
+            console.error('Error uploading image:', err);
+            return res.status(500).json({ message: 'Image upload error.' });
+        }
 
-    try {
-        const foundUser = await db.select().from(user).where(eq(user.id, setId));
-        if (foundUser.length > 0) {
-            const foundRole = Number(foundUser[0].roles);  
-            
-            if (foundRole) {
-               const newrole =await db.update(user).set({ roles: 3 }).where(eq(user.id, setId));
-               console.log('Role Updated', newrole);
+        const { username, accountType, contact, place, hasFinancing, acceptsTradeIn, userId } = req.body;
+        // Construct full image URL if file exists
+        const image_url = req.file
+            ? `${req.protocol}://${req.get('host')}/${req.file.path}`.replace(/\\/g, '/')
+            : undefined;
+
+        // If image is required, reject if missing.
+        if (!image_url) return res.status(400).json({ message: 'Image is required.' });
+
+        // Validate required fields
+        if (!username || !accountType || !contact || !place || hasFinancing === undefined || acceptsTradeIn === undefined || !userId) {
+            return res.status(400).json({ message: 'Required fields missing.' });
+        }
+
+        // Update user role if necessary
+        try {
+            const foundUser = await db.select().from(user).where(eq(user.id, Number(userId)));
+            console.log('foundUser', foundUser);
+            if (foundUser.length === 0) {
+                return res.status(404).json({ message: 'User not found.' });
             }
-        }
-    } catch (error) {
-        console.log(error)
-    }
-   
-    if (!username || !accountType || !contact || !hasFinancing || !acceptsTradeIn) {
-        return res.status(400).json({ message: 'Firstname, lastname, email, and password are required.' });
-    }
-
-    try {
-        console.log('Creating a new user');
-        const result = await db.insert(seller).values({
-            username, 
-            accountType, 
-            contact, 
-            hasFinancing,
-            place, 
-            acceptsTradeIn,
-            userId: setId
-        });
-        return res.status(201).json(result);
-    } catch (error) {
-        console.error('Error creating user:', error);
-        // Handle unique constraint violations or other DB errors
-    }
-};
-
-// Update an existing user
-const updateSeller = async (req: Request, res: Response): Promise<Response> => {
-    const sellerId= req.body.userId;
-    console.log('Seller Id', sellerId);
-    const { username, accountType, contact, hasFinancing, acceptsTradeIn } = req.body;
-
-    if (!sellerId) {
-        return res.status(400).json({ message: 'Seller ID is required.' });
-    }
-
-    if (!username && !accountType && !contact && !hasFinancing && !acceptsTradeIn ) {
-        return res.status(400).json({ message: 'At least one field (username, accountType, contact, has Financing, accepts Trade In ) is required to update.' });
-    }
-
-    try {
-        console.log(`Updating Seller with ID: ${sellerId}`);
-       const foundSeller = await db
-            .select()
-            .from(seller)
-            .where(eq(seller.userId, sellerId));
-        if (!foundSeller) {
-            return res.status(404).json({ message: `No Seller found with ID ${sellerId}.` });
+            if (Number(foundUser[0].roles) !== 3) {
+                await db.update(user).set({ roles: 3 }).where(eq(user.id, Number(userId)));
+            }
+        } catch (error) {
+            return res.status(500).json({ message: 'Error updating user role.' });
         }
 
-        const updatedFields: any = {};
-
-        if (username) updatedFields.username = username;
-        if (accountType) updatedFields.accountType = accountType;
-        if (contact) updatedFields.contact = contact;
-        if (hasFinancing) updatedFields.hasFinancing = hasFinancing;
-        if (acceptsTradeIn) updatedFields.acceptsTradeIn = acceptsTradeIn;
-
-        // Add other fields if necessary
-
-        const [updatedSeller] = await db
-            .update(seller)
-            .set(updatedFields)
-            .where(eq(seller.userId, sellerId));
-
-        return res.status(200).json(updatedSeller);
-    } catch (error) {
-        console.error(`Error updating Seller with ID ${sellerId}:`, error);        
-        return res.status(500).json({ message: 'Internal server error.' });
-    }
+        // Build seller data – include image_url if available
+        try {
+            const sellerData: any = {
+                username,
+                accountType,
+                contact,
+                hasFinancing,
+                place,
+                acceptsTradeIn,
+                userId: Number(userId),
+                image_url
+            };
+            const result = await db.insert(seller).values(sellerData);
+            return res.status(201).json({ message: 'Seller created successfully.', result });
+        } catch (error) {
+            console.error('Error creating seller:', error);
+            return res.status(500).json({ message: 'Error creating seller.' });
+        }
+    });
 };
 
-// Delete a user
-const deleteSeller = async (req: Request, res: Response): Promise<Response> => {
-    const sellerId: any = req.body.userId;
-    console.log('Seller Id', sellerId);
-    if (!sellerId) {
-        return res.status(400).json({ message: 'Seller ID is required.' });
-    }
+const updateSeller = async (req: Request, res: Response) => {
+    const { userId, username, accountType, contact, hasFinancing, acceptsTradeIn } = req.body;
+    const image_url = req.file ? `${uploadPath}${req.file.filename}` : undefined;
+
+    if (!userId) return res.status(400).json({ message: 'Seller ID required.' });
 
     try {
-        console.log(`Deleting Seller with ID: ${sellerId}`);
-        const foundSeller = await db
-            .select()
-            .from(seller)
-            .where(eq(seller.userId, sellerId));
+        const foundSeller = await db.select().from(seller).where(eq(seller.userId, Number(userId)));
+        if (!foundSeller.length) return res.status(404).json({ message: 'Seller not found.' });
 
-        if (!foundSeller) {
-            return res.status(404).json({ message: `No Seller found with ID ${sellerId}.` });
+        if (image_url && foundSeller[0].image_url) {
+            const oldImage = foundSeller[0].image_url;
+            if (fs.existsSync(oldImage)) fs.unlinkSync(oldImage);
         }
 
-        await db.delete(seller).where(eq(seller.userId, sellerId));
+        const updatedFields: any = { username, accountType, contact, hasFinancing, acceptsTradeIn };
+        if (image_url) updatedFields.image_url = image_url;
 
-        return res.status(200).json({ message: `Seller with ID ${sellerId} has been deleted.` });
+        await db.update(seller).set(updatedFields).where(eq(seller.userId, Number(userId)));
+        return res.status(200).json({ message: 'Seller updated successfully.' });
     } catch (error) {
-        console.error(`Error deleting seller with ID ${sellerId}:`, error);
-        return res.status(500).json({ message: 'Internal server error.' });
+        return res.status(500).json({ message: 'Error updating seller.' });
     }
 };
 
-export {
-    getAllSellers,
-    getSeller,
-    createSeller,
-    updateSeller,
-    deleteSeller
+const deleteSeller = async (req: Request, res: Response) => {
+    const { userId } = req.body;
+    if (!userId) return res.status(400).json({ message: 'Seller ID required.' });
+
+    try {
+        const foundSeller = await db.select().from(seller).where(eq(seller.userId, Number(userId)));
+        if (!foundSeller.length) return res.status(404).json({ message: 'Seller not found.' });
+
+        if (foundSeller[0].image_url && fs.existsSync(foundSeller[0].image_url)) {
+            fs.unlinkSync(foundSeller[0].image_url);
+        }
+
+        await db.delete(seller).where(eq(seller.userId, Number(userId)));
+        return res.status(200).json({ message: 'Seller deleted successfully.' });
+    } catch (error) {
+        return res.status(500).json({ message: 'Error deleting seller.' });
+    }
 };
+
+export { getAllSellers, getSeller, createSeller, updateSeller, deleteSeller, upload };
