@@ -15,6 +15,7 @@ dist-ssr
 
 #System Files
 index.html
+.env
 
 # Editor directories and files
 .vscode/*
