@@ -43,23 +43,23 @@ app.get('/', (req: express.Request, res: express.Response) => {
 // Serve static files from the uploads directory
 app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
 app.use('/seller_profile', express.static(path.join(__dirname, 'seller_profile')));
-app.use('/users',usersRoute )
-app.use("/auth", authRoute)
-app.use('/forgot-password', reqResetRoute)
-app.use('/reset-password', resetPasswordRoute)
-app.use('/refresh', refreshRoute)
-app.use('/search', searchCarsRoute)
-app.use('/filter', requireAuth, filterCarRoute)
-app.use("/sellers", sellersRoute)
-app.use("/publicproducts", publicProductsRoute)
+app.use('/api/users',usersRoute )
+app.use("/api/auth", authRoute)
+app.use('/api/forgot-password', reqResetRoute)
+app.use('/api/reset-password', resetPasswordRoute)
+app.use('/api/refresh', refreshRoute)
+app.use('/api/search', searchCarsRoute)
+app.use('/api/filter', requireAuth, filterCarRoute)
+app.use("/api/sellers", sellersRoute)
+app.use("/api/publicproducts", publicProductsRoute)
 
 //Test Case
 app.use("/test", requireAuth, testRoute)
 app.use("/testproduct", requireAuth, testProductRoute)
 
 //API Routes
-app.use("/products", requireAuth, productsRoute)
-app.use('/logout', requireAuth, logoutRoute)
+app.use("/api/products", requireAuth, productsRoute)
+app.use('/api/logout', requireAuth, logoutRoute)
 
 // Start the server
 app.listen(PORT, () => {
