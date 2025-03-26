@@ -96,86 +96,35 @@ const SubscriptionCard = ({ plan, onSubscribe, loading }) => (
 );
 
 function Pricing() {
-    const { auth } = useAuth();        
+    const { auth } = useAuth();
     const navigate = useNavigate();
-    const [loading, setLoading] = useState(false); 
+    const [loading, setLoading] = useState(false);
+
     const handleSubscribe = async (plan) => {
-        // Ensure user is logged in
-        if (!auth || !auth.id) {
+        if (!auth?.id) {
             alert("Please log in to subscribe.");
-            try {
-                if (!auth?.accessToken) {
-                    navigate("/login", { replace: true }); // No auth, send to Login
-                    return;
-                } else {
-                    navigate("/product", { replace: true }); // Expired token, send to Pricing
-                }
-            } catch (error) {
-                console.log("Session expired, redirecting to login...");
-                navigate("/login", { replace: true }); // Expired token, send to Pricing
-            }
+            navigate(auth?.accessToken ? "/product" : "/login", { replace: true });
             return;
         }
 
         setLoading(true);
         const userId = auth.id;
-
-        // Parse the price value (remove "KSH", commas, and trim whitespace)
-        const amount = parseInt(
-            plan.price.replace("KSH", "").replace(/,/g, "").trim(),
-            10
-        );
+        const amount = parseInt(plan.price.replace("KSH", "").replace(/,/g, "").trim(), 10);
 
         try {
-            const response = await axiosPrivate.post(
-                "subscriptions",
-                {
-                    userId,
-                    planName: plan.name,
-                    amount,
-                    currency: "KES",
-                    // Optionally, add an endDate or other params as required
-                },
-                {
-                    headers: {
-                        "Content-Type": "application/json",
-                    },
-                    withCredentials: true,
-                }
-            );
+            const response = await axiosPrivate.post("subscriptions", { userId, planName: plan.name, amount, currency: "KES" }, { headers: { "Content-Type": "application/json" }, withCredentials: true });
             alert(`Subscribed to ${plan.name} successfully!`);
         } catch (error) {
             console.error("Subscription error:", error);
-            // Check if the error message indicates an existing active subscription
-            if (
-                error.response &&
-                error.response.data &&
-                error.response.data.error &&
-                error.response.data.error.includes("active subscription")
-            ) {
-                alert(error.response.data.error); // Clear state: alert the user about existing subscription
+            if (error.response?.data?.error?.includes("active subscription")) {
+                alert(error.response.data.error);
             } else {
                 try {
-                    // Pre-check for an existing active subscription
                     const existingResponse = await axiosPrivate.get(`subscriptions/${userId}`);
-                    if (
-                        existingResponse.data &&
-                        existingResponse.data.subscriptions &&
-                        existingResponse.data.subscriptions.length > 0
-                    ) {
-                        const activeSub = existingResponse.data.subscriptions[0];
-                        // Compare plan names (case-insensitive)
-                        if (activeSub.planName.toLowerCase() === plan.name.toLowerCase()) {
-                            alert(`You already have an active subscription for the ${plan.name} tier.`);
-                            setLoading(false);
-                            return;
-                        } else {
-                            alert(
-                                `You already have an active subscription for the ${activeSub.planName} tier. You can only upgrade to a higher tier.`
-                            );
-                            setLoading(false);
-                            return;
-                        }
+                    const activeSub = existingResponse.data?.subscriptions?.[0];
+                    if (activeSub) {
+                        alert(`You already have an active subscription for the ${activeSub.planName} tier. ${activeSub.planName.toLowerCase() === plan.name.toLowerCase() ? "" : "You can only upgrade to a higher tier."}`);
+                        return;
                     }
                 } catch (existingError) {
                     console.error("Existing subscription check error:", existingError);
@@ -186,50 +135,28 @@ function Pricing() {
         }
     };
 
-
     return (
         <Layout>
             <div className="w-full min-h-screen bg-gradient-to-br from-blue-50 to-purple-50 py-16 px-4">
                 <div className="max-w-7xl mx-auto">
-                    <h1 className="text-4xl font-bold text-center mb-2">
-                        Pricing Plans
-                    </h1>
-                    <p className="text-center mb-12 text-gray-600">
-                        Choose the perfect plan for your needs
-                    </p>
-
-                    {loading && (
-                        <p className="text-center">Processing your subscription...</p>
-                    )}
-                   
-                    {/* Members Tier */}
+                    <h1 className="text-4xl font-bold text-center mb-2">Pricing Plans</h1>
+                    <p className="text-center mb-12 text-gray-600">Choose the perfect plan for your needs</p>
+                    {loading && <p className="text-center">Processing your subscription...</p>}
                     <div className="grid md:grid-cols-1 gap-8 mb-16">
                         <div className="space-y-8">
                             <h2 className="text-2xl font-semibold">Members Tier</h2>
                             <div className="grid md:grid-cols-2 gap-6">
                                 {subscriptionPlans.members.map((plan, index) => (
-                                    <SubscriptionCard
-                                        key={index}
-                                        plan={plan}
-                                        onSubscribe={handleSubscribe}
-                                        loading={loading}
-                                    />
+                                    <SubscriptionCard key={index} plan={plan} onSubscribe={handleSubscribe} loading={loading} />
                                 ))}
                             </div>
                         </div>
                     </div>
-
-                    {/* Sellers Tier */}
                     <section className="mt-16">
                         <h2 className="text-2xl font-semibold mb-8">Sellers Tier</h2>
                         <div className="grid md:grid-cols-3 gap-6">
                             {subscriptionPlans.sellers.map((plan, index) => (
-                                <SubscriptionCard
-                                    key={index}
-                                    plan={plan}
-                                    onSubscribe={handleSubscribe}
-                                    loading={loading}
-                                />
+                                <SubscriptionCard key={index} plan={plan} onSubscribe={handleSubscribe} loading={loading} />
                             ))}
                         </div>
                     </section>
