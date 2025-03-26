@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import {axiosPrivate} from "./api/axios";
+import { useNavigate } from "react-router-dom";
 import Layout from "./components/Layout";
 import useAuth from "./hooks/useAuth";
 
@@ -95,14 +96,24 @@ const SubscriptionCard = ({ plan, onSubscribe, loading }) => (
 );
 
 function Pricing() {
-    const { auth } = useAuth();
-    const [loading, setLoading] = useState(false);
-   
-
+    const { auth } = useAuth();        
+    const navigate = useNavigate();
+    const [loading, setLoading] = useState(false); 
     const handleSubscribe = async (plan) => {
         // Ensure user is logged in
         if (!auth || !auth.id) {
             alert("Please log in to subscribe.");
+            try {
+                if (!auth?.accessToken) {
+                    navigate("/login",{ replace: true }); // No auth, send to Login
+                    return;
+                }else{
+                    navigate("/product", { replace: true }); // Expired token, send to Pricing
+                }
+            } catch (error) {
+                console.log("Session expired, redirecting to login...");
+                navigate("/login", { replace: true }); // Expired token, send to Pricing
+            }
             return;
         }
         setLoading(true);
