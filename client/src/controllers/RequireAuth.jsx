@@ -5,7 +5,7 @@ const RequireAuth = ({ allowedRoles }) => {
     const { auth } = useAuth();
     const location = useLocation();
 
-    const isAuthorised = auth?.roles
+    const isAuthorised = allowedRoles.includes(auth?.roles);
     console.log('isAuthorised', typeof isAuthorised, isAuthorised)
     return (
         isAuthorised
