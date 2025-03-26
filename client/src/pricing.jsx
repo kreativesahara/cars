@@ -105,9 +105,9 @@ function Pricing() {
             alert("Please log in to subscribe.");
             try {
                 if (!auth?.accessToken) {
-                    navigate("/login",{ replace: true }); // No auth, send to Login
+                    navigate("/login", { replace: true }); // No auth, send to Login
                     return;
-                }else{
+                } else {
                     navigate("/product", { replace: true }); // Expired token, send to Pricing
                 }
             } catch (error) {
@@ -116,18 +116,16 @@ function Pricing() {
             }
             return;
         }
+
         setLoading(true);
-    
         const userId = auth.id;
 
-        // Parse the price value (remove "KSH", commas and trim whitespace)
+        // Parse the price value (remove "KSH", commas, and trim whitespace)
         const amount = parseInt(
             plan.price.replace("KSH", "").replace(/,/g, "").trim(),
             10
         );
 
-        // For paid plans, integrate your payment gateway logic here (e.g., Mpesa, Flutterwave, Paystack)
-        // For now, we simply call the subscription API for both free and paid plans.
         try {
             const response = await axiosPrivate.post(
                 "subscriptions",
@@ -136,7 +134,7 @@ function Pricing() {
                     planName: plan.name,
                     amount,
                     currency: "KES",
-                    // Optionally, you can add an endDate or other params as required
+                    // Optionally, add an endDate or other params as required
                 },
                 {
                     headers: {
@@ -145,15 +143,49 @@ function Pricing() {
                     withCredentials: true,
                 }
             );
-            // Update with a pending status if payment integration is needed
             alert(`Subscribed to ${plan.name} successfully!`);
         } catch (error) {
             console.error("Subscription error:", error);
-            alert("Subscription failed. Please try again.");
+            // Check if the error message indicates an existing active subscription
+            if (
+                error.response &&
+                error.response.data &&
+                error.response.data.error &&
+                error.response.data.error.includes("active subscription")
+            ) {
+                alert(error.response.data.error); // Clear state: alert the user about existing subscription
+            } else {
+                try {
+                    // Pre-check for an existing active subscription
+                    const existingResponse = await axiosPrivate.get(`subscriptions/${userId}`);
+                    if (
+                        existingResponse.data &&
+                        existingResponse.data.subscriptions &&
+                        existingResponse.data.subscriptions.length > 0
+                    ) {
+                        const activeSub = existingResponse.data.subscriptions[0];
+                        // Compare plan names (case-insensitive)
+                        if (activeSub.planName.toLowerCase() === plan.name.toLowerCase()) {
+                            alert(`You already have an active subscription for the ${plan.name} tier.`);
+                            setLoading(false);
+                            return;
+                        } else {
+                            alert(
+                                `You already have an active subscription for the ${activeSub.planName} tier. You can only upgrade to a higher tier.`
+                            );
+                            setLoading(false);
+                            return;
+                        }
+                    }
+                } catch (existingError) {
+                    console.error("Existing subscription check error:", existingError);
+                }
+            }
         } finally {
             setLoading(false);
         }
     };
+
 
     return (
         <Layout>
