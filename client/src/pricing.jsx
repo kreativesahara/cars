@@ -1,6 +1,10 @@
+import React, { useState } from "react";
+import axios from "./api/axios";
 import Layout from "./components/Layout";
+import useAuth from "./hooks/useAuth";
 
-const pricingPlans = {
+// Define subscription plans
+const subscriptionPlans = {
     members: [
         {
             tier: "Free",
@@ -10,7 +14,7 @@ const pricingPlans = {
             features: ["Basic Features", "Limited Storage", "Community Support"],
             bgColor: "bg-blue-100",
             btnColor: "bg-blue-500 hover:bg-blue-600",
-            btnText: "Get Started"
+            btnText: "Get Started",
         },
         {
             tier: "Premium",
@@ -20,8 +24,8 @@ const pricingPlans = {
             features: ["All Basic Features", "Unlimited Storage", "Priority Support"],
             bgColor: "bg-purple-100",
             btnColor: "bg-purple-500 hover:bg-purple-600",
-            btnText: "Get Started"
-        }
+            btnText: "Get Started",
+        },
     ],
     sellers: [
         {
@@ -32,7 +36,7 @@ const pricingPlans = {
             features: ["Basic Listing", "3 Products", "Basic Analytics"],
             bgColor: "bg-green-100",
             btnColor: "bg-green-500 hover:bg-green-600",
-            btnText: "Start Selling"
+            btnText: "Start Selling",
         },
         {
             tier: "Limited",
@@ -42,7 +46,7 @@ const pricingPlans = {
             features: ["Advanced Listing", "25 Products", "Full Analytics"],
             bgColor: "bg-orange-100",
             btnColor: "bg-orange-500 hover:bg-orange-600",
-            btnText: "Start Selling"
+            btnText: "Start Selling",
         },
         {
             tier: "Premium",
@@ -53,59 +57,141 @@ const pricingPlans = {
             bgColor: "bg-yellow-100",
             btnColor: "bg-yellow-500 hover:bg-yellow-600",
             border: "border-2 border-yellow-500",
-            btnText: "Start Selling"
-        }
-    ]
+            btnText: "Start Selling",
+        },
+    ],
 };
 
+// A reusable card component for each subscription plan
+const SubscriptionCard = ({ plan, onSubscribe, loading }) => (
+    <div
+        className={`bg-white rounded-xl p-6 shadow-lg hover:shadow-xl transition-all duration-300 transform hover:-translate-y-1 ${plan.border || ""
+            }`}
+    >
+        <span className={`px-4 py-1 text-sm ${plan.bgColor} rounded-full`}>
+            {plan.tier}
+        </span>
+        <h3 className="text-xl font-bold mt-4">{plan.name}</h3>
+        <p className="text-3xl font-bold mt-4">
+            {plan.price}
+            <span className="text-sm font-normal">{plan.period}</span>
+        </p>
+        <ul className="mt-6 space-y-4">
+            {plan.features.map((feature, i) => (
+                <li key={i} className="flex items-center">
+                    <span className="material-symbols-outlined mr-2">check_circle</span>
+                    {feature}
+                </li>
+            ))}
+        </ul>
+        <button
+            className={`w-full mt-8 text-white py-3 rounded-lg transition-colors duration-300 ${plan.btnColor}`}
+            onClick={() => onSubscribe(plan)}
+            disabled={loading}
+        >
+            {plan.btnText}
+        </button>
+    </div>
+);
+
 function Pricing() {
+    const { auth } = useAuth();
+    const [loading, setLoading] = useState(false);
+    const [message, setMessage] = useState("");
+
+    const handleSubscribe = async (plan) => {
+        // Ensure user is logged in
+        if (!auth || !auth.id) {
+            setMessage("Please log in to subscribe.");
+            return;
+        }
+        setLoading(true);
+        setMessage("");
+        const userId = auth.id;
+
+        // Parse the price value (remove "KSH", commas and trim whitespace)
+        const amount = parseInt(
+            plan.price.replace("KSH", "").replace(/,/g, "").trim(),
+            10
+        );
+
+        // For paid plans, integrate your payment gateway logic here (e.g., Mpesa, Flutterwave, Paystack)
+        // For now, we simply call the subscription API for both free and paid plans.
+        try {
+            const response = await axios.post(
+                "/api/subscriptions",
+                {
+                    userId,
+                    planName: plan.name,
+                    amount,
+                    currency: "KES",
+                    // Optionally, you can add an endDate or other params as required
+                },
+                {
+                    headers: {
+                        "Content-Type": "application/json",
+                    },
+                    withCredentials: true,
+                }
+            );
+            // Update with a pending status if payment integration is needed
+            setMessage(
+                response.data.message || `Subscribed to ${plan.name} successfully!`
+            );
+        } catch (error) {
+            console.error("Subscription error:", error);
+            setMessage("Subscription failed. Please try again.");
+        } finally {
+            setLoading(false);
+        }
+    };
+
     return (
         <Layout>
             <div className="w-full min-h-screen bg-gradient-to-br from-blue-50 to-purple-50 py-16 px-4">
                 <div className="max-w-7xl mx-auto">
-                    <h1 className="text-4xl font-bold text-center mb-2">Pricing Plans</h1>
-                    <p className="text-center mb-12 text-gray-600">Choose the perfect plan for your needs</p>
+                    <h1 className="text-4xl font-bold text-center mb-2">
+                        Pricing Plans
+                    </h1>
+                    <p className="text-center mb-12 text-gray-600">
+                        Choose the perfect plan for your needs
+                    </p>
 
+                    {loading && (
+                        <p className="text-center">Processing your subscription...</p>
+                    )}
+                    {message && (
+                        <p className="text-center text-green-500 mb-4">{message}</p>
+                    )}
+
+                    {/* Members Tier */}
                     <div className="grid md:grid-cols-1 gap-8 mb-16">
                         <div className="space-y-8">
                             <h2 className="text-2xl font-semibold">Members Tier</h2>
                             <div className="grid md:grid-cols-2 gap-6">
-                                {pricingPlans.members.map((plan, index) => (
-                                    <div key={index} className={`bg-white rounded-xl p-6 shadow-lg hover:shadow-xl transition-all duration-300 transform hover:-translate-y-1 ${plan.border || ''}`}>
-                                        <span className={`px-4 py-1 text-sm ${plan.bgColor} rounded-full`}>{plan.tier}</span>
-                                        <h3 className="text-xl font-bold mt-4">{plan.name}</h3>
-                                        <p className="text-3xl font-bold mt-4">{plan.price}<span className="text-sm font-normal">{plan.period}</span></p>
-                                        <ul className="mt-6 space-y-4">
-                                            {plan.features.map((feature, i) => (
-                                                <li key={i} className="flex items-center">
-                                                    <span className="material-symbols-outlined mr-2">check_circle</span>{feature}
-                                                </li>
-                                            ))}
-                                        </ul>
-                                        <button className={`w-full mt-8 text-white py-3 rounded-lg transition-colors duration-300 ${plan.btnColor}`}>{plan.btnText}</button>
-                                    </div>
+                                {subscriptionPlans.members.map((plan, index) => (
+                                    <SubscriptionCard
+                                        key={index}
+                                        plan={plan}
+                                        onSubscribe={handleSubscribe}
+                                        loading={loading}
+                                    />
                                 ))}
                             </div>
                         </div>
                     </div>
 
+                    {/* Sellers Tier */}
                     <section className="mt-16">
                         <h2 className="text-2xl font-semibold mb-8">Sellers Tier</h2>
                         <div className="grid md:grid-cols-3 gap-6">
-                            {pricingPlans.sellers.map((plan, index) => (
-                                <div key={index} className={`bg-white rounded-xl p-6 shadow-lg hover:shadow-xl transition-all duration-300 transform hover:-translate-y-1 ${plan.border || ''}`}>
-                                    <span className={`px-4 py-1 text-sm ${plan.bgColor} rounded-full`}>{plan.tier}</span>
-                                    <h3 className="text-xl font-bold mt-4">{plan.name}</h3>
-                                    <p className="text-3xl font-bold mt-4">{plan.price}<span className="text-sm font-normal">{plan.period}</span></p>
-                                    <ul className="mt-6 space-y-4">
-                                        {plan.features.map((feature, i) => (
-                                            <li key={i} className="flex items-center">
-                                                <span className="material-symbols-outlined mr-2">check_circle</span>{feature}
-                                            </li>
-                                        ))}
-                                    </ul>
-                                    <button className={`w-full mt-8 text-white py-3 rounded-lg transition-colors duration-300 ${plan.btnColor}`}>{plan.btnText}</button>
-                                </div>
+                            {subscriptionPlans.sellers.map((plan, index) => (
+                                <SubscriptionCard
+                                    key={index}
+                                    plan={plan}
+                                    onSubscribe={handleSubscribe}
+                                    loading={loading}
+                                />
                             ))}
                         </div>
                     </section>
