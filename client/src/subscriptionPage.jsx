@@ -1,5 +1,5 @@
 import Layout from "./components/Layout";
-import SubscriptionCard from "./components/subscriptionCard";
+import SubscriptionCard from "./components/cards/subscriptionCard";
 
 export function subscriptionPage() {
   return (

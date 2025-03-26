@@ -7,7 +7,7 @@ import { useProductContext } from "../context/ProductProvider";
 import BtnBeSeller from "../components/button/btnBeSeller";
 import BtnBeMember from "../components/button/btnBeMember";
 import { axiosPrivate } from "../api/axios";
-import SubscriptionCard from  "../components/subscriptionCard"
+import SubscriptionCard from  "../components/cards/subscriptionCard"
 
 
 function App() {
