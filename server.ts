@@ -14,7 +14,9 @@ import usersRoute from './routes/Api/user';
 import productsRoute from './routes/Api/product';
 import publicProductsRoute from './routes/Api/publicProduct'
 import sellersRoute from './routes/Api/seller'
+
 import testProductRoute from './routes/Api/testProduct'
+import subscriptionRoutes from './routes/Api/subscribe';
 
 import searchCarsRoute from './routes/Api/searchCars'
 import filterCarRoute from './routes/Api/filterCars';
@@ -49,11 +51,12 @@ app.use('/api/forgot-password', reqResetRoute)
 app.use('/api/reset-password', resetPasswordRoute)
 app.use('/api/refresh', refreshRoute)
 app.use('/api/search', searchCarsRoute)
-app.use('/api/filter', requireAuth, filterCarRoute)
 app.use("/api/sellers", sellersRoute)
 app.use("/api/publicproducts", publicProductsRoute)
 
+app.use('/api/subscriptions', subscriptionRoutes);
 //Test Case
+app.use('/api/filter', requireAuth, filterCarRoute)
 app.use("/test", requireAuth, testRoute)
 app.use("/testproduct", requireAuth, testProductRoute)
 
