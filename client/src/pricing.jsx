@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import axios from "./api/axios";
+import {axiosPrivate} from "./api/axios";
 import Layout from "./components/Layout";
 import useAuth from "./hooks/useAuth";
 
@@ -97,16 +97,16 @@ const SubscriptionCard = ({ plan, onSubscribe, loading }) => (
 function Pricing() {
     const { auth } = useAuth();
     const [loading, setLoading] = useState(false);
-    const [message, setMessage] = useState("");
+   
 
     const handleSubscribe = async (plan) => {
         // Ensure user is logged in
         if (!auth || !auth.id) {
-            setMessage("Please log in to subscribe.");
+            alert("Please log in to subscribe.");
             return;
         }
         setLoading(true);
-        setMessage("");
+    
         const userId = auth.id;
 
         // Parse the price value (remove "KSH", commas and trim whitespace)
@@ -118,8 +118,8 @@ function Pricing() {
         // For paid plans, integrate your payment gateway logic here (e.g., Mpesa, Flutterwave, Paystack)
         // For now, we simply call the subscription API for both free and paid plans.
         try {
-            const response = await axios.post(
-                "/api/subscriptions",
+            const response = await axiosPrivate.post(
+                "subscriptions",
                 {
                     userId,
                     planName: plan.name,
@@ -135,12 +135,10 @@ function Pricing() {
                 }
             );
             // Update with a pending status if payment integration is needed
-            setMessage(
-                response.data.message || `Subscribed to ${plan.name} successfully!`
-            );
+            alert(`Subscribed to ${plan.name} successfully!`);
         } catch (error) {
             console.error("Subscription error:", error);
-            setMessage("Subscription failed. Please try again.");
+            alert("Subscription failed. Please try again.");
         } finally {
             setLoading(false);
         }
@@ -160,10 +158,7 @@ function Pricing() {
                     {loading && (
                         <p className="text-center">Processing your subscription...</p>
                     )}
-                    {message && (
-                        <p className="text-center text-green-500 mb-4">{message}</p>
-                    )}
-
+                   
                     {/* Members Tier */}
                     <div className="grid md:grid-cols-1 gap-8 mb-16">
                         <div className="space-y-8">
