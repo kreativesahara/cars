@@ -13,6 +13,7 @@
 ## Clean the controllers
 ## Handle refresh tokens expiries.
 ## Handle Authorization of users depending with their subscription tiers.
+## install express_validator(jolie) - to ensure that required fields are provided and formatted correctly. This improves security and reliability.
 
 # Business scope
 
