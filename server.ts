@@ -4,6 +4,7 @@ import dotenv from 'dotenv';
 import cookieParser from 'cookie-parser'
 import morgan from 'morgan';
 import cors from 'cors';
+import cron from 'node-cron';
 
 import testRoute from './routes/test'
 
@@ -25,6 +26,8 @@ import logoutRoute from './routes/Api/logout'
 
 import corsOptions from './config/corsOptions';
 import { requireAuth } from './middleware/requireAuth';
+
+import { checkExpiredSubscriptions } from './controllers/subscriptionController';
 
 
 
@@ -63,6 +66,12 @@ app.use("/testproduct", requireAuth, testProductRoute)
 //API Routes
 app.use("/api/products", requireAuth, productsRoute)
 app.use('/api/logout', requireAuth, logoutRoute)
+
+
+cron.schedule('0 0 * * *', () => {
+    console.log('Running subscription expiry check...');
+    checkExpiredSubscriptions();
+});
 
 // Start the server
 app.listen(PORT, () => {
