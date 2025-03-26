@@ -3,17 +3,12 @@ import useAuth from './useAuth';
 
 const useRefreshToken = () => {
     const { setAuth } = useAuth();
-
     const refresh = async () => {
         try {
             console.log('Starting token refresh process...from refreshController');
-            // Make the refresh token request
             const response = await axiosPrivate.get('/refresh');
-            // Destructure the response for better readability
             const { id, firstname, lastname, email, roles, accessToken } = response.data;
-
-            console.log(accessToken);
-            // Update auth state with the new token and roles
+            console.log('Refreshed token:',accessToken);
             setAuth((prev) => {
                 return({
                     ...prev,
@@ -23,8 +18,7 @@ const useRefreshToken = () => {
                     email: email,
                     roles: roles,
                     accessToken: accessToken,
-                });
-                
+                });                
             });
             console.log('Token refreshed successfully');
         } catch (err) {
