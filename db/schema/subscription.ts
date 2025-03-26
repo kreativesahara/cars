@@ -10,6 +10,6 @@ export const subscription = mysqlTable('subscriptions', {
     status: varchar('status', { length: 20 }).notNull().default('active'), // active, cancelled, expired
     startDate: timestamp('start_date').defaultNow(),
     endDate: timestamp('end_date'),
-    createdAt: timestamp('created_at').defaultNow(),
-    updatedAt: timestamp('updated_at').defaultNow().onUpdateNow(),
+    createdAt: timestamp('created_at').defaultNow().notNull(),
+    updatedAt: timestamp('updated_at').defaultNow().onUpdateNow().notNull(),
 });
