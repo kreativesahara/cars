@@ -54,7 +54,7 @@ app.use('/api/search', searchCarsRoute)
 app.use("/api/sellers", sellersRoute)
 app.use("/api/publicproducts", publicProductsRoute)
 
-app.use('/api/subscriptions', subscriptionRoutes);
+app.use('/api/subscriptions',requireAuth, subscriptionRoutes);
 //Test Case
 app.use('/api/filter', requireAuth, filterCarRoute)
 app.use("/test", requireAuth, testRoute)
