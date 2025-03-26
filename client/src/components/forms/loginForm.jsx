@@ -1,5 +1,5 @@
 import React from 'react'
-import axios from '../../api/axios'
+import { axiosPrivate } from '../../api/axios'
 import useAuth from '../../hooks/useAuth'
 import { Link, useLocation } from 'react-router-dom'
 import { useRef, useState, useEffect } from 'react'
@@ -37,16 +37,7 @@ const LoginForm = () => {
         console.log(JSON.stringify(from))
         console.log(formData)
         try {
-            const response = await axios.post('auth/login', formData,
-                {
-                    headers: {
-                        'Content-Type': 'application/json',
-                    },
-                    withCredentials: true
-                },
-
-            );
-
+            const response = await axiosPrivate.post('auth/login', formData);
             const { accessToken, roles } = response?.data;
             setAuth({
                 email: formData.email,
@@ -56,10 +47,7 @@ const LoginForm = () => {
 
             setFormData({ email: "", password: "" });
             alert("User login successfully")
-            window.location.href = from, { replace: true }    
-
-
-
+            window.location.href = from, { replace: true }  
         } catch (error) {
             if (!error?.response) {
                 setErrMsg('No Server Response');
@@ -79,9 +67,11 @@ const LoginForm = () => {
     const togglePersist = () => {
         setPersist(prev => !prev);
     };
+
     useEffect(() => {
         localStorage.setItem("persist", JSON.stringify(persist));
     }, [persist]);
+    
     return (
         <div className='flex flex-col gap-4 items-center' >
             <div className=' md:rounded-lg shadow-md flex flex-col bg-slate-300 min-w-[400px] mt-8 pb-14 items-center'>
