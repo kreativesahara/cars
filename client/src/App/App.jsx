@@ -7,7 +7,7 @@ import { useProductContext } from "../context/ProductProvider";
 import BtnBeSeller from "../components/button/btnBeSeller";
 import BtnBeMember from "../components/button/btnBeMember";
 import { axiosPrivate } from "../api/axios";
-import SubscriptionCard from  "../components/cards/subscriptionCard"
+import SubscriptionDetailsCard from  "../components/cards/subscriptionDetailsCard"
 
 
 function App() {
@@ -66,7 +66,7 @@ function App() {
               <p className='text-sm text-neutral-600'>User's Name: {auth?.lastname + " " + auth?.firstname}</p>
               <p className='text-sm text-neutral-600'>Your Email: {auth?.email}</p>
             </div>
-            <SubscriptionCard/>
+            <SubscriptionDetailsCard/>
             <section className=' productsListing flex flex-col gap-4 '>
               {auth?.roles === 3 &&
                 <div className='md:p-4 bg-neutral-50 rounded-md  gap-4 '>
