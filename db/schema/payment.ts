@@ -11,6 +11,6 @@ export const payment = mysqlTable("payments", {
     paymentMethod: varchar("payment_method", { length: 50 }).notNull(), // MPesa, Stripe, PayPal, etc.
     txnId: varchar("txn_id", { length: 255 }).notNull().unique(), // Unique transaction reference
     status: varchar("status", { length: 20 }).notNull().default("pending"), // pending, successful, failed
-    createdAt: timestamp("created_at").defaultNow(),
-    updatedAt: timestamp("updated_at").defaultNow().onUpdateNow(),
+    createdAt: timestamp("created_at").defaultNow().onUpdateNow(),
+    updatedAt: timestamp("updated_at").defaultNow(),
 });
