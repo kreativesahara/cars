@@ -1,33 +1,33 @@
-import express from 'express';
-import * as path from 'path';
-import dotenv from 'dotenv';
+import express from 'express'
+import * as path from 'path'
+import dotenv from 'dotenv'
 import cookieParser from 'cookie-parser'
-import morgan from 'morgan';
-import cors from 'cors';
-import cron from 'node-cron';
+import morgan from 'morgan'
+import cors from 'cors'
+import cron from 'node-cron'
 
 import testRoute from './routes/test'
 
-import authRoute from './routes/Api/auth';
-import reqResetRoute from './routes/Api/reqReset';
-import resetPasswordRoute from './routes/Api/resetPassword';
-import usersRoute from './routes/Api/user';
-import productsRoute from './routes/Api/product';
+import authRoute from './routes/Api/auth'
+import reqResetRoute from './routes/Api/reqReset'
+import resetPasswordRoute from './routes/Api/resetPassword'
+import usersRoute from './routes/Api/user'
+import productsRoute from './routes/Api/product'
 import publicProductsRoute from './routes/Api/publicProduct'
 import sellersRoute from './routes/Api/seller'
 
 import testProductRoute from './routes/Api/testProduct'
-import subscriptionRoutes from './routes/Api/subscribe';
+import subscriptionRoutes from './routes/Api/subscribe'
+import paymentRoutes from './routes/Api/payment'
 
 import searchCarsRoute from './routes/Api/searchCars'
-import filterCarRoute from './routes/Api/filterCars';
+import filterCarRoute from './routes/Api/filterCars'
 import refreshRoute from './routes/Api/refresh'
 import logoutRoute from './routes/Api/logout'
 
-import corsOptions from './config/corsOptions';
-import { requireAuth } from './middleware/requireAuth';
-
-import { checkExpiredSubscriptions } from './controllers/subscriptionController';
+import corsOptions from './config/corsOptions'
+import { requireAuth } from './middleware/requireAuth'
+import { checkExpiredSubscriptions } from './controllers/subscriptionController'
 
 
 
@@ -58,6 +58,7 @@ app.use("/api/sellers", sellersRoute)
 app.use("/api/publicproducts", publicProductsRoute)
 
 app.use('/api/subscriptions',requireAuth, subscriptionRoutes);
+app.use("/api/payments", requireAuth, paymentRoutes);
 //Test Case
 app.use('/api/filter', requireAuth, filterCarRoute)
 app.use("/test", requireAuth, testRoute)
