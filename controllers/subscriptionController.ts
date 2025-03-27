@@ -106,7 +106,7 @@ export const subscribe = async (req: Request, res: Response) => {
                     planName,
                     amount,
                     currency,
-                    status: 'active',
+                    status: 'pending',
                     startDate: currentDate,
                     endDate,
                     createdAt: currentDate,
