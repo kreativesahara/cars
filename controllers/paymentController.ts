@@ -16,7 +16,7 @@ export const initiatePayment = async (req: Request, res: Response) => {
     // Example request body
     // {
     //     "userId": 181,
-    //     "subscriptionId": 100,
+    //     "subscriptionId": 146,
     //     "amount": 0,
     //     "currency": "KES",
     //     "paymentMethod": "mpesa"
@@ -63,6 +63,7 @@ export const initiatePayment = async (req: Request, res: Response) => {
  * Verify Payment
  * Endpoint: POST /payments/verify
  */
+
 export const verifyPayment = async (req: Request, res: Response) => {
     const { txnId, paymentMethod } = req.body;
     try {
@@ -80,7 +81,6 @@ export const verifyPayment = async (req: Request, res: Response) => {
         //     default:
         //         return res.status(400).json({ error: "Unsupported payment method." });
         // }
-
         if (paymentStatus === "successful") {
             await db.update(payment).set({ status: "successful" }).where(eq(payment.txnId, txnId));
             res.status(200).json({ message: "Payment verified successfully." });

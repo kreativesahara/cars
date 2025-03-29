@@ -75,7 +75,7 @@ const handleLogin = async (req: Request, res: Response) => {
                 }
             },
             process.env.ACCESS_TOKEN_SECRET as string,
-            { expiresIn: '15m' },
+            { expiresIn: '5m' },
         );
 
         const refreshToken = jwt.sign(
@@ -87,7 +87,7 @@ const handleLogin = async (req: Request, res: Response) => {
                 "roles": roles
             },
             process.env.REFRESH_TOKEN_SECRET as string,
-            { expiresIn: '1h' }
+            { expiresIn: '15m' }
         );
         //Save current user with their refresh token
         await db
@@ -104,11 +104,6 @@ const handleLogin = async (req: Request, res: Response) => {
         })
         // Send authorization roles and access token to user
         res.json({
-            id, 
-            firstname,
-            lastname,
-            email,
-            roles, 
             accessToken
         })
         console.log('foundUser', foundUser)

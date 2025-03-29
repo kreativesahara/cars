@@ -10,7 +10,7 @@ export const handleRefreshToken = async (req: Request, res: Response) => {
         const authcookies = req.cookies;
         console.log('AuthCookie from handle Refresh:', authcookies);
         if (!authcookies?.refreshToken) {
-            console.error('missing refresh cookie');
+            console.error('missing refresh cookies:', authcookies);
             return res.status(401).json({ error: 'Refresh token required' });
         }
 
@@ -56,7 +56,7 @@ export const handleRefreshToken = async (req: Request, res: Response) => {
                         },
                     },
                     process.env.ACCESS_TOKEN_SECRET as string,
-                    { expiresIn: '15m' }
+                    { expiresIn: '5m' }
                 );
                 
                 //Set access token as a cookie in the response

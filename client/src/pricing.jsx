@@ -47,6 +47,7 @@ function Pricing() {
             const activeSub = subscriptions[0];
             alert(`You already have an active subscription: ${activeSub.planName}.`);
             setLoading(false);
+            window.location.href = 'dashboard'
             return;
         }
 

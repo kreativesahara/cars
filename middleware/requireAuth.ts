@@ -5,7 +5,7 @@ import jwt from 'jsonwebtoken';
 declare module 'express-serve-static-core' {
     interface Request {
         auth?: {
-            id: string;
+            id: number;
             firstname: string;
             lastname: string;
             email: string;
@@ -38,12 +38,10 @@ export const requireAuth = (req: Request, res: Response, next: NextFunction) => 
                     console.error('Token verification failed:', err.message);
                     return res.status(403).json({ error: 'Invalid or expired token' });
                 }
-
                 if (!decoded.UserInfo || !decoded.UserInfo.email || !decoded.UserInfo.roles) {
                     console.error('Invalid token payload');
                     return res.status(403).json({ error: 'Invalid token payload' });
                 }
-
                 req.auth = {
                     id: decoded.UserInfo.id,
                     firstname: decoded.UserInfo.firstname,

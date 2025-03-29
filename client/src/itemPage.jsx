@@ -11,6 +11,7 @@ import { Carousel } from 'react-responsive-carousel';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faArrowRight, faArrowLeft } from '@fortawesome/free-solid-svg-icons';
 import RelatedCars from './components/cards/relatedCarsCard';
+import { subscription } from '../../db/schema/subscription';
 
 const Itempage = () => {
     const { productId } = useParams();
@@ -42,6 +43,7 @@ const Itempage = () => {
     useEffect(() => {
         if (product) {
             const foundSeller = sellers.find((s) => s.userId === Number(product.seller_id));
+            // const foundSubscriber = users.find((U) =>U.subscriptionId === Number(subscription.id))
             if (foundSeller) {
                 setSeller(foundSeller);
             } else {
@@ -164,8 +166,8 @@ const Itempage = () => {
                                 Drive System :
                                 <span className='font-bold'> {product.driveSystem} </span>
                             </li>
-                            {seller.hasFinancing !== null && <li className='py-2'>Financing Available: <span className='font-bold text-emerald-600'>{seller.hasFinancing ? 'Yes' : 'No'}</span></li>}
-                            {seller.acceptsTradeIn !== null && <li className='py-2'>Accepts Trade-in: <span className='font-bold text-emerald-600'>{seller.acceptsTradeIn ? 'Yes' : 'No'}</span></li>}
+                            {seller?.hasFinancing !== null && <li className='py-2'>Financing Available: <span className='font-bold text-emerald-600'>{seller.hasFinancing ? 'Yes' : 'No'}</span></li>}
+                            {seller?.acceptsTradeIn !== null && <li className='py-2'>Accepts Trade-in: <span className='font-bold text-emerald-600'>{seller.acceptsTradeIn ? 'Yes' : 'No'}</span></li>}
                         </ul>
                     </div>
                     <div>
@@ -189,16 +191,16 @@ const Itempage = () => {
                                 width="80"
                                 height="80"
                                 loading='lazy'
-                                src={auth?.roles === 2 || auth?.roles === 3 && (`${seller.image_url}`) || `${defaultProfile}`} alt=''
+                                src={auth?.roles === 2 || auth?.roles === 3 && (`${seller?.image_url}`) || `${defaultProfile}`} alt=''
                                
                              />
                             <span className='ml-4 my-auto'>
-                                <p className='uppercase font-semibold'>{seller.username}</p>
-                                <p className='font-semibold'>Seller Type : <span className='font-bold text-emerald-600'>{seller.accountType}</span></p>
+                                <p className='uppercase font-semibold'>{seller?.username}</p>
+                                <p className='font-semibold'>Seller Type : <span className='font-bold text-emerald-600'>{seller?.accountType}</span></p>
                             </span>
                         </div>
                     </div>
-                    {auth?.roles === 2 || auth?.roles === 3 && (<a href={`tel:${seller.contact}`} className='hover:bg-[#3DC2EC] transition-colors duration-100 bg-black p-2 rounded-md text-center text-white w-100 py-2 tracking-widest font-black'>Call Seller</a>)}
+                    {auth?.roles === 2 || auth?.roles === 3 && (<a href={`tel:${seller?.contact}`} className='hover:bg-[#3DC2EC] transition-colors duration-100 bg-black p-2 rounded-md text-center text-white w-100 py-2 tracking-widest font-black'>Call Seller</a>)}
                     {auth?.roles === 1 && (<a href='tel:254706823590' className='hover:bg-[#3DC2EC] transition-colors duration-100 bg-black p-2 rounded-md text-center text-white w-100 py-2 tracking-widest font-black'>Call Seller</a>)}
                     <RelatedCars />
                 </div>

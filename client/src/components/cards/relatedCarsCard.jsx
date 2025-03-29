@@ -42,12 +42,12 @@ const RelatedCars = () => {
             ) : error ? (
                 <p className="text-center text-red-500 p-3">{error}</p>
             ) : relatedCars.length > 0 ? (
-                <ul className="grid grid-cols-3 sm:grid-cols-4 md:grid-cols-5 lg:grid-cols-6 gap-1 pt-2">
+                <ul className="grid grid-cols-3 sm:grid-cols-4 md:grid-cols-4 lg:grid-cols-4 gap-1 pt-2">
                     {relatedCars.map((car) => (
                         <li
                             key={car.id}
                             className="cursor-pointer"
-                            onClick={() => navigate(`/car/${car.id}`)}
+                            // onClick={() => navigate(`/car/${car.id}`)}
                         >
                             <img
                                 className="p-2 hover:border-2 hover:border-blue-600 rounded object-cover w-full h-24 sm:h-28 md:h-32 lg:h-36"

@@ -1,21 +1,18 @@
 import { createContext, useState, useContext } from "react";
-import axios from "../api/axios";
-
+import useAxiosPrivate from "../api/useAxiosPrivate";
 const SellerContext = createContext();
-
 export const useSellerContext = () => {
     return useContext(SellerContext);
 };
-
-
 export const SellerProvider = ({ children }) => {
+    const axiosPrivate = useAxiosPrivate();
     const [sellers, setSellers] = useState([]);
     useState(() =>{
         const getSellers= async () =>{
             try{
-                const response = await axios.get('/sellers')
+                const response = await axiosPrivate.get('/sellers')
                 setSellers(response.data);
-                console.log(response.data)
+                console.log('sellers',response.data)
             }catch(err){
                 console.error(err)
             }
@@ -23,7 +20,7 @@ export const SellerProvider = ({ children }) => {
         getSellers()
         const controller = new AbortController();
         return() =>controller.abort();
-    },[axios])
+    },[axiosPrivate])
     return(
         <SellerContext.Provider value={{sellers, setSellers}}>
             {children}

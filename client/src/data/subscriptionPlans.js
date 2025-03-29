@@ -35,9 +35,9 @@ export const subscriptionPlans = {
         {
             tier: "Limited",
             name: "Growth",
-            price: "KSH 5,880",
+            price: "KSH 5,970",
             period: "/month",
-            features: ["Advanced Listing", "25 Products", "Full Analytics"],
+            features: ["Advanced Listing", "25 Products", "Custom Analytics"],
             bgColor: "bg-orange-100",
             btnColor: "bg-orange-500 hover:bg-orange-600",
             btnText: "Start Selling",
@@ -45,13 +45,13 @@ export const subscriptionPlans = {
         {
             tier: "Premium",
             name: "Enterprise",
-            price: "KSH 11,880",
+            price: "KSH 15,880",
             period: "/month",
-            features: ["Custom Listing", "Unlimited Products", "Priority Support"],
+            features: ["Custom Listing", "200 Products", "Priority Support"],
             bgColor: "bg-yellow-100",
             btnColor: "bg-yellow-500 hover:bg-yellow-600",
             border: "border-2 border-yellow-500",
-            btnText: "Start Selling",
+            btnText: "Advanced Start",
         },
     ],
 };

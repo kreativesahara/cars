@@ -41,7 +41,8 @@ const LoginForm = () => {
             const { accessToken, roles } = response?.data;
             setAuth({
                 email: formData.email,
-                roles: Array.isArray(roles) ? roles : [roles],
+                roles: roles,
+                // roles: Array.isArray(roles) ? roles : [roles],
                 accessToken: accessToken
             });
 

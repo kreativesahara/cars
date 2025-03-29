@@ -9,13 +9,13 @@ import BtnBeMember from "../components/button/btnBeMember";
 import { axiosPrivate } from "../api/axios";
 import SubscriptionDetailsCard from  "../components/cards/subscriptionDetailsCard"
 
-
 function App() {
   const { auth } = useAuth();
   const navigate = useNavigate()
   const { products } = useProductContext();
   const [product, setProduct] = useState(null);
   const SellerId = auth?.id;
+  //const SubscriptionId = auth?.subscriptionId
  
   console.log('User ID:',auth);
   console.log('products context:', products);
@@ -33,6 +33,13 @@ function App() {
       console.error('no product found');
     }
   }, [products, SellerId])
+
+  useEffect(()=>{
+    console.log('configure Subscription ID...')
+    //Substitute with user subscription_id.
+    // const foundSubscriber = subscription.find((s) =>s.id === Number(subscriptionId))
+      console.log('Authenticated user ID:',auth.id)
+  })
 
 
 

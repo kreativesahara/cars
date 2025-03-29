@@ -40,7 +40,7 @@ function Navbar() {
                         </li>
                         <li>
                             <NavLink to="/pricing" className="navbar-link" data-nav-link>
-                                Pricing
+                                Subscriptions
                             </NavLink>
                         </li>
                         <li>
@@ -53,7 +53,7 @@ function Navbar() {
                         {auth?.accessToken ?
                             (
                                 <>
-                                    <button className='text-white mx-auto p-2 hover:bg-black hover:p-2 hover:rounded-md' onClick={dashBoard}>Dashboard</button>
+                                    <button className='text-white mx-auto p-2 bg-red-600 hover:bg-black hover:p-2 rounded-md animate-pulse duration-3000' onClick={dashBoard}>Post CAR ADS</button>
                                     <Logout />
                                 </>
                             ) : (
