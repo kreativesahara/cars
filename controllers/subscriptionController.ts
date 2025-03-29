@@ -132,34 +132,29 @@ export const updateSubscription = async (req: Request, res: Response) => {
         const currentSub = currentSubArr[0];
         const currentPlanLower = currentSub.planName.toLowerCase();
         const currentAmount = parseAmount(currentSub.amount);
-
         // Prevent update if the new tier is the same as the current tier
         if (newPlanLower && newPlanLower === currentPlanLower) {
             return res.status(400).json({
                 error: 'You already have an active subscription for this tier and cannot override it.'
             });
         }
-
         // Prevent seller from updating to a members tier
         if (sellerPlans.includes(currentPlanLower) && newPlanLower && memberPlans.includes(newPlanLower)) {
             return res.status(400).json({
                 error: 'Sellers cannot update their subscription to a members tier.'
             });
         }
-
         // Allow update only if the new amount is higher than the current amount
         if (newPlanAmount <= currentAmount) {
             return res.status(400).json({
                 error: 'You can only update to a higher tier than your current subscription.'
             });
         }
-
         // Calculate new end date if planName is updated
         let newEndDate = currentSub.endDate;
         if (newPlanLower) {
             newEndDate = calculateEndDate(planName);
         }
-
         await db.update(subscription)
             .set({
                 planName,
@@ -170,7 +165,6 @@ export const updateSubscription = async (req: Request, res: Response) => {
                 updatedAt: new Date(),
             })
             .where(eq(subscription.id, id));
-
         res.json({ message: 'Subscription updated successfully.' });
     } catch (error) {
         console.error('Subscription update error:', error);
