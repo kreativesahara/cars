@@ -2,7 +2,6 @@ import { Request, Response } from 'express';
 import db from '../db/dbConfig';
 import { subscription } from '../db/schema/subscription';
 import { eq, and } from 'drizzle-orm';
-
 /**
  * Function to determine subscription end date based on plan name
  */
@@ -21,18 +20,15 @@ const calculateEndDate = (planName: string): Date => {
     }
     return startDate;
 };
-
 /**
  * Helper to convert amount to a number.
  */
 const parseAmount = (amount: any): number => {
     return parseFloat(amount);
 };
-
 // Define tier categories
 const memberPlans = ['basic', 'pro'];
 const sellerPlans = ['starter', 'growth', 'enterprise'];
-
 /**
  * Create or upgrade a subscription.
  * This endpoint will:
@@ -49,7 +45,6 @@ export const subscribe = async (req: Request, res: Response) => {
     const newPlanAmount = parseAmount(amount);
     const newPlanLower = planName.toLowerCase();
     const currentDate = new Date();
-
     try {
         // Check if user already has an active subscription
         const activeSubs = await db.select().from(subscription)
@@ -57,26 +52,22 @@ export const subscribe = async (req: Request, res: Response) => {
                 eq(subscription.userId, userId),
                 eq(subscription.status, 'active')
             ));
-
         if (activeSubs.length > 0) {
             const currentSub = activeSubs[0];
             const currentPlanLower = currentSub.planName.toLowerCase();
             const currentAmount = parseAmount(currentSub.amount);
-
             // Prevent repetition of the same tier
             if (currentPlanLower === newPlanLower) {
                 return res.status(400).json({
                     error: 'You already have an active subscription for this tier.'
                 });
             }
-
             // Prevent seller from switching to a members tier
             if (sellerPlans.includes(currentPlanLower) && memberPlans.includes(newPlanLower)) {
                 return res.status(400).json({
                     error: 'Sellers cannot override their subscription to a members tier.'
                 });
             }
-
             // Only allow an upgrade if the new plan is higher-priced
             if (newPlanAmount > currentAmount) {
                 // Reset startDate to now and recalc endDate from now
@@ -107,8 +98,8 @@ export const subscribe = async (req: Request, res: Response) => {
                     amount,
                     currency,
                     status: 'pending',
-                    startDate: currentDate,
                     endDate,
+                    startDate: currentDate, 
                     createdAt: currentDate,
                     updatedAt: currentDate,
                 })
@@ -120,8 +111,6 @@ export const subscribe = async (req: Request, res: Response) => {
         return res.status(500).json({ error: 'Failed to create subscription.' });
     }
 };
-
-
 /**
  * Update subscription details.
  * Similar checks are performed as in the subscribe endpoint.
@@ -188,7 +177,6 @@ export const updateSubscription = async (req: Request, res: Response) => {
         res.status(500).json({ error: 'Failed to update subscription.' });
     }
 };
-
 /**
  * Get subscriptions for a user and check expiration status.
  *
@@ -204,7 +192,6 @@ export const getSubscriptions = async (req: Request, res: Response) => {
         if (subscriptions.length === 0) {
             return res.status(404).json({ message: 'No subscriptions found for this user.' });
         }
-
         const currentDate = new Date();
         // Process subscriptions: update expired ones and add a lastUpdated field
         for (const sub of subscriptions) {
@@ -216,15 +203,12 @@ export const getSubscriptions = async (req: Request, res: Response) => {
                 sub.status = 'expired'; // update status locally
             }
         }
-
         return res.json({ subscriptions });
     } catch (error) {
         console.error('Fetch subscriptions error:', error);
         return res.status(500).json({ error: 'Failed to fetch subscriptions.' });
     }
 };
-
-
 /**
  * Cancel a subscription.
  *
@@ -243,17 +227,14 @@ export const cancelSubscription = async (req: Request, res: Response) => {
         res.status(500).json({ error: 'Failed to cancel subscription.' });
     }
 };
-
 /**
  * Check expired subscriptions and update their status (for cron jobs or admin use)
  */
 export const checkExpiredSubscriptions = async () => {
     const now = new Date();
-
     // Find active subscriptions
     const activeSubs = await db.select().from(subscription)
         .where(eq(subscription.status, 'active'));
-
     for (const sub of activeSubs) {
         if (sub.endDate && new Date(sub.endDate) < now) {
             await db.update(subscription)
@@ -261,6 +242,5 @@ export const checkExpiredSubscriptions = async () => {
                 .where(eq(subscription.id, sub.id));
         }
     }
-
     console.log('Expired subscriptions updated.');
 };
