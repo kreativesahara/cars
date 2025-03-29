@@ -38,13 +38,11 @@ const BecomeSeller = () => {
     const handleImageChange = async (e) => {
         const file = e.target.files[0];
         if (!file) return;
-
         const options = {
             maxSizeMB: 1,
             maxWidthOrHeight: 400,
             useWebWorker: true,
         };
-
         try {
             const compressedFile = await imageCompression(file, options);
             setImage(compressedFile);
@@ -58,11 +56,9 @@ const BecomeSeller = () => {
         // Reset the input value so the same file can be re-selected if needed
         e.target.value = null;
     };
-
     const handleSubmit = async (e) => {
         e.preventDefault();
         const form = new FormData();
-
         Object.keys(values).forEach((key) => form.append(key, values[key]));
         if (image) {
             form.append('image', image); // Append the image file
@@ -79,7 +75,6 @@ const BecomeSeller = () => {
 
             console.log("Response from Seller controller:", response.data);
             alert("Seller Details uploaded successfully");
-
             // Reset state
             setValues({
                 username: '',
