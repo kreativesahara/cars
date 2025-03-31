@@ -72,7 +72,7 @@ const UpdateProduct = () => {
     }, [productId, products]);
     useEffect(() => {
         if (product) {
-            const foundSeller = sellers.find((s) => s.userId === Number(product.seller_id));
+            const foundSeller = sellers.find((s) => s.userId === Number(product.sellerId));
             if (foundSeller) {
                 setSeller(foundSeller);
             } else {
@@ -194,7 +194,7 @@ const UpdateProduct = () => {
                                 {[
                                     {
                                         label: "Fuel Type",
-                                        name: "fuel_type",
+                                        name: "fuelType",
                                         options: ["Petrol", "Diesel", "Hybrid", "Electric"],
                                     },
                                     {
@@ -238,7 +238,7 @@ const UpdateProduct = () => {
                                     },
                                     {
                                         label: "Engine Capacity CC",
-                                        name: "engine_capacity",
+                                        name: "engineCapacity",
                                         type: "number",
                                         placeholder: "Enter Engine Capacity",
                                     },

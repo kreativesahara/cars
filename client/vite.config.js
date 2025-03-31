@@ -7,7 +7,7 @@ export default defineConfig({
   server: {
     proxy: {
       "/api": {
-        target: "http://localhost:3100", // Change this to your backend URL
+        target: "https://cars-7r06.onrender.com", // Change this to your backend URL
         changeOrigin: true,
         secure: false, // Set to true if using HTTPS
       },
