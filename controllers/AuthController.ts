@@ -17,7 +17,7 @@ const registerUser = async (req: Request, res: Response): Promise<Response> => {
         const saltRounds = 10;
         const hashedPassword = await bcrypt.hash(password, saltRounds);
         // Insert the new user into the database
-        const [newUser] = await db
+        const newUser = await db
             .insert(user)
             .values({
                 firstname,

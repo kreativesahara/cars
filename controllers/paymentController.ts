@@ -50,7 +50,8 @@ export const initiatePayment = async (req: Request, res: Response) => {
             status: "pending",
             createdAt: currentDate,
             updatedAt: currentDate
-        }).$returningId();
+        })
+        .returning({ id: payment.id });
 
         res.status(201).json({ message: "Payment initiated", txnId, paymentId: paymentRecord });
     } catch (error) {

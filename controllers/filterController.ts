@@ -7,8 +7,8 @@ import { carImages } from '../db/schema/carImages';
 export const filterCarProducts = async (req: Request, res: Response) => {
     try {
         const {
-            make, model, location, yearFrom, yearTo, priceMin, priceMax, fuel_type,
-            transmission, mileageRange, condition, driveSystem, engine_capacity, features
+            make, model, location, yearFrom, yearTo, priceMin, priceMax, fuelType,
+            transmission, mileageRange, condition, driveSystem, engineCapacity, features
         } = req.query;
 
         const filters = [];
@@ -16,11 +16,11 @@ export const filterCarProducts = async (req: Request, res: Response) => {
         if (make) filters.push(like(product.make, `%${make}%`));
         if (model) filters.push(like(product.model, `%${model}%`));
         if (location) filters.push(like(product.location, `%${location}%`));
-        if (fuel_type) filters.push(eq(product.fuel_type, fuel_type.toString()));
+        if (fuelType) filters.push(eq(product.fuelType, fuelType.toString()));
         if (transmission) filters.push(eq(product.transmission, transmission.toString()));
         if (condition) filters.push(eq(product.condition, condition.toString()));
         if (driveSystem) filters.push(eq(product.driveSystem, driveSystem.toString()));
-        if (engine_capacity) filters.push(eq(product.engine_capacity, engine_capacity.toString()));
+        if (engineCapacity) filters.push(eq(product.engineCapacity, engineCapacity.toString()));
         if (yearFrom) filters.push(gte(product.year, Number(yearFrom)));
         if (yearTo) filters.push(lte(product.year, Number(yearTo)));
         if (priceMin) filters.push(gte(product.price, priceMin.toString()));
@@ -42,9 +42,9 @@ export const filterCarProducts = async (req: Request, res: Response) => {
         // Fetch images only for the cars that matched
         const carIds = cars.map(car => car.id);
         const images = await db
-            .select({ car_id: carImages.car_id, image_url: carImages.image_url })
+            .select({ car_id: carImages.carId, image_url: carImages.imageUrl })
             .from(carImages)
-            .where(inArray(carImages.car_id, carIds));
+            .where(inArray(carImages.carId, carIds));
 
         // Group images by car_id
         const imageMap = images.reduce((acc, { car_id, image_url }) => {

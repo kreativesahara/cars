@@ -67,13 +67,13 @@ export const getAllProducts = async (req: Request, res: Response): Promise<Respo
         if (!cars.length) return res.status(204).json({ message: 'No products found.' });
 
         const carIds = cars.map(car => car.id);
-        const images = await db.select().from(carImages).where(inArray(carImages.car_id, carIds));
+        const images = await db.select().from(carImages).where(inArray(carImages.carId, carIds));
 
         const carsWithImages = cars.map(car => ({
             ...car,
             images: images
-                .filter(img => img.car_id === car.id)
-                .map(img => img.image_url)
+                .filter(img => img.carId === car.id)
+                .map(img => img.imageUrl)
         }));
 
         return res.json(carsWithImages);
@@ -97,12 +97,12 @@ export const getProduct = async (req: Request, res: Response): Promise<Response>
         const images = await db
             .select()
             .from(carImages)
-            .where(eq(carImages.car_id, viewProduct.id));
-        const imageUrls = images.map(img => img.image_url);
+            .where(eq(carImages.carId, viewProduct.id));
+        const imageUrls = images.map(img => img.imageUrl);
         const productSeller = await db
             .select()
             .from(seller)
-            .where(eq(seller.userId, viewProduct.seller_id));
+            .where(eq(seller.userId, viewProduct.sellerId));
 
         return res.json({ ...viewProduct, images: imageUrls, productSeller });
     } catch (error) {
@@ -117,16 +117,15 @@ export const createProduct = async (req: Request, res: Response): Promise<any> =
             console.error('Error from client:', err);
             return res.status(500).json({ message: 'Image upload error.' });
         }
-
         const {
-            make, model, year, engine_capacity, fuel_type, transmission,
-            driveSystem, mileage, features, condition, location, price, seller_id
+            make, model, year, engineCapacity, fuelType, transmission,
+            driveSystem, mileage, features, condition, location, price, sellerId
         } = req.body;
         const images: any = req.files;
 
-        if (!make || !model || !year || !engine_capacity || !fuel_type ||
+        if (!make || !model || !year || !engineCapacity || !fuelType ||
             !transmission || !driveSystem || !mileage || !features || !condition ||
-            !location || !price || !seller_id) {
+            !location || !price || !sellerId) {
             return res.status(400).json({ message: 'All fields are required.' });
         }
 
@@ -137,8 +136,8 @@ export const createProduct = async (req: Request, res: Response): Promise<any> =
                 model,
                 year,
                 slug,
-                engine_capacity,
-                fuel_type,
+                engineCapacity,
+                fuelType,
                 transmission,
                 driveSystem,
                 mileage,
@@ -146,8 +145,10 @@ export const createProduct = async (req: Request, res: Response): Promise<any> =
                 condition,
                 location,
                 price,
-                seller_id
-            }).$returningId();
+                sellerId
+            })
+            .returning({
+                id: product.id,});
 
             if (!carDetails || !carDetails.id) {
                 console.error('Failed to retrieve car_id after inserting product details.');
@@ -167,8 +168,14 @@ export const createProduct = async (req: Request, res: Response): Promise<any> =
                 return `${req.protocol}://${req.get('host')}/${newPath}`.replace(/\\/g, '/');
             });
 
-            const newCarImages = imageUrls.map((url: string) => ({ car_id, image_url: url }));
-            await db.insert(carImages).values(newCarImages);
+            const newCarImages = imageUrls.map((url: string) => ({ carId: car_id, imageUrl: url }));
+            console.log('New car images:', newCarImages);
+            if (newCarImages.length === 0) {
+                return res.status(400).json({ message: 'No images uploaded.' });
+            }
+            else{
+                await db.insert(carImages).values(newCarImages);
+            }            
 
             return res.status(201).json({
                 message: 'Product created successfully.',

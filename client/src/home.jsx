@@ -8,7 +8,7 @@ function home() {
   return (
     <Layout>
       <Header />
-      <Search  />
+      {/* <Search  /> */}
       {/* <Newsletter /> */}
     </Layout>
   )

@@ -103,7 +103,7 @@ export const subscribe = async (req: Request, res: Response) => {
                     createdAt: currentDate,
                     updatedAt: currentDate,
                 })
-                .$returningId();
+                .returning({id: subscription.id});
             return res.status(201).json({ message: 'Subscription created successfully.', subscription: newSubscription });
         }
     } catch (error) {

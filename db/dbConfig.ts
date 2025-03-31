@@ -1,24 +1,19 @@
-import mysql from 'mysql2';
-import dotenv from 'dotenv';
-import { drizzle } from 'drizzle-orm/mysql2';
+import { Pool } from "pg";
+import dotenv from "dotenv";
+import { drizzle } from "drizzle-orm/node-postgres";
 
 dotenv.config();
 //++++++++++++++++++++++++++++++++++++++++++
 // DB Connection
 //++++++++++++++++++++++++++++++++++++++++++
-const connection = mysql.createConnection({
-    host: process.env.DB_HOST,
-    user: process.env.DB_USER,
-    password: process.env.DB_PWD,
-    database: process.env.DB_NAME,
-    waitForConnections: true,
-    connectionLimit: 10,
-    queueLimit: 0
+const connection = new Pool({
+    connectionString: process.env.DATABASE_URL, // Use the PostgreSQL connection string from Supabase
+    ssl: process.env.DB_SSL === "true" ? { rejectUnauthorized: false } : false, // Use SSL if needed
 });
 //++++++++++++++++++++++++++++++++++++++++++
 // DB Connection Test
 //++++++++++++++++++++++++++++++++++++++++++
-connection.connect((err) => {
+connection.connect((err: any) => {
     if (err) {
         console.log('There Is Error In DB Connection:' + err);
     }
@@ -30,4 +25,3 @@ connection.connect((err) => {
 const db = drizzle(connection)
 ///export default connection;
 export default db;
-//++++++++++++++++++++++++++++++++++++++++++    

@@ -6,8 +6,6 @@ import morgan from 'morgan'
 import cors from 'cors'
 import cron from 'node-cron'
 
-import testRoute from './routes/test'
-
 import authRoute from './routes/Api/auth'
 import reqResetRoute from './routes/Api/reqReset'
 import resetPasswordRoute from './routes/Api/resetPassword'
@@ -16,7 +14,6 @@ import productsRoute from './routes/Api/product'
 import publicProductsRoute from './routes/Api/publicProduct'
 import sellersRoute from './routes/Api/seller'
 
-import testProductRoute from './routes/Api/testProduct'
 import subscriptionRoutes from './routes/Api/subscribe'
 import paymentRoutes from './routes/Api/payment'
 
@@ -64,9 +61,7 @@ app.use("/api/sellers", sellersRoute)
 app.use("/api/products", requireAuth, productsRoute)
 app.use('/api/subscriptions',requireAuth, subscriptionRoutes);
 app.use("/api/payments", requireAuth, paymentRoutes);
-//Test Case
-app.use("/test", requireAuth, testRoute)
-app.use("/testproduct", requireAuth, testProductRoute)
+
 
 cron.schedule('0 0 * * *', () => {
     console.log('Running subscription expiry check...');

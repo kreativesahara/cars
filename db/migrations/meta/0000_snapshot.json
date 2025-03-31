@@ -1,40 +1,37 @@
 {
-  "version": "5",
-  "dialect": "mysql",
-  "id": "5ac000dc-38bb-4b7b-a9f3-99e0dbeaa056",
+  "id": "6ed8f4d4-b48b-4975-bd9a-e4893d925ce0",
   "prevId": "00000000-0000-0000-0000-000000000000",
+  "version": "7",
+  "dialect": "postgresql",
   "tables": {
-    "car_images": {
+    "public.car_images": {
       "name": "car_images",
+      "schema": "",
       "columns": {
         "id": {
           "name": "id",
-          "type": "int",
-          "primaryKey": false,
-          "notNull": true,
-          "autoincrement": true
+          "type": "serial",
+          "primaryKey": true,
+          "notNull": true
         },
         "car_id": {
           "name": "car_id",
-          "type": "int",
+          "type": "integer",
           "primaryKey": false,
-          "notNull": true,
-          "autoincrement": false
+          "notNull": true
         },
         "image_url": {
           "name": "image_url",
           "type": "varchar(255)",
           "primaryKey": false,
-          "notNull": true,
-          "autoincrement": false
+          "notNull": true
         },
         "created_at": {
           "name": "created_at",
-          "type": "timestamp",
+          "type": "timestamp with time zone",
           "primaryKey": false,
           "notNull": true,
-          "autoincrement": false,
-          "default": "(now())"
+          "default": "now()"
         }
       },
       "indexes": {},
@@ -49,80 +46,68 @@
           "columnsTo": [
             "id"
           ],
-          "onDelete": "no action",
+          "onDelete": "cascade",
           "onUpdate": "no action"
         }
       },
-      "compositePrimaryKeys": {
-        "car_images_id": {
-          "name": "car_images_id",
-          "columns": [
-            "id"
-          ]
-        }
-      },
+      "compositePrimaryKeys": {},
       "uniqueConstraints": {},
-      "checkConstraint": {}
+      "policies": {},
+      "checkConstraints": {},
+      "isRLSEnabled": false
     },
-    "payments": {
+    "public.payments": {
       "name": "payments",
+      "schema": "",
       "columns": {
         "id": {
           "name": "id",
-          "type": "int",
-          "primaryKey": false,
-          "notNull": true,
-          "autoincrement": true
+          "type": "serial",
+          "primaryKey": true,
+          "notNull": true
         },
         "user_id": {
           "name": "user_id",
-          "type": "int",
+          "type": "integer",
           "primaryKey": false,
-          "notNull": true,
-          "autoincrement": false
+          "notNull": true
         },
         "subscription_id": {
           "name": "subscription_id",
-          "type": "int",
+          "type": "integer",
           "primaryKey": false,
-          "notNull": false,
-          "autoincrement": false
+          "notNull": false
         },
         "amount": {
           "name": "amount",
-          "type": "decimal(10,2)",
+          "type": "numeric(10, 2)",
           "primaryKey": false,
-          "notNull": true,
-          "autoincrement": false
+          "notNull": true
         },
         "currency": {
           "name": "currency",
           "type": "varchar(10)",
           "primaryKey": false,
           "notNull": true,
-          "autoincrement": false,
           "default": "'KES'"
         },
         "payment_method": {
           "name": "payment_method",
           "type": "varchar(50)",
           "primaryKey": false,
-          "notNull": true,
-          "autoincrement": false
+          "notNull": true
         },
         "txn_id": {
           "name": "txn_id",
           "type": "varchar(255)",
           "primaryKey": false,
-          "notNull": true,
-          "autoincrement": false
+          "notNull": true
         },
         "status": {
           "name": "status",
           "type": "varchar(20)",
           "primaryKey": false,
           "notNull": true,
-          "autoincrement": false,
           "default": "'pending'"
         },
         "created_at": {
@@ -130,17 +115,14 @@
           "type": "timestamp",
           "primaryKey": false,
           "notNull": false,
-          "autoincrement": false,
-          "onUpdate": true,
-          "default": "(now())"
+          "default": "now()"
         },
         "updated_at": {
           "name": "updated_at",
           "type": "timestamp",
           "primaryKey": false,
           "notNull": false,
-          "autoincrement": false,
-          "default": "(now())"
+          "default": "now()"
         }
       },
       "indexes": {},
@@ -172,131 +154,113 @@
           "onUpdate": "no action"
         }
       },
-      "compositePrimaryKeys": {
-        "payments_id": {
-          "name": "payments_id",
-          "columns": [
-            "id"
-          ]
-        }
-      },
+      "compositePrimaryKeys": {},
       "uniqueConstraints": {
         "payments_txn_id_unique": {
           "name": "payments_txn_id_unique",
+          "nullsNotDistinct": false,
           "columns": [
             "txn_id"
           ]
         }
       },
-      "checkConstraint": {}
+      "policies": {},
+      "checkConstraints": {},
+      "isRLSEnabled": false
     },
-    "cars": {
+    "public.cars": {
       "name": "cars",
+      "schema": "",
       "columns": {
         "id": {
           "name": "id",
-          "type": "int",
-          "primaryKey": false,
-          "notNull": true,
-          "autoincrement": true
+          "type": "serial",
+          "primaryKey": true,
+          "notNull": true
         },
         "seller_id": {
           "name": "seller_id",
-          "type": "int",
+          "type": "integer",
           "primaryKey": false,
-          "notNull": true,
-          "autoincrement": false
+          "notNull": true
         },
         "make": {
           "name": "make",
           "type": "varchar(255)",
           "primaryKey": false,
-          "notNull": true,
-          "autoincrement": false
+          "notNull": true
         },
         "model": {
           "name": "model",
           "type": "varchar(255)",
           "primaryKey": false,
-          "notNull": true,
-          "autoincrement": false
+          "notNull": true
         },
         "slug": {
           "name": "slug",
           "type": "varchar(255)",
           "primaryKey": false,
-          "notNull": true,
-          "autoincrement": false
+          "notNull": true
         },
         "yom": {
           "name": "yom",
-          "type": "int",
+          "type": "integer",
           "primaryKey": false,
-          "notNull": true,
-          "autoincrement": false
+          "notNull": true
         },
         "engine_capacity": {
           "name": "engine_capacity",
           "type": "varchar(20)",
           "primaryKey": false,
-          "notNull": true,
-          "autoincrement": false
+          "notNull": true
         },
         "fuel_type": {
           "name": "fuel_type",
           "type": "varchar(50)",
           "primaryKey": false,
-          "notNull": true,
-          "autoincrement": false
+          "notNull": true
         },
         "transmission": {
           "name": "transmission",
           "type": "varchar(50)",
           "primaryKey": false,
-          "notNull": true,
-          "autoincrement": false
+          "notNull": true
         },
         "drive_system": {
           "name": "drive_system",
           "type": "varchar(50)",
           "primaryKey": false,
-          "notNull": true,
-          "autoincrement": false
+          "notNull": true
         },
         "mileage": {
           "name": "mileage",
           "type": "text",
           "primaryKey": false,
-          "notNull": true,
-          "autoincrement": false
+          "notNull": true
         },
         "features": {
           "name": "features",
           "type": "text",
           "primaryKey": false,
-          "notNull": true,
-          "autoincrement": false
+          "notNull": true
         },
         "car_condition": {
           "name": "car_condition",
           "type": "varchar(50)",
           "primaryKey": false,
-          "notNull": true,
-          "autoincrement": false
+          "notNull": true
         },
         "view_location": {
           "name": "view_location",
           "type": "varchar(255)",
           "primaryKey": false,
-          "notNull": true,
-          "autoincrement": false
+          "notNull": true
         },
         "price": {
           "name": "price",
           "type": "text",
           "primaryKey": false,
-          "notNull": true,
-          "autoincrement": false
+          "notNull": true
         }
       },
       "indexes": {},
@@ -311,111 +275,98 @@
           "columnsTo": [
             "user_id"
           ],
-          "onDelete": "no action",
+          "onDelete": "cascade",
           "onUpdate": "no action"
         }
       },
-      "compositePrimaryKeys": {
-        "cars_id": {
-          "name": "cars_id",
-          "columns": [
-            "id"
-          ]
-        }
-      },
+      "compositePrimaryKeys": {},
       "uniqueConstraints": {
         "cars_slug_unique": {
           "name": "cars_slug_unique",
+          "nullsNotDistinct": false,
           "columns": [
             "slug"
           ]
         }
       },
-      "checkConstraint": {}
+      "policies": {},
+      "checkConstraints": {},
+      "isRLSEnabled": false
     },
-    "sellers": {
+    "public.sellers": {
       "name": "sellers",
+      "schema": "",
       "columns": {
         "id": {
           "name": "id",
-          "type": "int",
-          "primaryKey": false,
-          "notNull": true,
-          "autoincrement": true
+          "type": "serial",
+          "primaryKey": true,
+          "notNull": true
         },
         "user_id": {
           "name": "user_id",
-          "type": "int",
+          "type": "integer",
           "primaryKey": false,
-          "notNull": true,
-          "autoincrement": false
+          "notNull": true
         },
         "username": {
           "name": "username",
           "type": "text",
           "primaryKey": false,
-          "notNull": true,
-          "autoincrement": false
+          "notNull": true
         },
         "account_type": {
           "name": "account_type",
           "type": "varchar(255)",
           "primaryKey": false,
-          "notNull": false,
-          "autoincrement": false
+          "notNull": false
         },
         "contact": {
           "name": "contact",
           "type": "varchar(50)",
           "primaryKey": false,
-          "notNull": false,
-          "autoincrement": false
+          "notNull": false
         },
         "place": {
           "name": "place",
           "type": "varchar(200)",
           "primaryKey": false,
-          "notNull": true,
-          "autoincrement": false
+          "notNull": true
         },
         "image_url": {
           "name": "image_url",
           "type": "varchar(255)",
           "primaryKey": false,
-          "notNull": true,
-          "autoincrement": false
+          "notNull": true
         },
         "has_financing": {
           "name": "has_financing",
           "type": "varchar(255)",
           "primaryKey": false,
-          "notNull": false,
-          "autoincrement": false
+          "notNull": false
         },
         "accepts_trade_in": {
           "name": "accepts_trade_in",
           "type": "varchar(255)",
           "primaryKey": false,
-          "notNull": false,
-          "autoincrement": false
+          "notNull": false
         },
         "created_at": {
           "name": "created_at",
           "type": "timestamp",
           "primaryKey": false,
           "notNull": true,
-          "autoincrement": false,
-          "default": "(now())"
+          "default": "now()"
         }
       },
       "indexes": {},
       "foreignKeys": {
-        "sellers_id_users_id_fk": {
-          "name": "sellers_id_users_id_fk",
+        "sellers_user_id_users_id_fk": {
+          "name": "sellers_user_id_users_id_fk",
           "tableFrom": "sellers",
           "tableTo": "users",
           "columnsFrom": [
-            "id"
+            "user_id"
           ],
           "columnsTo": [
             "id"
@@ -424,61 +375,59 @@
           "onUpdate": "no action"
         }
       },
-      "compositePrimaryKeys": {
-        "sellers_id": {
-          "name": "sellers_id",
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {
+        "sellers_user_id_unique": {
+          "name": "sellers_user_id_unique",
+          "nullsNotDistinct": false,
           "columns": [
-            "id"
+            "user_id"
           ]
         }
       },
-      "uniqueConstraints": {},
-      "checkConstraint": {}
+      "policies": {},
+      "checkConstraints": {},
+      "isRLSEnabled": false
     },
-    "subscriptions": {
+    "public.subscriptions": {
       "name": "subscriptions",
+      "schema": "",
       "columns": {
         "id": {
           "name": "id",
-          "type": "int",
-          "primaryKey": false,
-          "notNull": true,
-          "autoincrement": true
+          "type": "serial",
+          "primaryKey": true,
+          "notNull": true
         },
         "user_id": {
           "name": "user_id",
-          "type": "int",
+          "type": "integer",
           "primaryKey": false,
-          "notNull": true,
-          "autoincrement": false
+          "notNull": true
         },
         "txn_id": {
           "name": "txn_id",
           "type": "varchar(255)",
           "primaryKey": false,
-          "notNull": false,
-          "autoincrement": false
+          "notNull": false
         },
         "plan_name": {
           "name": "plan_name",
           "type": "varchar(50)",
           "primaryKey": false,
-          "notNull": true,
-          "autoincrement": false
+          "notNull": true
         },
         "amount": {
           "name": "amount",
-          "type": "decimal(10,2)",
+          "type": "numeric(10, 2)",
           "primaryKey": false,
-          "notNull": true,
-          "autoincrement": false
+          "notNull": true
         },
         "currency": {
           "name": "currency",
           "type": "varchar(10)",
           "primaryKey": false,
           "notNull": true,
-          "autoincrement": false,
           "default": "'KES'"
         },
         "status": {
@@ -486,7 +435,6 @@
           "type": "varchar(20)",
           "primaryKey": false,
           "notNull": true,
-          "autoincrement": false,
           "default": "'pending'"
         },
         "start_date": {
@@ -494,32 +442,27 @@
           "type": "timestamp",
           "primaryKey": false,
           "notNull": false,
-          "autoincrement": false,
-          "default": "(now())"
+          "default": "now()"
         },
         "end_date": {
           "name": "end_date",
           "type": "timestamp",
           "primaryKey": false,
-          "notNull": false,
-          "autoincrement": false
+          "notNull": false
         },
         "created_at": {
           "name": "created_at",
           "type": "timestamp",
           "primaryKey": false,
           "notNull": true,
-          "autoincrement": false,
-          "default": "(now())"
+          "default": "now()"
         },
         "updated_at": {
           "name": "updated_at",
           "type": "timestamp",
           "primaryKey": false,
           "notNull": true,
-          "autoincrement": false,
-          "onUpdate": true,
-          "default": "(now())"
+          "default": "now()"
         }
       },
       "indexes": {},
@@ -538,144 +481,127 @@
           "onUpdate": "no action"
         }
       },
-      "compositePrimaryKeys": {
-        "subscriptions_id": {
-          "name": "subscriptions_id",
-          "columns": [
-            "id"
-          ]
-        }
-      },
+      "compositePrimaryKeys": {},
       "uniqueConstraints": {
         "subscriptions_txn_id_unique": {
           "name": "subscriptions_txn_id_unique",
+          "nullsNotDistinct": false,
           "columns": [
             "txn_id"
           ]
         }
       },
-      "checkConstraint": {}
+      "policies": {},
+      "checkConstraints": {},
+      "isRLSEnabled": false
     },
-    "users": {
+    "public.users": {
       "name": "users",
+      "schema": "",
       "columns": {
         "id": {
           "name": "id",
-          "type": "int",
-          "primaryKey": false,
-          "notNull": true,
-          "autoincrement": true
+          "type": "serial",
+          "primaryKey": true,
+          "notNull": true
         },
         "first_name": {
           "name": "first_name",
           "type": "varchar(255)",
           "primaryKey": false,
-          "notNull": true,
-          "autoincrement": false
+          "notNull": true
         },
         "last_name": {
           "name": "last_name",
           "type": "varchar(255)",
           "primaryKey": false,
-          "notNull": true,
-          "autoincrement": false
+          "notNull": true
         },
         "email": {
           "name": "email",
           "type": "varchar(255)",
           "primaryKey": false,
-          "notNull": true,
-          "autoincrement": false
+          "notNull": true
         },
         "roles": {
           "name": "roles",
-          "type": "int",
+          "type": "integer",
           "primaryKey": false,
           "notNull": true,
-          "autoincrement": false,
           "default": 0
         },
         "password": {
           "name": "password",
           "type": "varchar(255)",
           "primaryKey": false,
-          "notNull": true,
-          "autoincrement": false
+          "notNull": true
         },
         "refresh_token": {
           "name": "refresh_token",
           "type": "varchar(500)",
           "primaryKey": false,
-          "notNull": false,
-          "autoincrement": false
+          "notNull": false
         },
         "reset_token": {
           "name": "reset_token",
           "type": "varchar(500)",
           "primaryKey": false,
-          "notNull": false,
-          "autoincrement": false
+          "notNull": false
         },
         "reset_token_expiry": {
           "name": "reset_token_expiry",
           "type": "timestamp",
           "primaryKey": false,
-          "notNull": false,
-          "autoincrement": false
+          "notNull": false
         },
         "created_at": {
           "name": "created_at",
           "type": "timestamp",
           "primaryKey": false,
           "notNull": false,
-          "autoincrement": false,
-          "default": "(now())"
+          "default": "now()"
         },
         "expires_at": {
           "name": "expires_at",
           "type": "timestamp",
           "primaryKey": false,
           "notNull": false,
-          "autoincrement": false,
-          "onUpdate": true,
-          "default": "(now())"
+          "default": "now()"
         }
       },
       "indexes": {},
       "foreignKeys": {},
-      "compositePrimaryKeys": {
-        "users_id": {
-          "name": "users_id",
-          "columns": [
-            "id"
-          ]
-        }
-      },
+      "compositePrimaryKeys": {},
       "uniqueConstraints": {
         "users_email_unique": {
           "name": "users_email_unique",
+          "nullsNotDistinct": false,
           "columns": [
             "email"
           ]
         },
         "users_reset_token_unique": {
           "name": "users_reset_token_unique",
+          "nullsNotDistinct": false,
           "columns": [
             "reset_token"
           ]
         }
       },
-      "checkConstraint": {}
+      "policies": {},
+      "checkConstraints": {},
+      "isRLSEnabled": false
     }
   },
+  "enums": {},
+  "schemas": {},
+  "sequences": {},
+  "roles": {},
+  "policies": {},
   "views": {},
   "_meta": {
+    "columns": {},
     "schemas": {},
-    "tables": {},
-    "columns": {}
-  },
-  "internal": {
-    "tables": {},
-    "indexes": {}
+    "tables": {}
   }
 }

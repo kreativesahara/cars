@@ -28,9 +28,9 @@ export const searchCarProduct = async (req: Request, res: Response) => {
         // Fetch images only for the cars that matched
         const carIds = cars.map(car => car.id);
         const images = await db
-            .select({ car_id: carImages.car_id, image_url: carImages.image_url })
+            .select({ car_id: carImages.carId, image_url: carImages.imageUrl })
             .from(carImages)
-            .where(inArray(carImages.car_id, carIds));
+            .where(inArray(carImages.carId, carIds));
 
         // Group images by car_id
         const imageMap = images.reduce((acc, { car_id, image_url }) => {

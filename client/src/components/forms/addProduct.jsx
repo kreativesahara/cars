@@ -17,8 +17,8 @@ function AddProduct() {
     make: '',
     model: '',
     year: '',
-    engine_capacity: '',
-    fuel_type: '',
+    engineCapacity: '',
+    fuelType: '',
     transmission: '',
     driveSystem: '',
     mileage: '',
@@ -26,7 +26,7 @@ function AddProduct() {
     condition: '',
     location: '',
     price: '',
-    seller_id: auth.id,
+    sellerId: auth.id,
   });
 
   const [images, setImages] = useState([]);
@@ -149,6 +149,7 @@ function AddProduct() {
       return;
     }
     const form = new FormData();
+    console.log("Form data before appending images:", values);
     Object.keys(values).forEach(key => form.append(key, values[key]));
     images.forEach(image => form.append('images', image));
     try {
@@ -163,8 +164,8 @@ function AddProduct() {
         make: '',
         model: '',
         year: '',
-        engine_capacity: '',
-        fuel_type: '',
+        engineCapacity: '',
+        fuelType: '',
         transmission: '',
         driveSystem: '',
         mileage: '',
@@ -172,7 +173,7 @@ function AddProduct() {
         condition: '',
         location: '',
         price: '',
-        seller_id: auth.id,
+        sellerId: auth.id,
       });
       setImages([]);
       setPreview([]);
@@ -207,7 +208,7 @@ function AddProduct() {
                 <div>
                   <label className="block text-sm font-medium text-gray-700 mb-1">User ID</label>
                   <input
-                    name="seller_id"
+                    name="sellerId"
                     type="number"
                     value={auth.id}
                     disabled
@@ -252,11 +253,11 @@ function AddProduct() {
                   <div>
                     <label className="block text-sm font-medium text-gray-700 mb-1">Engine (cc)</label>
                     <input
-                      name="engine_capacity"
+                      name="engineCapacity"
                       type="number"
                       placeholder="e.g. 2000"
                       onChange={handleChange}
-                      value={values.engine_capacity}
+                      value={values.engineCapacity}
                       className="w-full bg-white border border-gray-300 rounded-lg px-4 py-3 focus:outline-none"
                       required
                     />
@@ -266,9 +267,9 @@ function AddProduct() {
                   <div>
                     <label className="block text-sm font-medium text-gray-700 mb-1">Fuel Type</label>
                     <select
-                      name="fuel_type"
+                      name="fuelType"
                       onChange={handleChange}
-                      value={values.fuel_type}
+                      value={values.fuelType}
                       className="w-full bg-white border border-gray-300 rounded-lg px-4 py-3 focus:outline-none"
                       required
                     >

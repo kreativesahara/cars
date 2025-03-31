@@ -1,12 +1,12 @@
-import { int, text, mysqlTable, timestamp, foreignKey, varchar } from 'drizzle-orm/mysql-core';
+import { integer, serial, pgTable, timestamp, foreignKey, varchar } from 'drizzle-orm/pg-core';
 import { product } from './product';
 
-export const carImages = mysqlTable('car_images', {
-    id: int('id').primaryKey().autoincrement(),
-    car_id: int('car_id').notNull().references
-    (() => product.id),
-    image_url: varchar('image_url',{length:255}).notNull(),
-    created_at: timestamp('created_at').defaultNow().notNull(),
+
+export const carImages = pgTable("car_images", {
+    id: serial("id").primaryKey(),// PostgreSQL uses default instead of autoincrement
+    carId: integer("car_id")
+        .notNull()
+        .references(() => product.id, { onDelete: "cascade" }), // PostgreSQL supports cascade
+    imageUrl: varchar("image_url", { length: 255 }).notNull(),
+    createdAt: timestamp("created_at", { withTimezone: true }).defaultNow().notNull(),
 });
-
-

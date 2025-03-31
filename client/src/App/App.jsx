@@ -14,7 +14,7 @@ function App() {
   const navigate = useNavigate()
   const { products } = useProductContext();
   const [product, setProduct] = useState(null);
-  const SellerId = auth?.id;
+  const Seller = auth?.id;
   //const SubscriptionId = auth?.subscriptionId
  
   console.log('User ID:',auth);
@@ -26,13 +26,13 @@ function App() {
       setProduct(null);
       return; // Skip the filter if no products.
     }
-    const findProducts = products.filter((p) => p.seller_id === Number(SellerId));
+    const findProducts = products.filter((p) => p.sellerId === Number(Seller));
     if (findProducts) {
       setProduct(findProducts);
     } else {
       console.error('no product found');
     }
-  }, [products, SellerId])
+  }, [products, Seller])
 
   useEffect(()=>{
     console.log('configure Subscription ID...')

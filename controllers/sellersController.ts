@@ -59,21 +59,18 @@ const createSeller = async (req: Request, res: Response): Promise<any> => {
             console.error('Error uploading image:', err);
             return res.status(500).json({ message: 'Image upload error.' });
         }
-
         const { username, accountType, contact, place, hasFinancing, acceptsTradeIn, userId } = req.body;
         // Construct full image URL if file exists
-        const image_url = req.file
+        const imageUrl = req.file
             ? `${req.protocol}://${req.get('host')}/${req.file.path}`.replace(/\\/g, '/')
             : undefined;
 
         // If image is required, reject if missing.
-        if (!image_url) return res.status(400).json({ message: 'Image is required.' });
-
+        if (!imageUrl) return res.status(400).json({ message: 'Image is required.' });
         // Validate required fields
         if (!username || !accountType || !contact || !place || hasFinancing === undefined || acceptsTradeIn === undefined || !userId) {
             return res.status(400).json({ message: 'Required fields missing.' });
         }
-
         // Update user role if necessary
         try {
             const foundUser = await db.select().from(user).where(eq(user.id, Number(userId)));
@@ -98,7 +95,7 @@ const createSeller = async (req: Request, res: Response): Promise<any> => {
                 place,
                 acceptsTradeIn,
                 userId: Number(userId),
-                image_url
+                imageUrl
             };
             const result = await db.insert(seller).values(sellerData);
             return res.status(201).json({ message: 'Seller created successfully.', result });
@@ -119,8 +116,8 @@ const updateSeller = async (req: Request, res: Response) => {
         const foundSeller = await db.select().from(seller).where(eq(seller.userId, Number(userId)));
         if (!foundSeller.length) return res.status(404).json({ message: 'Seller not found.' });
 
-        if (image_url && foundSeller[0].image_url) {
-            const oldImage = foundSeller[0].image_url;
+        if (image_url && foundSeller[0].imageUrl) {
+            const oldImage = foundSeller[0].imageUrl;
             if (fs.existsSync(oldImage)) fs.unlinkSync(oldImage);
         }
 
@@ -137,15 +134,13 @@ const updateSeller = async (req: Request, res: Response) => {
 const deleteSeller = async (req: Request, res: Response) => {
     const { userId } = req.body;
     if (!userId) return res.status(400).json({ message: 'Seller ID required.' });
-
     try {
         const foundSeller = await db.select().from(seller).where(eq(seller.userId, Number(userId)));
         if (!foundSeller.length) return res.status(404).json({ message: 'Seller not found.' });
 
-        if (foundSeller[0].image_url && fs.existsSync(foundSeller[0].image_url)) {
-            fs.unlinkSync(foundSeller[0].image_url);
+        if (foundSeller[0].imageUrl && fs.existsSync(foundSeller[0].imageUrl)) {
+            fs.unlinkSync(foundSeller[0].imageUrl);
         }
-
         await db.delete(seller).where(eq(seller.userId, Number(userId)));
         return res.status(200).json({ message: 'Seller deleted successfully.' });
     } catch (error) {

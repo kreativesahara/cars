@@ -42,7 +42,7 @@ const Itempage = () => {
 
     useEffect(() => {
         if (product) {
-            const foundSeller = sellers.find((s) => s.userId === Number(product.seller_id));
+            const foundSeller = sellers.find((s) => s.userId === Number(product.sellerId));
             // const foundSubscriber = users.find((U) =>U.subscriptionId === Number(subscription.id))
             if (foundSeller) {
                 setSeller(foundSeller);
