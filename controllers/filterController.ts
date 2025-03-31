@@ -52,7 +52,6 @@ export const filterCarProducts = async (req: Request, res: Response) => {
             acc[car_id].push({ image_url });
             return acc;
         }, {} as Record<number, { image_url: string }[]>);
-        console.log('imageMap:', imageMap);
         // Attach images to their respective cars
         const carsWithImages = cars.map(car => ({
             ...car,
