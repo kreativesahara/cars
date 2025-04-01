@@ -1,6 +1,6 @@
 const allowedOrigins: string[] = [
-    'http://localhost:5173',
-    // 'http://localhost:3100',
+    'https://diksxcars.vercel.app',
+    'http://localhost:5173'
 ];
 
 export default allowedOrigins;

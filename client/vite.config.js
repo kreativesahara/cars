@@ -1,16 +1,18 @@
-import { defineConfig } from 'vite'
-import react from '@vitejs/plugin-react'
+import { defineConfig } from 'vite';
+import react from '@vitejs/plugin-react';
 
-// https://vitejs.dev/config/
+// Dynamically set the backend URL based on the environment
+const BACKEND_URL = process.env.API_URL || "http://localhost:3100"; // Default to localhost for development
+
 export default defineConfig({
   plugins: [react()],
   server: {
     proxy: {
       "/api": {
-        target: "https://cars-7r06.onrender.com", // Change this to your backend URL
+        target: BACKEND_URL, // Use the dynamic backend URL
         changeOrigin: true,
         secure: false, // Set to true if using HTTPS
       },
     },
   },
-})
+});
