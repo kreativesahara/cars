@@ -30,7 +30,7 @@ import { checkExpiredSubscriptions } from './controllers/subscriptionController'
 
 dotenv.config();
 const app : express.Application = express();
-const PORT: number = Number(process.env.PORT) || 3100;  
+const PORT: number = Number(process.env.PORT) || 10000;  
 
 // Middleware to parse JSON body & parse URL-encoded bodies (for form submissions)
 app.use(express.json())
