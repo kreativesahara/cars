@@ -101,7 +101,7 @@ const Search = () => {
             type="submit"
             className="w-[100%] lg:w-auto bg-[#2ff3b2] text-black tracking-widest text-2xl font-bold px-6 py-2 rounded-lg hover:bg-black hover:text-white border-double mt-2 border-4 border-white lg:px-[200px] transition duration-1000 md:col-span-3 md:row-start-3"
           >
-            SEARCH
+            SEARCH...
           </button>
         </form>
       </div>
