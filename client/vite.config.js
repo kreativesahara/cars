@@ -15,21 +15,4 @@ export default defineConfig({
       },
     },
   },
-  build: {
-    rollupOptions: {
-      external: [
-        // Externalize all drizzle-related imports
-        'drizzle-orm',
-        'drizzle-orm/pg-core',
-        '@vercel/postgres',
-      ],
-    },
-    // Exclude database schema files from the build
-    exclude: ['**/db/schema/**'],
-  },
-  resolve: {
-    alias: {
-      '@': '/src',
-    },
-  },
 });
