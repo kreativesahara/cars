@@ -55,7 +55,7 @@ function App() {
   // Render content based on fetched bills
   return (
     <Layout>
-      <main className="mt-10 md:mx-8 min-w-[380px]">
+      <article className="mt-10 md:mx-8 min-w-[380px]">
         <div>
           <div className='w-full bg-white shadow rounded-lg p-2 flex flex-col gap-4'>
             <div className=' font-semibold text-center'>
@@ -124,7 +124,7 @@ function App() {
             </section>
           </div>
         </div>
-      </main>
+      </article>
     </Layout>
   );
 }
