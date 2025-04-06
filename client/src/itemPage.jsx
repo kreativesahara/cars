@@ -11,7 +11,6 @@ import { Carousel } from 'react-responsive-carousel';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faArrowRight, faArrowLeft } from '@fortawesome/free-solid-svg-icons';
 import RelatedCars from './components/cards/relatedCarsCard';
-import { subscription } from '../../db/schema/subscription';
 
 const Itempage = () => {
     const { productId } = useParams();
