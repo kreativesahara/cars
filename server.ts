@@ -30,7 +30,7 @@ import { checkExpiredSubscriptions } from './controllers/subscriptionController'
 
 dotenv.config();
 const app : express.Application = express();
-const PORT: number = Number(process.env.PORT) || 10000;  
+const PORT: number = Number(process.env.PORT) || 4000;  
 
 // Middleware to parse JSON body & parse URL-encoded bodies (for form submissions)
 app.use(express.json())
@@ -71,5 +71,5 @@ app.use('/api/logout', requireAuth, logoutRoute)
 
 // Start the server
 app.listen(PORT, () => {
-    console.log(`http://localhost:${PORT}`)
+    console.log(`server is running a ${PORT}`)
 })
